@@ -1,5 +1,5 @@
-import { Withdraw } from "@/@clean/shared/domain/entities/withdraw";
-import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { Withdraw } from "@/@clean/modules/domain/entities/withdraw";
+import { EntityError } from "@/@clean/modules/domain/helpers/errors/domain_error";
 
 test('[ENTITY] - Withdraw - should create a valid withdraw', () => {
     const withdraw = new Withdraw({

@@ -1,5 +1,5 @@
 import { CreateUserUsecase } from "@/@clean/modules/user/usecases/create_user_usecase"
-import { User } from "@/@clean/shared/domain/entities/user"
+import { User } from "@/@clean/modules/domain/entities/user"
 import { STATE } from "@/@clean/shared/domain/enums/state_enum"
 import { UserRepositoryMock } from "@/@clean/shared/infra/repositories/user_repository_mock"
 

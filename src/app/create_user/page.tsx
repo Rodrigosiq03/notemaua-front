@@ -1,5 +1,5 @@
 'use client';
-import { User } from '@/@clean/shared/domain/entities/user';
+import { User } from '@/@clean/modules/domain/entities/user';
 import { STATE } from '@/@clean/shared/domain/enums/state_enum';
 import React, { useContext } from 'react';
 import styles from './create_user.module.css';

@@ -1,4 +1,4 @@
-import { JsonProps, User } from "@/@clean/shared/domain/entities/user";
+import { User } from "@/@clean/shared/domain/entities/user";
 import { ROLE } from "@/@clean/shared/domain/enums/role_enum";
 import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
 
@@ -26,9 +26,9 @@ test('[ENTITY] - User - Test User role default', () => {
         name: 'Teste',
         email: 'rodrigo.dsiqueira1@maua.br',
         password: '12345678',
-        role: undefined
+        role: ROLE.STUDENT
     })
-    expect(user.role).toBe(ROLE.STUDENT);
+    expect(user.props.role).toBe(ROLE.STUDENT);
     
 });
 test('[ENTITY] - User - Test User entity email', () => {

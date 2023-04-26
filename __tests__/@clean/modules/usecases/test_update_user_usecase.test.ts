@@ -1,5 +1,5 @@
 import { UpdateUserUsecase } from "@/@clean/modules/user/usecases/update_user_usecase"
-import { User } from "@/@clean/shared/domain/entities/user"
+import { User } from "@/@clean/modules/domain/entities/user"
 import { UserRepositoryMock } from "@/@clean/shared/infra/repositories/user_repository_mock"
 
 test('Test update user usecase', async () => {

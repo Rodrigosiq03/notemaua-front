@@ -2,16 +2,28 @@ import { EntityError } from "../helpers/errors/domain_error";
 
 export type NotebookProps = {
     num_serie: string;
-    isActive: boolean;
+    isActive?: boolean;
+}
+
+export type JsonProps = {
+    num_serie: string;
+    isActive?: boolean;
 }
 
 export class Notebook {
-    constructor(public props: NotebookProps) {
+    constructor(public props: NotebookProps) {        
         if (!Notebook.validateNum_serie(props.num_serie)) {
             throw new EntityError('props.num_serie')
         }
         this.props.num_serie = props.num_serie;
-        if (!Notebook.validateIsActive(props.isActive)) {
+
+        if (this.props.isActive == null) {
+            this.props.isActive = false;
+        } 
+        if (this.props.isActive == undefined) {
+            this.props.isActive = false;
+        } 
+        if (typeof props.isActive != 'boolean') {
             throw new EntityError('props.isActive')
         }
         this.props.isActive = props.isActive;
@@ -34,7 +46,7 @@ export class Notebook {
     }
 
     set setIsActive(isActive: boolean) {
-        if (!Notebook.validateIsActive(isActive)) {
+        if (typeof isActive != 'boolean') {
             throw new EntityError('props.isActive')
         }
         this.props.isActive = isActive;
@@ -45,6 +57,13 @@ export class Notebook {
             ra: this.props.isActive,
             name: this.props.num_serie,
         }
+    }
+
+    fromJSON(json: JsonProps) {
+        return new Notebook({
+            num_serie: json.num_serie,
+            isActive: json.isActive,
+        });
     }
 
     static validateNum_serie(num_serie: string): boolean {
@@ -59,17 +78,6 @@ export class Notebook {
             return false;
         } 
         if (num_serie.length != 5) {
-            return false;
-        }
-        return true;
-    }
-
-    static validateIsActive(isActive: boolean): boolean {
-        if (isActive == null) {
-            return false;
-        } else if (isActive == undefined) {
-            return false;
-        } else if (typeof isActive != 'boolean') {
             return false;
         }
         return true;

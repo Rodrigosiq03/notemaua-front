@@ -17,8 +17,6 @@ export type JsonProps = {
 }
 
 export class User {
-    role: ROLE = ROLE.STUDENT;
-
     constructor (public props: UserProps) {
         if (!User.validateRa(props.ra)) {
             throw new EntityError('props.ra')
@@ -37,12 +35,16 @@ export class User {
         }
         this.props.password = props.password;
 
-        if (props.role != null) {
-            if (!User.validateRole(props.role)) {
-                throw new EntityError('props.role')
-            }
-            this.role = props.role;
+        if (props.role == null) {
+            this.props.role = ROLE.STUDENT;
         }
+        if (props.role == undefined) {
+            this.props.role = ROLE.STUDENT;
+        }
+        if (typeof props.role != 'string') {
+            throw new EntityError('props.role')
+        }
+        this.props.role = props.role;
         
 
     }
@@ -160,9 +162,7 @@ export class User {
     }
 
     static validateRole(role: ROLE): boolean {
-        if (role == null) {
-            return false
-        } else if (Object.values(ROLE).includes(role) == false) {
+        if (Object.values(ROLE).includes(role) == false) {
             return false
         }
         return true

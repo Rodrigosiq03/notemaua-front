@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { IUserRepository } from "@/@clean/modules/user/domain/repositories/user_repository_interface";
-import { User } from "../../domain/entities/user";
+import { User } from "../../../modules/domain/entities/user";
 import { decorate, injectable } from 'inversify';
 import { AxiosError, AxiosInstance } from 'axios';
 

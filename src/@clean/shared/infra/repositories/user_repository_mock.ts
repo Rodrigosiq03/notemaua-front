@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import { IUserRepository } from "@/@clean/modules/user/domain/repositories/user_repository_interface";
 import { randomUUID } from "crypto";
-import { User } from "../../domain/entities/user";
-import { STATE } from "../../domain/enums/state_enum";
+import { User } from "../../../modules/domain/entities/user";
+import { STATE } from "../../../modules/domain/enums/state_enum";
 import { decorate, injectable } from "inversify";
 import { uuid } from "uuidv4";
-import { NoItemsFoundError } from "../../domain/helpers/errors/domain_error";
+import { NoItemsFoundError } from "../../../modules/domain/helpers/errors/domain_error";
 
 
 export class UserRepositoryMock implements IUserRepository {
