@@ -52,7 +52,7 @@ export default function LoginPage() {
                     </ContainerCardContent>
                 </CardWhite>
             </CardGray>
-            <Image src={logoMaua} alt='logoMaua' width={100} style={{ paddingTop: '24px'}} />
+            <Image src={logoMaua} alt='logoMaua' width={180} style={{ paddingTop: '24px'}} />
         </Container>
     )
 }
