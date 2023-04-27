@@ -9,7 +9,8 @@ const Container = styled.div`
     justify-content: center;
 
     @media (max-width: 450px) {
-      padding-top: 120px;
+      padding-top: 40px;
+      padding-left: 4px;
     }
 `;
 
