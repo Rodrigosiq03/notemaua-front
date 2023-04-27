@@ -1,11 +1,15 @@
-import LinkNext from 'next/link';
-import React from 'react';
-import styles from './Link.module.css';
+import styled from 'styled-components';
+import Link from 'next/link';
 
-export default function LinkComponent({ href, children }: { href: string, children: React.ReactNode }) {
-    return (
-        <LinkNext className={styles.link} href={`/${href}`}>
-            { children }
-        </LinkNext>
-    );
-}
+const LinkStyled = styled(Link)`
+    text-decoration: none;
+    color: #1669b6;
+
+`;
+
+const TextForLink = styled.p`
+    margin: 0;
+    padding-right: 8px;
+`;
+
+export { LinkStyled, TextForLink };
