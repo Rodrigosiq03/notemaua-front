@@ -3,11 +3,14 @@ import styled from 'styled-components';
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    background-color: #B2DAFF;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: 450px) {
+      padding-top: 120px;
+    }
 `;
 
 const ContainerCardContent = styled.div`
@@ -15,13 +18,21 @@ const ContainerCardContent = styled.div`
     align-items: center;
     flex-direction: column;
     padding-top: 16px;
+
+    @media (max-width: 450px) {
+      
+    }
+
+    @media (max-width: 380px) {
+      padding-top: 0px;
+    }
     
 `;
 
 const ContainerRowLink = styled.div`
     display: flex;
     flex-direction: row;  
-    padding-top: 8px;
+    padding-top: 16px;
 `;
 
 export { Container, ContainerCardContent, ContainerRowLink };

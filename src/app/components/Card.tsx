@@ -20,6 +20,11 @@ const CardGray = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 120px;
+
+    @media (max-width: 400px) {
+      background-color: white;
+      margin-top: 0px;
+    }
     
 `;
 

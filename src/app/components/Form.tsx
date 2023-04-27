@@ -3,6 +3,10 @@ import styled from 'styled-components';
 const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 450px) {
+      
+    }
   
 `;  
 
@@ -20,7 +24,7 @@ const FormInput = styled.input`
 const FormLabel = styled.label`
   display: inline-block;
   text-align: left;
-  font-size: 20px;
+  font-size: 15px;
     
 `;
 
@@ -37,6 +41,10 @@ const FormButton = styled.button`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none;
     font-weight: bold;
+
+    &:hover {
+      background-color: #0d4a7c;
+    }
 `;
 
 export { FormContainer, FormInput, FormLabel, FormButton };

@@ -2,7 +2,6 @@
 import React from 'react';
 
 import logo from 'public/images/logo.svg';
-import logoMaua from 'public/images/logoMaua.svg';
 import Image from 'next/image';
 
 import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
@@ -17,6 +16,8 @@ const hind = Hind({subsets: ['latin'], weight: '700'})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from './components/Form';
 import { LinkStyled, TextForLink } from './components/Link';
+import ImageComponentMaua from './components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 
 
 export interface IFormlogin {
@@ -31,29 +32,29 @@ export default function LoginPage() {
     const onSubmit: SubmitHandler<IFormlogin> = data => {};
 
     return (
-        <Container className={hind.className}>
-            <CardGray>
-                <CardWhite>
-                    <ContainerCardContent>
-                        <Image src={logo} alt='logo_note_maua' width={250}/>
-                        <Title>Login</Title>
-                        <FormContainer onSubmit={handleSubmit(onSubmit)}>
-                            <FormLabel htmlFor='email'>Email (@maua.br)</FormLabel>
-                            <FormInput type='email' {...register('email', { required: true })}/>
-                            <FormLabel style={{paddingRight: ''}} htmlFor='password'>Senha</FormLabel>
-                            <FormInput type='password' {...register('password', { required: true})} />
-                            <FormButton type='submit'>Entrar</FormButton>
-                        </FormContainer>
-                        <ContainerRowLink>
-                            <TextForLink>Primeiro Acesso?</TextForLink>
-                            <LinkStyled href="/primeiro-acesso">Clique aqui</LinkStyled>
-                        </ContainerRowLink>
-                            <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
-                    </ContainerCardContent>
-                </CardWhite>
-            </CardGray>
-            <Image src={logoMaua} alt='logoMaua' width={180} style={{ paddingTop: '24px'}} />
-        </Container>
+      <Container className={hind.className}>
+        <CardGray>
+          <CardWhite>
+              <ContainerCardContent>
+                <ImageComponentNoteMaua/>
+                <Title>Login</Title>
+                <FormContainer onSubmit={handleSubmit(onSubmit)}>
+                  <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
+                  <FormInput type='email' {...register('email', { required: true })}/>
+                  <FormLabel style={{paddingRight: ''}} htmlFor='password'>Senha</FormLabel>
+                  <FormInput type='password' {...register('password', { required: true})} />
+                  <FormButton type='submit'>Entrar</FormButton>
+                </FormContainer>
+                <ContainerRowLink>
+                  <TextForLink>Primeiro Acesso?</TextForLink>
+                  <LinkStyled href="/primeiro-acesso">Clique aqui</LinkStyled>
+                </ContainerRowLink>
+                    <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
+              </ContainerCardContent>
+          </CardWhite>
+        </CardGray>
+          <ImageComponentMaua />
+      </Container>
     )
 }
 
