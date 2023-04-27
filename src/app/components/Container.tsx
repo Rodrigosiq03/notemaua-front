@@ -18,4 +18,10 @@ const ContainerCardContent = styled.div`
     
 `;
 
-export { Container, ContainerCardContent };
+const ContainerRowLink = styled.div`
+    display: flex;
+    flex-direction: row;  
+    padding-top: 8px;
+`;
+
+export { Container, ContainerCardContent, ContainerRowLink };

@@ -110,3 +110,7 @@ body {
   background-color: #B2DAFF;
 } 
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #D6D6D6 inset;
+}
+
