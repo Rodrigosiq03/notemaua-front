@@ -6,7 +6,7 @@ const ImageLogoMaua = styled(Image)`
   padding-top: 24px;
 
   @media (max-width: 450px) {
-    padding-top: 200px;
+    padding-top: 0px;
     padding-bottom: 20px;
   }
 
