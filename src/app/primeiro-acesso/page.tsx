@@ -11,8 +11,9 @@ import { Title } from '../components/Title';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
+// to calmo
 import {Hind} from 'next/font/google';
-const hind = Hind({subsets: ['latin'], weight: '700'})
+const hind = Hind({subsets: ['latin'], weight: ['700', '400']})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from '../components/Form';
 import { ReturnLink, LinkStyled, TextForLink } from '../components/Link';
@@ -31,16 +32,17 @@ export default function PrimeiroAcessoPage() {
     const onSubmit: SubmitHandler<IFormlogin> = data => {};
 
     return (
-        <Container className={hind.className}>
+        <Container className={hind.}>
           <CardGray>
             <CardWhite>
                 <ContainerCardContent>
                   <ImageComponentNoteMaua/>
                   <Title>Primeiro Acesso</Title>
                   <FormContainer onSubmit={handleSubmit(onSubmit)}>
+                    <p style={{textAlign: 'center', fontSize: '16px'}}>Você receberá um e-mail<br/>para definir sua senha.</p>
                     <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
                     <FormInput type='email' {...register('email', { required: true })}/>
-                    <FormButton type='submit'>Entrar</FormButton>
+                    <FormButton type='submit'>Enviar</FormButton>
                   </FormContainer>
                   <ContainerRowLink>
                     <ReturnLink href="/">Voltar</ReturnLink>
@@ -51,5 +53,4 @@ export default function PrimeiroAcessoPage() {
             <ImageComponentMaua />
         </Container>
       )
-
 }
