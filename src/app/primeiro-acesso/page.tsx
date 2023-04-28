@@ -12,7 +12,7 @@ import { Title } from '../components/Title';
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import {Hind} from 'next/font/google';
-const hind = Hind({subsets: ['latin'], weight: '700'})
+const hind = Hind({subsets: ['latin'], weight: ['700', '400']})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from '../components/Form';
 import { ReturnLink, LinkStyled, TextForLink } from '../components/Link';
