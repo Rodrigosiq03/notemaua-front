@@ -38,6 +38,7 @@ export default function PrimeiroAcessoPage() {
                   <ImageComponentNoteMaua/>
                   <Title>Primeiro Acesso</Title>
                   <FormContainer onSubmit={handleSubmit(onSubmit)}>
+                    <p style={{textAlign: 'center', fontSize: '20px'}}>Você receberá um e-mail<br/>para definir sua senha.</p>
                     <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
                     <FormInput type='email' {...register('email', { required: true })}/>
                     <FormButton type='submit'>Entrar</FormButton>
