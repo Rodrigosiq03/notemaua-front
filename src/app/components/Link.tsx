@@ -4,6 +4,7 @@ import Link from 'next/link';
 const LinkStyled = styled(Link)`
     text-decoration: none;
     color: #1669b6;
+ 
 
 `;
 
