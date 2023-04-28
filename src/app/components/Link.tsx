@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 
+
 const LinkStyled = styled(Link)`
     text-decoration: none;
     color: #1669b6;
@@ -13,4 +14,9 @@ const TextForLink = styled.p`
     padding-right: 8px;
 `;
 
-export { LinkStyled, TextForLink };
+const ReturnLink = styled(Link)`
+    color: #545454;
+    padding-top: 20px;
+`
+
+export { LinkStyled, TextForLink, ReturnLink };

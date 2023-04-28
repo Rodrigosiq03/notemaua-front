@@ -15,7 +15,7 @@ import {Hind} from 'next/font/google';
 const hind = Hind({subsets: ['latin'], weight: '700'})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from '../components/Form';
-import { LinkStyled, TextForLink } from '../components/Link';
+import { ReturnLink, LinkStyled, TextForLink } from '../components/Link';
 import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 
@@ -43,7 +43,7 @@ export default function PrimeiroAcessoPage() {
                     <FormButton type='submit'>Entrar</FormButton>
                   </FormContainer>
                   <ContainerRowLink>
-                    <LinkStyled href="/">Voltar</LinkStyled>
+                    <ReturnLink href="/">Voltar</ReturnLink>
                   </ContainerRowLink>
                 </ContainerCardContent>
             </CardWhite>
