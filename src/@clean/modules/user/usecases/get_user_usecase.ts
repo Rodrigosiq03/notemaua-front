@@ -1,16 +1,15 @@
-import { User } from "@/@clean/shared/domain/entities/user";
+import { User } from "../../../shared/domain/entities/user";
 import { IUserRepository } from "../domain/repositories/user_repository_interface";
-import { NoItemsFoundError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { EntityError, NoItemsFoundError } from "../../../shared/domain/helpers/errors/domain_error";
 
 export class GetUserUsecase {
     constructor(private userRepo: IUserRepository) {}
 
-    async execute(userId: number): Promise<User> {
-        try {
-            const user = await this.userRepo.getUser(userId);
-            return user;
-        } catch (err) {
-            throw new NoItemsFoundError(` id ${userId}`);
+    async execute(email: string): Promise<User> {
+        if (!User.validateEmail(email)) {
+            throw new EntityError("email");
         }
+        const user = await this.userRepo.getUser(email);
+        return user;
     }
 }

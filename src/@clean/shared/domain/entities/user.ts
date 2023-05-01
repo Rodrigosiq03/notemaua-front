@@ -1,53 +1,79 @@
-import { STATE, toEnum } from "../enums/state_enum";
+import { ROLE } from "../enums/role_enum";
 import { EntityError } from "../helpers/errors/domain_error";
 
 export type UserProps = {
-    id?: number;  //uuid
+    ra: string | null;
     name: string;
     email: string;
-    state?: STATE;
+    password: string | null;
+    role?: ROLE | null;
 }
 
-export type JsonProps = {
-    user_id?: number;
-    name: string;
-    email: string;
-    state?: string;
-}
+// export type JsonProps = {
+//     user_id?: number;
+//     name: string;
+//     email: string;
+//     state?: string;
+// }
 
 export class User {
-    constructor (public props: UserProps) {
-        if (!User.validateId(props.id as number)) {
-            throw new EntityError('props.id')
+    constructor (public props: UserProps = {
+        ra: null,
+        name: '',
+        email: '',
+        password: null,
+        role: ROLE.STUDENT
+    }) {
+        if (!User.validateRa(props.ra)) {
+            throw new EntityError('props.ra')
         }
-        this.props.id = props.id
-
+        if (this.props.ra != null) {
+            props.role = ROLE.STUDENT;
+        }
+        this.props.ra = props.ra;
         if (!User.validateName(props.name)) {
             throw new EntityError('props.name')
         }
-        this.props.name = props.name
-
+        this.props.name = props.name;
         if (!User.validateEmail(props.email)) {
             throw new EntityError('props.email')
         }
-        this.props.email = props.email
-
-        if (!User.validateState(props.state as STATE)) {
-            throw new EntityError('props.state')
+        this.props.email = props.email;
+        if (!User.validatePassword(props.password)) {
+            throw new EntityError('props.password')
         }
-        this.props.state = props.state
+        this.props.password = props.password;
+        if (props.role == null) {
+            this.props.role = ROLE.STUDENT;
+        }
+        if (typeof props.role != 'string') {
+            throw new EntityError('props.role');
+        }
+        this.props.role = props.role;
+        
 
     }
 
-    get id() {
-        return this.props.id;
+    get ra() {
+        return this.props.ra;
     }
 
-    set setId(id: number) {
-        if (!User.validateId(id)) {
-            throw new EntityError('props.id')
+    set setRa(ra: string) {
+        if (!User.validateRa(ra)) {
+            throw new EntityError('props.ra');
         }
-        this.props.id = id
+        this.props.ra = ra;
+    }
+
+    get password() {
+        return this.props.password;
+    }
+
+    set setPassword(password: string) {
+        if (!User.validatePassword(password)) {
+            throw new EntityError('props.password');
+        }
+        this.props.password = password;
     }
 
     get name() {
@@ -56,9 +82,9 @@ export class User {
 
     set setName(name: string) {
         if (!User.validateName(name)) {
-            throw new EntityError('props.name')
+            throw new EntityError('props.name');
         }
-        this.props.name = name
+        this.props.name = name;
     }
 
     get email() {
@@ -67,57 +93,72 @@ export class User {
 
     set setEmail(email: string) {
         if (!User.validateEmail(email)) {
-            throw new EntityError('props.email')
+            throw new EntityError('props.email');
         }
-        this.props.email = email
+        this.props.email = email;
     }
 
-    get state() {
-        return this.props.state;
+    get role() {
+        return this.props.role;
     }
 
-    set setState(state: STATE) {
-        if (!User.validateState(state)) {
-            throw new EntityError('props.state')
+    set setRole(role: ROLE) {
+        if (typeof role != 'string') {
+            throw new EntityError('props.role');
         }
-        this.props.state = state
+        this.props.role = role;
     }
+
+    // AUTHENTICATION IS GOING TO BE DONE BY THE FRONTEND WITH AMPLIFY!!!
     
-    static fromJSON(json: JsonProps) {
-        return new User({
-            id: json.user_id,
-            name: json.name,
-            email: json.email,
-            state: toEnum(json.state as string)
-        })
-    }
+    // static fromJSON(json: JsonProps) {
+    //     return new User({
+    //         id: json.user_id,
+    //         name: json.name,
+    //         email: json.email,
+    //         state: toEnum(json.state as string)
+    //     })
+    // }
 
-    toJSON() {
-        return {
-            id: this.id,
-            name: this.name,
-            email: this.email,
-            state: this.state
-        }
-    }
+    // toJSON() {
+    //     return {
+    //         ra: this.props.ra,
+    //         name: this.props.name,
+    //         email: this.props.email,
+    //         role: this.props.role
+    //     }
+    // }
 
     // validações abaixo...
 
-    static validateId(id: number): boolean {
-        if (id == null) {
-            return false
-        } else if (typeof(id) != "number") {
-            return false
+    static validateRa(ra: string | null): boolean {
+        if (ra != null) {
+            if (typeof(ra) != "string") {
+                return false
+            }
+            if (ra.length != 10) {
+                // CONTANDO O PONTO E O TRAÇO!!
+                return false
+            } 
+            // model of ra is 22.00680-0
+            if (ra[2] != "." && ra[8] != "-" ) {
+                return false
+            }
+            return true
+
+        } else {
+            return true
         }
-        return true
     }
 
     static validateName(name: string): boolean {
         if (name == null) {
             return false
-        } else if (typeof(name) != "string") {
+        } 
+        if (typeof(name) != "string") {
             return false
-        } else if (name.length < 3) {
+        } 
+        if (name.length < 3) {
             return false
         }
         return true
@@ -135,18 +176,34 @@ export class User {
         if (!email.match(regexp)) {
             return false
         }
-        return true
-    }
-
-    static validateState(state: STATE): boolean {
-        if (state == null) {
-            return false
-        } else if (Object.values(STATE).includes(state) == false) {
+        if (email.substring(email.length - 8, email.length) != "@maua.br") {
             return false
         }
         return true
     }
 
-    
+    static validateRole(role: ROLE): boolean {
+        if (Object.values(ROLE).includes(role) == false) {
+            return false
+        }
+        return true
+    }
 
+    static validatePassword(password: string | null): boolean {
+        if (password != null ) {
+            if (password == null) {
+                return false
+            } 
+            if (typeof(password) != "string") {
+                return false
+            } 
+            if (password.length <= 8) {
+                return false
+            }
+            return true
+        } else {
+            return true
+        }
+        
+    }
 }

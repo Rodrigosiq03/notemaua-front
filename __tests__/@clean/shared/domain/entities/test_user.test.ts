@@ -1,75 +1,85 @@
-import { JsonProps, User } from "@/@clean/shared/domain/entities/user";
-import { STATE } from "@/@clean/shared/domain/enums/state_enum";
+import { User } from "@/@clean/shared/domain/entities/user";
+import { ROLE } from "@/@clean/shared/domain/enums/role_enum";
 import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
-import { randomUUID } from "node:crypto";
 
-test('Test User entity', () => {
+test('[ENTITY] - User - Test User entity', () => {
     const user = new User({
-        id: 1,
+        ra: null,
         name: 'Teste',
-        email: 'rodrigo.dsiqueira1@gmailcom',
-        state: STATE.PENDING
+        email: 'rodrigo.dsiqueira1@maua.br',
+        password: null,
+        role: null
     })
     expect(user).toBeInstanceOf(User);
+    expect(user.props.role).toBe(ROLE.STUDENT);
 });
-test('Test User entity name', () => {
+test('[ENTITY] - User - Test User entity name', () => {
     const user = new User({
-        id: 1,
+        ra: '22.00680-0',
         name: 'Teste',
-        email: 'rodrigo.dsiqueira1@gmailcom',
-        state: STATE.PENDING
+        email: 'rodrigo.dsiqueira1@maua.br',
+        password: '12345678',
+        role: null
     })
     expect(user.name).toBe('Teste');
 });
-test('Test User entity email', () => {
+test('[ENTITY] - User - Test User role default', () => {
     const user = new User({
-        id: 1,
+        ra: '22.00680-0',
         name: 'Teste',
-        email: 'rodrigo.dsiqueira1@gmailcom',
-        state: STATE.PENDING
+        email: 'rodrigo.dsiqueira1@maua.br',
+        password: null,
     })
-    expect(user.email).toBe('rodrigo.dsiqueira1@gmailcom');
+    expect(user.role).toBe(ROLE.STUDENT);
+    
 });
-test('Test User entity error email', () => {
+test('[ENTITY] - User - Test User entity email', () => {
+    const user = new User({
+        ra: '22.00680-0',
+        name: 'Teste',
+        email: 'rodrigo.dsiqueira1@maua.br',
+        password: '12345678',
+        role: null
+    })
+    expect(user.email).toBe('rodrigo.dsiqueira1@maua.br');
+});
+test('[ENTITY] - User - Test User entity error maua email', () => {
     expect(() => {
         new User({
-            id: 1,
+            ra: '22.00680-0',
             name: 'Teste',
-            email: 'rodrigo.dsiqueira1gmailcom',
-            state: STATE.PENDING
+            email: 'rodrigo.dsiqueira1@gmail.com',
+            password: '12345678',
+            role: null
         })
     }).toThrowError(EntityError);
     expect(() => {
         new User({
-            id: 1,
+            ra: '22.00680-0',
             name: 'Teste',
-            email: 'rodrigo.dsiqueira1gmailcom',
-            state: STATE.PENDING
+            email: 'rodrigo.dsiqueira1@gmail.com',
+            password: '12345678',
+            role: null
         })
     }).toThrowError('Field props.email is not valid');
 });
-test('Test to json', () => {
-    const user = new User({
-        id: 1,
-        name: 'Teste',
-        email: 'rodrigo.dsiqueira1@gmailcom',
-        state: STATE.PENDING
-    })
-
-    const userToJSON = user.toJSON();
-
-    expect(userToJSON).toBeInstanceOf(Object);
-});
-
-test('Test from json', () => {
-    const user = {
-        user_id: 1,
-        name: 'Teste',
-        email: 'rodrigo.dsiqueira1@gmailcom',
-        state: 'PENDING'
-    }
-
-    const userFromJSON = User.fromJSON(user);
-
-    expect(userFromJSON).toBeInstanceOf(User);
+test('[ENTITY] - User - Test User entity error email common', () => {
+    expect(() => {
+        new User({
+            ra: '22.00680-0',
+            name: 'Teste',
+            email: 'rodrigo.dsiqueira1mauabr',
+            password: '12345678',
+            role: null
+        })
+    }).toThrowError(EntityError);
+    expect(() => {
+        new User({
+            ra: '22.00680-0',
+            name: 'Teste',
+            email: 'rodrigo.dsiqueira1mauabr',
+            password: '12345678',
+            role: null
+        })
+    }).toThrowError('Field props.email is not valid');
 });
