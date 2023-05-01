@@ -1,6 +1,7 @@
 export enum ROLE {
     ADMIN = "ADMIN",
-    STUDENT = "STUDENT"
+    STUDENT = "STUDENT",
+    EMPLOYEE = "EMPLOYEE",
 };
 
 export function toEnum(value: string): ROLE {
@@ -9,6 +10,8 @@ export function toEnum(value: string): ROLE {
             return ROLE.ADMIN;
         case "STUDENT":
             return ROLE.STUDENT;
+        case "EMPLOYEE":
+            return ROLE.EMPLOYEE;
         default:
             throw new Error("Invalid value for enum");
     }

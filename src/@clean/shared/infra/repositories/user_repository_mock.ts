@@ -1,78 +1,91 @@
 import "reflect-metadata";
 import { IUserRepository } from "@/@clean/modules/user/domain/repositories/user_repository_interface";
-import { randomUUID } from "crypto";
-import { User } from "../../../modules/domain/entities/user";
-import { STATE } from "../../../modules/domain/enums/state_enum";
+import { User } from "../../../shared/domain/entities/user";
 import { decorate, injectable } from "inversify";
-import { uuid } from "uuidv4";
-import { NoItemsFoundError } from "../../../modules/domain/helpers/errors/domain_error";
+import { NoItemsFoundError } from "../../../shared/domain/helpers/errors/domain_error";
 
 
 export class UserRepositoryMock implements IUserRepository {
-
-
     private users: User[] = [
         new User({
-            id: 1,
-            name: 'Toledo',
-            email: 'rodrigo.devcommunity@gmail.com',
-            state: STATE.PENDING
+            ra: '22.00680-0',
+            name: 'Rodrigo Siqueira',
+            email: '22.00680-0@maua.br',
+            password: null,
         }),
         new User({
-            id: 2,
-            name: 'Zeeba',
-            email: 'zeeba.devcommunity@gmail.com',
-            state: STATE.PENDING
+            ra: '22.01290-7',
+            name: 'Leonardo Stuber',
+            email: '22.01290-7@maua.br',
+            password: null,
         }),
         new User({
-            id: 3,
-            name: 'Enricao',
-            email: 'enrico.devcommunity@gmail.com',
-            state: STATE.PENDING
+            ra: '22.01102-0',
+            name: 'Luigi Trevisan',
+            email: '22.01102-0@maua.br',
+            password: null,
         }),
         new User({
-            id: 4,
-            name: 'Ludjas',
-            email: 'luigi.devcommunity@gmail.com',
-            state: STATE.PENDING
+            ra: '22.01589-2',
+            name: 'Gabriel Parmigiano',
+            email: '22.01589-2@maua.br',
+            password: null,
         }),
         new User({
-            id: 5,
-            name: 'Coordenas',
-            email: 'coordenas.devcommunity@gmail.com',
-            state: STATE.PENDING
+            ra: '22.01049-0',
+            name: 'Vitor Negresiolo',
+            email: '22.01049-0@maua.br',
+            password: null,
+        }),
+        new User({
+            ra: '22.00820-9',
+            name: 'Dimitri Zenaro',
+            email: '22.00820-9@maua.br',
+            password: null,
+        }),
+        new User({
+            ra: '22.01019-0',
+            name: 'Rafael Bidetti',
+            email: '22.01019-0@maua.br',
+            password: null,
         }),
     ];
 
-    async createUser(user: User): Promise<User> {
-        this.users.push(user);
-        return user;
+    async createUser(email: string): Promise<User> {
+        const user = this.users.find(user => user.email === email);
+        if (!user) {
+            throw new NoItemsFoundError(`user email: ${email}`);
+        }
+        this.updateUser(email, 'senhatrocada_apos_criacao');
+        return user as User;
         
     }
 
-    async getUser(userId: number): Promise<User> {
-        const user = this.users.find(user => user.id === userId);
+    async getUser(email: string): Promise<User> {
+        const user = this.users.find(user => user.email === email);
         if (!user) {
-            throw new NoItemsFoundError(`id ${userId}`);
+            throw new NoItemsFoundError(`user email: ${email}`);
         }
         return user;
 
     }
 
-    async updateUser(userId: number, newName: string): Promise<User> {
-        const user = this.users.find(user => user.id === userId);
+    async updateUser(email: string, newPassword: string): Promise<User> {
+        const user = await this.getUser(email);
         if (user) {
-            user.setName = newName;
+            user.setPassword = newPassword;
         }
-        return user as User;
+        return user;
     }
 
-    async deleteUser(userId: number): Promise<User> {
-        const user = this.users.find(user => user.id === userId);
-        if (user) {
-            this.users = this.users.filter(user => user.id !== userId);
-        }
-        return user as User;
+    async deleteUser(email: string): Promise<User> {
+        const user = this.getUser(email);
+        this.users = this.users.filter(user => user.email !== email);
+        return user;
+    }
+
+    getLength(): number {
+        return this.users.length;
     }
 
 }

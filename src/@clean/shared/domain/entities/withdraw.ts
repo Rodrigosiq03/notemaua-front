@@ -1,6 +1,13 @@
 import { EntityError } from "../helpers/errors/domain_error";
 
 export type WithdrawProps = {
+    numSerie: string;
+    email: string;
+    withdrawTime: number;
+    finishTime: number | null;
+}
+
+export type JsonProps = {
     num_serie: string;
     email: string;
     withdraw_time: number;
@@ -9,35 +16,35 @@ export type WithdrawProps = {
 
 export class Withdraw {
     constructor(public props: WithdrawProps) {
-        if (!Withdraw.validateNum_serie(props.num_serie)) {
+        if (!Withdraw.validateNumSerie(props.numSerie)) {
             throw new EntityError('props.num_serie')
         }
-        this.props.num_serie = props.num_serie;
+        this.props.numSerie = props.numSerie;
         if (!Withdraw.validateEmail(props.email)) {
             throw new EntityError('props.email')
         }
         this.props.email = props.email;
-        if (!Withdraw.validateWithdraw_time(props.withdraw_time)) {
+        if (!Withdraw.validateWithdraw_time(props.withdrawTime)) {
             throw new EntityError('props.withdraw_time')
         }
-        this.props.withdraw_time = props.withdraw_time;
-        if (props.finish_time != null) {
-            if (!Withdraw.validateFinish_time(props.finish_time)) {
+        this.props.withdrawTime = props.withdrawTime;
+        if (props.finishTime != null) {
+            if (!Withdraw.validateFinish_time(props.finishTime)) {
                 throw new EntityError('props.finish_time')
             }
-            this.props.finish_time = props.finish_time;
-        }
+            this.props.finishTime = props.finishTime;
+        } 
     }
 
-    get num_serie() {
-        return this.props.num_serie;
+    get numSerie() {
+        return this.props.numSerie;
     }
 
-    set setNum_serie(num_serie: string) {
-        if (!Withdraw.validateNum_serie(num_serie)) {
-            throw new EntityError('props.num_serie')
+    set setNumSerie(numSerie: string) {
+        if (!Withdraw.validateNumSerie(numSerie)) {
+            throw new EntityError('props.numSerie')
         }
-        this.props.num_serie = num_serie;
+        this.props.numSerie = numSerie;
     }
 
     get email() {
@@ -51,40 +58,49 @@ export class Withdraw {
         this.props.email = email;
     }
 
-    get withdraw_time() {
-        return this.props.withdraw_time;
+    get withdrawTime() {
+        return this.props.withdrawTime;
     }
 
-    set setWithdraw_time(withdraw_time: number) {
-        if (!Withdraw.validateWithdraw_time(withdraw_time)) {
-            throw new EntityError('props.withdraw_time')
+    set setWithdrawTime(withdrawTime: number) {
+        if (!Withdraw.validateWithdraw_time(withdrawTime)) {
+            throw new EntityError('props.withdrawTime')
         }
-        this.props.withdraw_time = withdraw_time;
+        this.props.withdrawTime = withdrawTime;
     }
 
-    get finish_time() {
-        return this.props.finish_time;
+    get finishTime() {
+        return this.props.finishTime;
     }
 
-    set setFinish_time(finish_time: number | null) {
-        if (finish_time != null) {
-            if (!Withdraw.validateFinish_time(finish_time)) {
-                throw new EntityError('props.finish_time')
+    set setFinishTime(finishTime: number | null) {
+        if (finishTime != null) {
+            if (!Withdraw.validateFinish_time(finishTime)) {
+                throw new EntityError('props.finishTime')
             }
-            this.props.finish_time = finish_time;
+            this.props.finishTime = finishTime;
         }
     }
 
     toJSON() {
         return {
-            num_serie: this.props.num_serie,
+            num_serie: this.props.numSerie,
             email: this.props.email,
-            withdraw_time: this.props.withdraw_time,
-            finish_time: this.props.finish_time,
+            withdraw_time: this.props.withdrawTime,
+            finish_time: this.props.finishTime,
         }
     }
 
-    static validateNum_serie(num_serie: string): boolean {
+    static fromJSON(json: JsonProps) {
+        return new Withdraw({
+            numSerie: json.num_serie,
+            email: json.email,
+            withdrawTime: json.withdraw_time,
+            finishTime: json.finish_time,
+        })
+    }
+
+    static validateNumSerie(num_serie: string): boolean {
         // validate length of num_serie 
         if (num_serie == undefined) {
             return false;
@@ -113,7 +129,7 @@ export class Withdraw {
         if (!email.match(regexp)) {
             return false
         }
-        if (email.includes("maua.br") == false) {
+        if (email.substring(email.length - 8, email.length) != "@maua.br") {
             return false
         }
         return true
@@ -126,7 +142,8 @@ export class Withdraw {
         if (typeof(withdraw_time) != "number") {
             return false
         }
-        if (withdraw_time < 0) {
+        // 1672585200000 = Janeiro de 2023, dia 01.       
+        if (withdraw_time < 1672585200000) {
             return false
         }
         return true
@@ -139,7 +156,7 @@ export class Withdraw {
         if (typeof(finish_time) != "number") {
             return false
         }
-        if (finish_time < 0) {
+        if (finish_time < 1672585200000) {
             return false
         }
         return true

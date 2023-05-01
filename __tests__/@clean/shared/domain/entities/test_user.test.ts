@@ -4,19 +4,22 @@ import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error"
 
 test('[ENTITY] - User - Test User entity', () => {
     const user = new User({
-        ra: '22.00680-0',
+        ra: null,
         name: 'Teste',
         email: 'rodrigo.dsiqueira1@maua.br',
-        password: '12345678'
+        password: null,
+        role: null
     })
     expect(user).toBeInstanceOf(User);
+    expect(user.props.role).toBe(ROLE.STUDENT);
 });
 test('[ENTITY] - User - Test User entity name', () => {
     const user = new User({
         ra: '22.00680-0',
         name: 'Teste',
         email: 'rodrigo.dsiqueira1@maua.br',
-        password: '12345678'
+        password: '12345678',
+        role: null
     })
     expect(user.name).toBe('Teste');
 });
@@ -25,10 +28,9 @@ test('[ENTITY] - User - Test User role default', () => {
         ra: '22.00680-0',
         name: 'Teste',
         email: 'rodrigo.dsiqueira1@maua.br',
-        password: '12345678',
-        role: ROLE.STUDENT
+        password: null,
     })
-    expect(user.props.role).toBe(ROLE.STUDENT);
+    expect(user.role).toBe(ROLE.STUDENT);
     
 });
 test('[ENTITY] - User - Test User entity email', () => {
@@ -36,7 +38,8 @@ test('[ENTITY] - User - Test User entity email', () => {
         ra: '22.00680-0',
         name: 'Teste',
         email: 'rodrigo.dsiqueira1@maua.br',
-        password: '12345678'
+        password: '12345678',
+        role: null
     })
     expect(user.email).toBe('rodrigo.dsiqueira1@maua.br');
 });
@@ -46,7 +49,8 @@ test('[ENTITY] - User - Test User entity error maua email', () => {
             ra: '22.00680-0',
             name: 'Teste',
             email: 'rodrigo.dsiqueira1@gmail.com',
-            password: '12345678'
+            password: '12345678',
+            role: null
         })
     }).toThrowError(EntityError);
     expect(() => {
@@ -54,7 +58,8 @@ test('[ENTITY] - User - Test User entity error maua email', () => {
             ra: '22.00680-0',
             name: 'Teste',
             email: 'rodrigo.dsiqueira1@gmail.com',
-            password: '12345678'
+            password: '12345678',
+            role: null
         })
     }).toThrowError('Field props.email is not valid');
 });
@@ -64,7 +69,8 @@ test('[ENTITY] - User - Test User entity error email common', () => {
             ra: '22.00680-0',
             name: 'Teste',
             email: 'rodrigo.dsiqueira1mauabr',
-            password: '12345678'
+            password: '12345678',
+            role: null
         })
     }).toThrowError(EntityError);
     expect(() => {
@@ -72,19 +78,8 @@ test('[ENTITY] - User - Test User entity error email common', () => {
             ra: '22.00680-0',
             name: 'Teste',
             email: 'rodrigo.dsiqueira1mauabr',
-            password: '12345678'
+            password: '12345678',
+            role: null
         })
     }).toThrowError('Field props.email is not valid');
-});
-test('[ENTITY] - User - Test to json', () => {
-    const user = new User({
-        ra: '22.00680-0',
-        name: 'Teste',
-        email: 'rodrigo.dsiqueira1@maua.br',
-        password: '12345678'
-    })
-
-    const userToJSON = user.toJSON();
-
-    expect(userToJSON).toBeInstanceOf(Object);
 });

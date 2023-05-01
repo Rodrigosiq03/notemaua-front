@@ -1,7 +1,7 @@
 import { EntityError } from "../helpers/errors/domain_error";
 
 export type NotebookProps = {
-    num_serie: string;
+    numSerie: string;
     isActive?: boolean;
 }
 
@@ -10,12 +10,13 @@ export type JsonProps = {
     isActive?: boolean;
 }
 
+// if (!Notebook.validateNum_serie(props.numSerie)) {
+//     throw new EntityError('props.num_serie')
+// }
+// this.props.numSerie = props.numSerie;
+
 export class Notebook {
     constructor(public props: NotebookProps) {        
-        if (!Notebook.validateNum_serie(props.num_serie)) {
-            throw new EntityError('props.num_serie')
-        }
-        this.props.num_serie = props.num_serie;
 
         if (this.props.isActive == null) {
             this.props.isActive = false;
@@ -30,15 +31,15 @@ export class Notebook {
         
     }
 
-    get num_serie() {
-        return this.props.num_serie;
+    get numSerie() {
+        return this.props.numSerie;
     }
 
-    set setNum_serie(num_serie: string) {
-        if (!Notebook.validateNum_serie(num_serie)) {
+    set setNumSerie(numSerie: string) {
+        if (!Notebook.validateNumSerie(numSerie)) {
             throw new EntityError('props.num_serie')
         }
-        this.props.num_serie = num_serie;
+        this.props.numSerie = numSerie;
     }
 
     get isActive() {
@@ -52,32 +53,40 @@ export class Notebook {
         this.props.isActive = isActive;
     }
 
+    setNotebookIsActive(numSerie: string) {
+        if (!Notebook.validateNumSerie(numSerie)) {
+            throw new EntityError('props.numSerie')
+        }
+        this.props.numSerie = numSerie;
+        this.props.isActive = true;
+    }
+
     toJSON() {
         return {
             ra: this.props.isActive,
-            name: this.props.num_serie,
+            name: this.props.numSerie,
         }
     }
 
     fromJSON(json: JsonProps) {
         return new Notebook({
-            num_serie: json.num_serie,
+            numSerie: json.num_serie,
             isActive: json.isActive,
         });
     }
 
-    static validateNum_serie(num_serie: string): boolean {
+    static validateNumSerie(numSerie: string): boolean {
         // validate length of num_serie 
-        if (num_serie == undefined) {
+        if (numSerie == undefined) {
             return false;
         } 
-        if (num_serie == null) {
+        if (numSerie == null) {
             return false;
         } 
-        if (typeof num_serie != 'string') {
+        if (typeof numSerie != 'string') {
             return false;
         } 
-        if (num_serie.length != 5) {
+        if (numSerie.length != 5) {
             return false;
         }
         return true;

@@ -3,30 +3,37 @@ import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error"
 
 test('[ENTITY] - Notebook - should create a valid notebook', () => {
     const notebook = new Notebook({
-        num_serie: '12345',
-        isActive: false
+        numSerie: '12345'
     })
     expect(notebook).toBeInstanceOf(Notebook);
-    expect(notebook.num_serie).toBe('12345');
+    expect(notebook.numSerie).toBe('12345');
     expect(notebook.isActive).toBe(false);
 });
 test('[ENTITY] - Notebook - should create a invalid notebook', () => {
     expect(() => {
         new Notebook({
-            num_serie: '1234'
+            numSerie: '1234'
         })
     }).toThrowError(EntityError);
     expect(() => {
         new Notebook({
-            num_serie: '1234'
+            numSerie: '1234'
         })
     }).toThrowError('Field props.num_serie is not valid');
 });
 test('[ENTITY] - Notebook - test to json', () => {
     const notebook = new Notebook({
-        num_serie: '12345'
+        numSerie: '12345'
     })
 
     const json = notebook.toJSON();
     expect(json).toBeInstanceOf(Object);
+});
+test('[ENTITY] - Notebook - test set is active', () => {
+    const notebook = new Notebook({
+        numSerie: '12345'
+    })
+    expect(notebook.isActive).toBe(false);
+    notebook.setIsActive = true;
+    expect(notebook.isActive).toBe(true);
 });
