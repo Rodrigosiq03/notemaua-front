@@ -1,6 +1,6 @@
-import { Notebook } from "@/@clean/shared/domain/entities/notebook";
+import { Notebook } from "../../../shared/domain/entities/notebook";
 import { INotebookRepository } from "../domain/repositories/notebook_repository_interface";
-import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { EntityError } from "../../../shared/domain/helpers/errors/domain_error";
 
 export class GetNotebookUsecase {
     constructor(private notebookRepo: INotebookRepository) {}

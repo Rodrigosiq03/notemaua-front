@@ -1,13 +1,13 @@
 'use client';
-import { createContext, PropsWithChildren, useState } from "react";
-import { User } from "@/@clean/shared/domain/entities/user";
-import { container, Registry } from "@/@clean/shared/infra/containers/container_user";
-import { GetUserUsecase } from "@/@clean/modules/user/usecases/get_user_usecase";
-import { CreateUserUsecase } from "@/@clean/modules/user/usecases/create_user_usecase";
-import { UpdateUserUsecase } from "@/@clean/modules/user/usecases/update_user_usecase";
-import { DeleteUserUsecase } from "@/@clean/modules/user/usecases/delete_user_usecase";
+import React, { createContext, PropsWithChildren, useState } from "react";
+import { User } from "../@clean/shared/domain/entities/user";
+import { container, Registry } from "../@clean/shared/infra/containers/container_user";
+import { GetUserUsecase } from "../@clean/modules/user/usecases/get_user_usecase";
+import { CreateUserUsecase } from "../@clean/modules/user/usecases/create_user_usecase";
+import { UpdateUserUsecase } from "../@clean/modules/user/usecases/update_user_usecase";
+import { DeleteUserUsecase } from "../@clean/modules/user/usecases/delete_user_usecase";
 import { AxiosError } from "axios";
-import { NoItemsFoundError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { NoItemsFoundError } from "../@clean/shared/domain/helpers/errors/domain_error";
 
 export type UserContextType = {
     users: User[];
