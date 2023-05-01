@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import logo from 'public/images/logo.svg';
+// import logo from 'public/images/logo.svg';
 import Image from 'next/image';
 
 import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
@@ -10,6 +10,8 @@ import {CardGray, CardWhite} from './components/Card';
 import { Title } from './components/Title';
 
 import { useForm, SubmitHandler } from "react-hook-form";
+
+// import { Auth } from 'aws-amplify';
 
 import {Hind} from 'next/font/google';
 const hind = Hind({subsets: ['latin'], weight: '700'})
@@ -29,7 +31,14 @@ export default function LoginPage() {
 
     const {register, handleSubmit } = useForm<IFormlogin>();
 
-    const onSubmit: SubmitHandler<IFormlogin> = data => {};
+    const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
+      // const auth = Auth.signIn(data.email, data.password);
+      // if (auth) {
+      //   console.log('LOGGED IN, ', auth)
+      // } else {
+      //   console.log('ERROR LOGGED IN ', auth)
+      // }
+    };
 
     return (
       <Container className={hind.className}>
