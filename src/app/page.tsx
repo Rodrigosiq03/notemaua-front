@@ -1,94 +1,61 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
-import { UserProvider } from '@/contexts/user_provider'
+'use client';
+import React from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
+import logo from 'public/images/logo.svg';
+import Image from 'next/image';
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
+import {CardGray, CardWhite} from './components/Card';
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+import { Title } from './components/Title';
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+import { useForm, SubmitHandler } from "react-hook-form";
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
+import {Hind} from 'next/font/google';
+const hind = Hind({subsets: ['latin'], weight: '700'})
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+import { FormButton, FormContainer, FormInput, FormLabel } from './components/Form';
+import { LinkStyled, TextForLink } from './components/Link';
+import ImageComponentMaua from './components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
+
+
+export interface IFormlogin {
+  email: string;
+  password: string;
+}
+
+export default function LoginPage() {
+
+    const {register, handleSubmit } = useForm<IFormlogin>();
+
+    const onSubmit: SubmitHandler<IFormlogin> = data => {};
+
+    return (
+      <Container className={hind.className}>
+        <CardGray>
+          <CardWhite>
+              <ContainerCardContent>
+                <ImageComponentNoteMaua/>
+                <Title>Login</Title>
+                <FormContainer onSubmit={handleSubmit(onSubmit)}>
+                  <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
+                  <FormInput type='email' {...register('email', { required: true })}/>
+                  <FormLabel style={{paddingRight: ''}} htmlFor='password'>Senha</FormLabel>
+                  <FormInput type='password' {...register('password', { required: true})} />
+                  <FormButton type='submit'>Entrar</FormButton>
+                </FormContainer>
+                <ContainerRowLink>
+                  <TextForLink>Primeiro Acesso?</TextForLink>
+                  <LinkStyled href="/primeiro-acesso">Clique aqui</LinkStyled>
+                </ContainerRowLink>
+                    <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
+              </ContainerCardContent>
+          </CardWhite>
+        </CardGray>
+          <ImageComponentMaua />
+      </Container>
+    )
 }
 
 
