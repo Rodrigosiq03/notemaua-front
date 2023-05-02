@@ -32,7 +32,18 @@ const ContainerCardContent = styled.div`
 const ContainerRowLink = styled.div`
     display: flex;
     flex-direction: row;  
-    padding-top: 16px;
+    padding-top: 16px;  
 `;
 
-export { Container, ContainerCardContent, ContainerRowLink };
+const ContainerRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding-top: 28px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`
+
+export { Container, ContainerCardContent, ContainerRowLink, ContainerRow };

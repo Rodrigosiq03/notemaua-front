@@ -21,7 +21,7 @@ const FormLabel = styled.label`
   display: inline-block;
   text-align: left;
   font-size: 15px;
-    
+  font-weight: 700;
 `;
 
 const FormButton = styled.button`
