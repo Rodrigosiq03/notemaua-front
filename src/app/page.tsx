@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-// import logo from 'public/images/logo.svg';
+// import logo from '../../public/images/logoMaua.svg';
 import Image from 'next/image';
 
 import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
@@ -11,7 +11,10 @@ import { Title } from './components/Title';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
-// import { Auth } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
+import config from '../aws-exports';
+Amplify.configure(config);
 
 import {Hind} from 'next/font/google';
 const hind = Hind({subsets: ['latin'], weight: '700'})
@@ -29,15 +32,41 @@ export interface IFormlogin {
 
 export default function LoginPage() {
 
+  async function getUser() {
+    const user = await Auth.currentAuthenticatedUser();
+    return user;
+  }
+
     const {register, handleSubmit } = useForm<IFormlogin>();
 
     const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-      // const auth = Auth.signIn(data.email, data.password);
-      // if (auth) {
-      //   console.log('LOGGED IN, ', auth)
-      // } else {
-      //   console.log('ERROR LOGGED IN ', auth)
-      // }
+      const auth = Auth.signIn(data.email, data.password);
+      if (auth) {
+        auth.then((res) => {
+          console.log('RES ', res.challengeName);
+          if (res.challengeName === 'NEW_PASSWORD_REQUIRED') {
+            Auth.completeNewPassword(
+              res, 'Teste123!', { name: 'a80d1c8e-d937-4d6e-8979-ce6b6ed1a323' }
+            ).then((res) => {
+              Auth.forgotPassword(data.email).then((res) => {
+                console.log('RES ', res);
+              }).catch((err) => {
+                console.log('ERR ', err);
+              });
+              console.log(res)
+            }).catch((err) => {
+              console.log('ERR ', err);
+            }
+            );
+          }
+          Auth.currentAuthenticatedUser().then((res) => {
+            console.log('RES ', res);
+          }) 
+        });
+
+      } else {
+        console.log('ERROR LOGGED IN ', auth)
+      }
     };
 
     return (
