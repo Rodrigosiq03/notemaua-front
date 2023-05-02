@@ -38,7 +38,7 @@ const ContainerRowLink = styled.div`
 const ContainerRow = styled.div`
     display: flex;
     flex-direction: row;
-    padding-top: 16px;
+    padding-top: 28px;
     cursor: pointer;
 
     &:hover {

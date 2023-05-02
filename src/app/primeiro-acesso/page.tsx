@@ -9,9 +9,7 @@ import {CardGray, CardWhite} from '../components/Card';
 
 import { Title } from '../components/Title';
 
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
-import ExitIcon from '../components/Icon';
+import { ExitIcon } from '../components/Icon';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -49,7 +47,7 @@ export default function PrimeiroAcessoPage() {
                   </FormContainer>
                   <ContainerRow>
                     <ReturnLink href="/">Voltar</ReturnLink>
-                    <ExitIcon />
+                    <ExitIcon /> 
                   </ContainerRow>
                 </ContainerCardContent>
             </CardWhite>
