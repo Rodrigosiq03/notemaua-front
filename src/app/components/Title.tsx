@@ -13,6 +13,7 @@ const Title = styled.h2`
       padding-top: 20px;
       padding-bottom: 28px;
       margin-top: 0;
+      
     }
 
 `;

@@ -16,8 +16,8 @@ const TextForLink = styled.p`
 
 const ReturnLink = styled(Link)`
     color: #545454;
-    padding-top: 20px;
     font-weight: 700;
+    text-decoration: none;
 `
 
 export { LinkStyled, TextForLink, ReturnLink };
