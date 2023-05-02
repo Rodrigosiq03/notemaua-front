@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-import {Container, ContainerCardContent, ContainerRowLink} from '../components/Container';
+import {Container, ContainerCardContent} from '../components/Container';
 import {CardGray, CardWhite} from '../components/Card';
 
 import { Title } from '../components/Title';
@@ -39,7 +39,7 @@ export default function DefinirSenhaPage() {
                   <FormInput type='password' {...register('password', { required: true })}/>
                   <FormLabel style={{paddingRight: ''}} htmlFor='password'>Confirme a Senha</FormLabel>
                   <FormInput type='password' {...register('password', { required: true})} />
-                  <FormButton type='submit'>Definir</FormButton>
+                  <FormButton style={{marginTop:'46px'}} type='submit'>Definir</FormButton>
                 </FormContainer>
               </ContainerCardContent>
           </CardWhite>
