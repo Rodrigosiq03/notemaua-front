@@ -1,10 +1,12 @@
 import { User } from "@/@clean/shared/domain/entities/user";
 
+
 export interface IUserRepository {
-    createUser(user: User): Promise<User>;
-    getUser(userId: number): Promise<User>;
-    updateUser(userId: number, newName: string): Promise<User>;  //returns updated user
-    deleteUser(userId: number): Promise<User>;
+    createUser(email: string): Promise<User>;
+    getUser(email: string): Promise<User>;
+    updateUser(email: string, newPassword: string): Promise<User>;
+    deleteUser(email: string): Promise<User>;
+    getLength(): number;
 }
 
 
