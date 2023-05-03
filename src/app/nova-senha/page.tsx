@@ -17,15 +17,15 @@ import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 
 
-export interface IFormRedefinirSenha {
+export interface IFormNovaSenha {
   password: string;
 }
 
-export default function DefinirSenhaPage() {
+export default function NovaSenhaPage() {
 
-    const {register, handleSubmit } = useForm<IFormRedefinirSenha>();
+    const {register, handleSubmit } = useForm<IFormNovaSenha>();
 
-    const onSubmit: SubmitHandler<IFormRedefinirSenha> = data => {};
+    const onSubmit: SubmitHandler<IFormNovaSenha> = data => {};
 
     return (
       <Container className={hind.className}>
