@@ -27,7 +27,7 @@ export interface IFormlogin {
     password: string;
 }
 
-export default function PrimeiroAcessoPage() {
+export default function CadastroPage() {
   const {register, handleSubmit, formState: { errors } } = useForm<IFormlogin>();
   
   const onSubmit: SubmitHandler<IFormlogin> = data => {

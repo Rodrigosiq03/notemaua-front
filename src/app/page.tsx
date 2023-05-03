@@ -51,7 +51,7 @@ export default function LoginPage() {
                 </FormContainer>
                 <ContainerRowLink>
                   <TextForLink>Primeiro Acesso?</TextForLink>
-                  <LinkStyled href="/primeiro-acesso">Clique aqui</LinkStyled>
+                  <LinkStyled href="/cadastro">Clique aqui</LinkStyled>
                 </ContainerRowLink>
                     <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
               </ContainerCardContent>
