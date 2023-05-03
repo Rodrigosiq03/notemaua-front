@@ -17,7 +17,7 @@ import config from '../aws-exports';
 Amplify.configure(config);
 
 import {Hind} from 'next/font/google';
-const hind = Hind({subsets: ['latin'], weight: '700'})
+const hind = Hind({subsets: ['latin'], weight: ['700', '300']})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from './components/Form';
 import { LinkStyled, TextForLink } from './components/Link';

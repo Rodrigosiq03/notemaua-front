@@ -24,6 +24,7 @@ const hind = Hind({subsets: ['latin'], weight: ['700', '300']})
 
 export interface IFormlogin {
     email: string;
+    password: string;
 }
 
 export default function PrimeiroAcessoPage() {
@@ -64,13 +65,14 @@ export default function PrimeiroAcessoPage() {
         <CardWhite>
             <ContainerCardContent>
               <ImageComponentNoteMaua/>
-              <Title style={{ paddingTop: '0px', marginBottom: '0px' }}>Primeiro Acesso</Title>
+              <Title style={{ marginBottom: '32px' }}>Realize seu cadastro</Title>
               <FormContainer onSubmit={handleSubmit(onSubmit)}>
-                <p style={{textAlign: 'center', fontSize: '20px'}}>Você receberá um e-mail<br/>para definir sua senha.</p>
-                <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
+                <FormLabel htmlFor='email'>Digite seu E-mail (@maua.br)</FormLabel>
                 <FormInput type='email' {...register('email', { required: true, })}/>
                 {errors.email && <span style={{color: 'red'}}>Este campo é obrigatório</span> } 
-                <FormButton type='submit'>Entrar</FormButton>
+                <FormLabel style={{paddingRight: ''}} htmlFor='password'>Digite uma senha</FormLabel>
+                <FormInput type='password' {...register('password', { required: true})} />
+                <FormButton type='submit'>Cadastrar</FormButton>
               </FormContainer>
               <ContainerRow>
                 <ReturnLink href="/">Voltar</ReturnLink>
