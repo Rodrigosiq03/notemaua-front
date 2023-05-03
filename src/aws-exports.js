@@ -6,7 +6,7 @@ const awsmobile = {
     "aws_cognito_identity_pool_id": process.env.NEXT_PUBLIC_IDENTITY_POOL_ID,
     "aws_cognito_region": process.env.NEXT_PUBLIC_REGION,
     "aws_user_pools_id": process.env.NEXT_PUBLIC_USER_POOL_ID,
-    "aws_user_pools_web_client_id": process.env.NEXT_PUBLIC_REGION,
+    "aws_user_pools_web_client_id": process.env.NEXT_PUBLIC_USER_POOL_WEB_CLIENT_ID,
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
