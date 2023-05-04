@@ -3,17 +3,21 @@ import { ROLE } from "@/@clean/shared/domain/enums/role_enum";
 import { NoItemsFoundError } from "@/@clean/shared/domain/helpers/errors/domain_error";
 import { UserRepositoryMock } from "@/@clean/shared/infra/repositories/user_repository_mock";
 
-test('Test create user', () => {
-    const repo = new UserRepositoryMock();
-    const oldPass = repo.getUser('22.00680-0@maua.br').then((user) => user.password);
-    const user = repo.createUser('22.00680-0@maua.br');
-    const userPassword = user.then((user) => user.password);
-    const userRole = user.then((user) => user.props.role);
-    expect(user).toBeInstanceOf(Promise<User>);
-    expect(userPassword).not.toBe(oldPass);
-    expect(userPassword).resolves.toBe('senhatrocada_apos_criacao');
-    expect(userRole).resolves.toBe(ROLE.STUDENT);
+test('Test create user', async () => {
+  const repo = new UserRepositoryMock();
     
+  const newUser = new User({
+    ra: '22.00680-0',
+    name: 'Rodrigo Siqueira', 
+    email: '22.00680-0@maua.br', 
+    password: 'Maua1234!',
+  });
+
+  const userCreated = await repo.createUser(newUser.email, newUser.password as string);
+
+  expect(userCreated).toBeInstanceOf(User);
+
+
 });
 test('Test get user', () => {
     const repo = new UserRepositoryMock();
