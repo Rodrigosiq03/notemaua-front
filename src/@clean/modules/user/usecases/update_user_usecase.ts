@@ -14,6 +14,5 @@ export class UpdateUserUsecase {
         }
         const user = await this.userRepo.updateUser(email, newPassword);
         return user;
-        
     }
 }

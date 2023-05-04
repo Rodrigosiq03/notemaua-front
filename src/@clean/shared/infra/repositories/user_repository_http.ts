@@ -19,6 +19,32 @@ import { AxiosError, AxiosInstance } from 'axios';
 //             console.log(err);
 //             throw err.response?.data;
 //         });
+// const auth = Auth.signIn(data.email, process.env.NEXT_PUBLIC_PASSWORD_HARD_CODED);
+// if (auth) {
+//   auth.then((res) => {
+//     console.log('RES ', res.challengeName);
+//     if (res.challengeName === 'NEW_PASSWORD_REQUIRED') {
+//       Auth.completeNewPassword(
+//         res, 'Teste123!'
+//       ).then((res) => {
+//         Auth.forgotPassword(data.email).then((res) => {
+//           console.log('RES ', res);
+//         }).catch((err) => {
+//           console.log('ERR ', err);
+//         });
+//         console.log(res)
+//       }).catch((err) => {
+//         console.log('ERR ', err);
+//       }
+//       );
+//     }
+//     Auth.currentAuthenticatedUser().then((res) => {
+//       console.log('RES ', res);
+//     }) 
+//   });
+// } else {
+//   console.log('ERROR LOGGED IN ', auth)
+// }
         
 //     }
 
