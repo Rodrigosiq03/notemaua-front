@@ -7,7 +7,7 @@ export class FinishWithdrawUsecase {
     
   async execute(numSerie: string) {
     if (!Withdraw.validateNumSerie(numSerie)) {
-        throw new EntityError("numSerie");
+      throw new EntityError("numSerie");
     }
     const withdraw = await this.withdrawRepo.finishWithdraw(numSerie);
     return withdraw;

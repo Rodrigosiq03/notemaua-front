@@ -1,6 +1,6 @@
-import { GetNotebookUsecase } from "@/@clean/modules/notebook/usecases/get_notebook_usecase";
-import { Notebook } from "@/@clean/shared/domain/entities/notebook";
-import { NotebookRepositoryMock } from "@/@clean/shared/infra/repositories/notebook_repository_mock";
+import { Notebook } from '../../../../../src/@clean/shared/domain/entities/notebook'; 
+import { NotebookRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/notebook_repository_mock';
+import { GetNotebookUsecase } from '../../../../../src/@clean/modules/notebook/usecases/get_notebook_usecase';  
 
 test('Test get a notebook usecase', async () => {
   const repo = new NotebookRepositoryMock();
