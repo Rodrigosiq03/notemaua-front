@@ -1,4 +1,4 @@
-import { INotebookRepository } from "@/@clean/modules/user/domain/repositories/notebook_repository_interface";
+import { INotebookRepository } from "../../../modules/notebook/domain/repositories/notebook_repository_interface"
 import { Notebook } from "../../domain/entities/notebook";
 import { NoItemsFoundError } from "../../domain/helpers/errors/domain_error";
 
