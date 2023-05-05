@@ -1,9 +1,6 @@
 'use client';
 import React, { useContext } from 'react';
 
-// import logo from '../../public/images/logoMaua.svg';
-import Image from 'next/image';
-
 import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
 import {CardGray, CardWhite} from './components/Card';
 
@@ -32,36 +29,45 @@ export interface IFormlogin {
 }
 
 export default function LoginPage() {
-    const {register, handleSubmit } = useForm<IFormlogin>();
-    const { getUser } =  useContext(UserContext);
+  const {register, handleSubmit } = useForm<IFormlogin>();
+  const { users } = useContext(UserContext); 
 
-    const onSubmit: SubmitHandler<IFormlogin> = async (data) => {  };
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => { 
+    const userCreated = users.find(user => user.email === data.email);
 
-    return (
-      <Container className={hind.className}>
-        <CardGray>
-          <CardWhite>
-              <ContainerCardContent>
-                <ImageComponentNoteMaua/>
-                <Title>Login</Title>
-                <FormContainer onSubmit={handleSubmit(onSubmit)}>
-                  <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
-                  <FormInput type='email' {...register('email', { required: true })}/>
-                  <FormLabel style={{paddingRight: ''}} htmlFor='password'>Senha</FormLabel>
-                  <FormInput type='password' {...register('password', { required: true})} />
-                  <FormButton type='submit'>Entrar</FormButton>
-                </FormContainer>
-                <ContainerRowLink>
-                  <TextForLink>Primeiro Acesso?</TextForLink>
-                  <LinkStyled href="/cadastro">Clique aqui</LinkStyled>
-                </ContainerRowLink>
-                    <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
-              </ContainerCardContent>
-          </CardWhite>
-        </CardGray>
-          <ImageComponentMaua />
-      </Container>
-    )
+    if (userCreated) {
+      if (userCreated.email === data.email && userCreated.password === data.password) { 
+        console.log('Login realizado com sucesso');
+      }
+    }
+
+  };
+
+  return (
+    <Container className={hind.className}>
+      <CardGray>
+        <CardWhite>
+          <ContainerCardContent>
+            <ImageComponentNoteMaua/>
+            <Title>Login</Title>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+              <FormLabel htmlFor='email'>E-mail (@maua.br)</FormLabel>
+              <FormInput type='email' {...register('email', { required: true })}/>
+              <FormLabel style={{paddingRight: ''}} htmlFor='password'>Senha</FormLabel>
+              <FormInput type='password' {...register('password', { required: true})} />
+              <FormButton type='submit'>Entrar</FormButton>
+            </FormContainer>
+            <ContainerRowLink>
+              <TextForLink>Primeiro Acesso?</TextForLink>
+              <LinkStyled href="/primeiro-acesso">Clique aqui</LinkStyled>
+            </ContainerRowLink>
+              <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
+          </ContainerCardContent>
+        </CardWhite>
+      </CardGray>
+        <ImageComponentMaua />
+    </Container>
+  )
 }
 
 
