@@ -33,14 +33,14 @@ export default function LoginPage() {
   const { users } = useContext(UserContext); 
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => { 
-    const userCreated = users.find(user => user.email === data.email);
-
-    if (userCreated) {
-      if (userCreated.email === data.email && userCreated.password === data.password) { 
-        console.log('Login realizado com sucesso');
+    const findUser = users.find(user => user.email === data.email); 
+    if (findUser) {
+      if (findUser.password === data.password) {
+        console.log('Login realizado com sucesso!')
+      } else {
+        console.log('Senha incorreta!')
       }
     }
-
   };
 
   return (
@@ -61,7 +61,7 @@ export default function LoginPage() {
               <TextForLink>Primeiro Acesso?</TextForLink>
               <LinkStyled href="/cadastro">Clique aqui</LinkStyled>
             </ContainerRowLink>
-              <LinkStyled href="/esqueci-minha-senha">Esqueci minha senha</LinkStyled>
+              <LinkStyled href="/redefinir-senha">Esqueci minha senha</LinkStyled>
           </ContainerCardContent>
         </CardWhite>
       </CardGray>
