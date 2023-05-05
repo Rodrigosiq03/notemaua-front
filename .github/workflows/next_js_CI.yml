@@ -1,0 +1,15 @@
+name: Next.js CI TEST
+
+on:
+  pull_request:
+    branches: [develop, main]
+jobs:
+  next_js_test:
+    name: Run Next.js test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
