@@ -1,5 +1,5 @@
-import { Withdraw } from "@/@clean/shared/domain/entities/withdraw";
-import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { Withdraw } from "../../../../../src/@clean/shared/domain/entities/withdraw";
+import { EntityError } from "../../../../../src/@clean/shared/domain/helpers/errors/domain_error";
 
 test('[ENTITY] - Withdraw - should create a valid withdraw', () => {
     const withdraw = new Withdraw({
@@ -9,10 +9,10 @@ test('[ENTITY] - Withdraw - should create a valid withdraw', () => {
         finishTime: 1672585200002
     })
     expect(withdraw).toBeInstanceOf(Withdraw);
-    expect(withdraw.num_serie).toBe('12345');
+    expect(withdraw.numSerie).toBe('12345');
     expect(withdraw.email).toBe('rodrigo.dsiqueira1@maua.br');
-    expect(withdraw.withdraw_time).toBe(1672585200001);
-    expect(withdraw.finish_time).toBe(1672585200002);
+    expect(withdraw.withdrawTime).toBe(1672585200001);
+    expect(withdraw.finishTime).toBe(1672585200002);
 });
 test('[ENTITY] - Withdraw - should create a withdraw with invalid num_serie ', () => {
     expect(() => {

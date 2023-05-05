@@ -17,7 +17,6 @@ export type JsonProps = {
 
 export class Notebook {
     constructor(public props: NotebookProps) {        
-
         if (this.props.isActive == null) {
             this.props.isActive = false;
         } 
@@ -28,6 +27,9 @@ export class Notebook {
             throw new EntityError('props.isActive')
         }
         this.props.isActive = props.isActive;
+        if (!Notebook.validateNumSerie(props.numSerie)) {
+            throw new EntityError('props.numSerie')
+        }
         
     }
 

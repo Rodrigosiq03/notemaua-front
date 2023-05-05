@@ -20,7 +20,7 @@ import { FormButton, FormContainer, FormInput, FormLabel } from './components/Fo
 import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
-import { UserContext } from '@/contexts/user_provider';
+import { UserContext } from '../contexts/user_provider';
 
 
 export interface IFormlogin {

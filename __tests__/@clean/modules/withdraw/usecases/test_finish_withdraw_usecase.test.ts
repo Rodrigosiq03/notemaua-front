@@ -1,6 +1,6 @@
-import { FinishWithdrawUsecase } from "@/@clean/modules/withdraw/usecases/finish_withdraw_usecase";
-import { Withdraw } from "@/@clean/shared/domain/entities/withdraw";
-import { WithdrawRepositoryMock } from "@/@clean/shared/infra/repositories/withdraw_repository_mock";
+import { FinishWithdrawUsecase } from "../../../../../src/@clean/modules/withdraw/usecases/finish_withdraw_usecase";
+import { Withdraw } from "../../../../../src/@clean/shared/domain/entities/withdraw";
+import { WithdrawRepositoryMock } from "../../../../../src/@clean/shared/infra/repositories/withdraw_repository_mock";
 
 test('Test finish withdraw usecase', () => {
   const repo = new WithdrawRepositoryMock();
