@@ -1,6 +1,6 @@
 import { IWithdrawRepository } from "../domain/repositories/withdraw_repository_interface";
 
-export class GetAllWithdraws {
+export class GetAllWithdrawsUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
     
   async execute() {

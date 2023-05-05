@@ -8,8 +8,13 @@ import { Title } from './components/Title';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
+import { Auth } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
+import config from '../aws-exports';
+Amplify.configure(config);
+
 import {Hind} from 'next/font/google';
-const hind = Hind({subsets: ['latin'], weight: '700'})
+const hind = Hind({subsets: ['latin'], weight: ['700', '300']})
 
 import { FormButton, FormContainer, FormInput, FormLabel } from './components/Form';
 import { LinkStyled, TextForLink } from './components/Link';

@@ -1,4 +1,4 @@
-import { IWithdrawRepository } from "../../../modules/withdraw/domain/repositories/withdraw_repository_interface";
+import { IWithdrawRepository } from "@/@clean/modules/user/domain/repositories/withdraw_repository_interface";
 import { Withdraw } from "../../domain/entities/withdraw";
 import { NoItemsFoundError } from "../../domain/helpers/errors/domain_error";
 

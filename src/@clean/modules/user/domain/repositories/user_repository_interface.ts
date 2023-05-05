@@ -8,5 +8,3 @@ export interface IUserRepository {
   deleteUser(email: string): Promise<User>;
   getLength(): number;
 }
-
-
