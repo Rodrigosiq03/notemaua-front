@@ -47,7 +47,7 @@ export function UserProvider({ children }: PropsWithChildren) {
     try {
       const userCreated = await createUserUseCase.execute(email, password)
       setUsers([...users, userCreated])
-    } catch(error) {
+    } catch(error: any) {
       console.log(`ERROR PROVIDER: ${error}`)
       const setError = error
       setError(setError)
@@ -58,7 +58,7 @@ export function UserProvider({ children }: PropsWithChildren) {
     try {
       const userFound = await getUserUsecase.execute(email)
       setUsers([...users, userFound])
-    } catch(error) {
+    } catch(error: any) {
       console.log(`ERROR PROVIDER: ${error}`)
       const setError = error
       setError(setError)
@@ -70,7 +70,7 @@ export function UserProvider({ children }: PropsWithChildren) {
       const userUpdated = await updateUserUseCase.execute(email, newPassword)
       const usersFiltered = users.filter(user => user.email !== email)
       setUsers([...usersFiltered, userUpdated])
-    } catch(error) {
+    } catch(error: any) {
       console.log(`ERROR PROVIDER: ${error}`)
       const setError = error
       setError(setError)
@@ -82,7 +82,7 @@ export function UserProvider({ children }: PropsWithChildren) {
       await deleteUserUseCase.execute(email)
       const usersFiltered = users.filter(user => user.email !== email)
       setUsers(usersFiltered)
-    } catch(error) {
+    } catch(error: any) {
       console.log(`ERROR PROVIDER: ${error}`)
       const setError = error
       setError(setError)
