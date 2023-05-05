@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {Container, ContainerCardContent, ContainerRowLink} from './components/Container';
 import {CardGray, CardWhite} from './components/Card';
@@ -15,6 +15,7 @@ import { FormButton, FormContainer, FormInput, FormLabel } from './components/Fo
 import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
+import { UserContext } from '@/contexts/user_provider';
 
 
 export interface IFormlogin {
@@ -24,11 +25,18 @@ export interface IFormlogin {
 
 export default function LoginPage() {
   const {register, handleSubmit } = useForm<IFormlogin>();
+  const { users } = useContext(UserContext); 
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => { 
-    const fullEmail = data.email
-    console.log(fullEmail.split('@')[0])
-    };
+    const userCreated = users.find(user => user.email === data.email);
+
+    if (userCreated) {
+      if (userCreated.email === data.email && userCreated.password === data.password) { 
+        console.log('Login realizado com sucesso');
+      }
+    }
+
+  };
 
   return (
     <Container className={hind.className}>
