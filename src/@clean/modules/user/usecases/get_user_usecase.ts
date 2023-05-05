@@ -6,10 +6,10 @@ export class GetUserUsecase {
     constructor(private userRepo: IUserRepository) {}
 
     async execute(email: string): Promise<User> {
-        if (!User.validateEmail(email)) {
-            throw new EntityError("email");
-        }
-        const user = await this.userRepo.getUser(email);
-        return user;
+      if (!User.validateEmail(email)) {
+        throw new EntityError("email");
+      }
+      const user = await this.userRepo.getUser(email);
+      return user;
     }
 }
