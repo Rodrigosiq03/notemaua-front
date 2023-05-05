@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
 
 // import logo from '../../public/images/logoMaua.svg';
 import Image from 'next/image';
@@ -23,6 +23,7 @@ import { FormButton, FormContainer, FormInput, FormLabel } from './components/Fo
 import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
+import { UserContext } from '@/contexts/user_provider';
 
 
 export interface IFormlogin {
@@ -32,6 +33,7 @@ export interface IFormlogin {
 
 export default function LoginPage() {
     const {register, handleSubmit } = useForm<IFormlogin>();
+    const { getUser } =  useContext(UserContext);
 
     const onSubmit: SubmitHandler<IFormlogin> = async (data) => {  };
 
