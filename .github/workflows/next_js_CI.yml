@@ -1,4 +1,4 @@
-name: Next.js CI PIPELINE 
+name: Next.js CI TEST
 
 on:
   push:
