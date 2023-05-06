@@ -19,7 +19,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 //             console.log(err);
 //             throw err.response?.data;
 //         });
-        
+
 //     }
 
 //     async deleteUser(userId: number): Promise<User> {
