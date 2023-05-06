@@ -5,6 +5,7 @@ import { CreateUserUsecase } from "@/@clean/modules/user/usecases/create_user_us
 import { GetUserUsecase } from "@/@clean/modules/user/usecases/get_user_usecase";
 import { UpdateUserUsecase } from "@/@clean/modules/user/usecases/update_user_usecase";
 import { DeleteUserUsecase } from "@/@clean/modules/user/usecases/delete_user_usecase";
+
 // import { UserHttpRepository } from "../repositories/user_http_repository";
 import { http } from "../http";
 
@@ -24,19 +25,20 @@ export const Registry = {
     DeleteUserUsecase: Symbol.for("DeleteUserUsecase"),
 };
 
-export const container = new Container();
+export const containerUser = new Container();
+export const containerNotebook = new Container();
 
 // HTTP
-container.bind(Registry.AxiosAdapter).toConstantValue(http);
+containerUser.bind(Registry.AxiosAdapter).toConstantValue(http);
 
 // Repositories
-container.bind(Registry.UserRepositoryMock).to(UserRepositoryMock);
-// container.bind(Registry.UserHttpRepository).toDynamicValue((context) => {
-//     return new UserHttpRepository(context.container.get(Registry.AxiosAdapter));
+containerUser.bind(Registry.UserRepositoryMock).to(UserRepositoryMock);
+// containerUser.bind(Registry.UserHttpRepository).toDynamicValue((context) => {
+//     return new UserHttpRepository(context.containerUser.get(Registry.AxiosAdapter));
 // });
 
 // Usecases
-container.bind(Registry.CreateUserUsecase).toDynamicValue((context) => {
+containerUser.bind(Registry.CreateUserUsecase).toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
         return new CreateUserUsecase(context.container.get(Registry.UserRepositoryMock));
     } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {
@@ -46,7 +48,7 @@ container.bind(Registry.CreateUserUsecase).toDynamicValue((context) => {
     }
 });
 
-container.bind(Registry.GetUsersUsecase).toDynamicValue((context) => {
+containerUser.bind(Registry.GetUsersUsecase).toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
         return new GetUserUsecase(context.container.get(Registry.UserRepositoryMock));
     } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {
@@ -56,7 +58,7 @@ container.bind(Registry.GetUsersUsecase).toDynamicValue((context) => {
     }
 });
 
-container.bind(Registry.UpdateUserUsecase).toDynamicValue((context) => {
+containerUser.bind(Registry.UpdateUserUsecase).toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
         return new UpdateUserUsecase(context.container.get(Registry.UserRepositoryMock));
     } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {
@@ -66,7 +68,7 @@ container.bind(Registry.UpdateUserUsecase).toDynamicValue((context) => {
     }
 });
 
-container.bind(Registry.DeleteUserUsecase).toDynamicValue((context) => {
+containerUser.bind(Registry.DeleteUserUsecase).toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
         return new DeleteUserUsecase(context.container.get(Registry.UserRepositoryMock));
     } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {

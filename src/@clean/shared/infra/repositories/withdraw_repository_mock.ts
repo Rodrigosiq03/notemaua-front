@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import { decorate, injectable } from "inversify"; 
 import { IWithdrawRepository } from "../../../modules/withdraw/domain/repositories/withdraw_repository_interface";
 import { Withdraw } from "../../domain/entities/withdraw";
 import { NoItemsFoundError } from "../../domain/helpers/errors/domain_error";
@@ -48,3 +50,5 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
         return withdraw;
     }
 }
+
+decorate(injectable(), WithdrawRepositoryMock);

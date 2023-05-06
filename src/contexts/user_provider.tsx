@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, PropsWithChildren, useState } from "react";
 import { User } from "../@clean/shared/domain/entities/user";
-import { container, Registry } from "../@clean/shared/infra/containers/container_user";
+import { containerUser, Registry } from "../@clean/shared/infra/containers/container_user";
 import { GetUserUsecase } from "../@clean/modules/user/usecases/get_user_usecase";
 import { CreateUserUsecase } from "../@clean/modules/user/usecases/create_user_usecase";
 import { UpdateUserUsecase } from "../@clean/modules/user/usecases/update_user_usecase";
@@ -32,10 +32,10 @@ const defaultContext: UserContextType = {
 
 export const UserContext = createContext(defaultContext);
 
-const getUserUsecase = container.get<GetUserUsecase>(Registry.GetUsersUsecase)
-const createUserUseCase = container.get<CreateUserUsecase>(Registry.CreateUserUsecase)
-const updateUserUseCase = container.get<UpdateUserUsecase>(Registry.UpdateUserUsecase)
-const deleteUserUseCase = container.get<DeleteUserUsecase>(Registry.DeleteUserUsecase)
+const getUserUsecase = containerUser.get<GetUserUsecase>(Registry.GetUsersUsecase)
+const createUserUseCase = containerUser.get<CreateUserUsecase>(Registry.CreateUserUsecase)
+const updateUserUseCase = containerUser.get<UpdateUserUsecase>(Registry.UpdateUserUsecase)
+const deleteUserUseCase = containerUser.get<DeleteUserUsecase>(Registry.DeleteUserUsecase)
 
 export function UserProvider({ children }: PropsWithChildren) {
   // State for error in API

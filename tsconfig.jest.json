@@ -14,7 +14,9 @@
         "@/public/": ["public/"],
         "@/styles/": ["styles/"],
         "@/types/": ["types/"],
-        "@/utils/": ["utils/"]
+        "@/utils/": ["utils/"],
+        "@/app/": ["app/"],
+        "@/app/contexts/": ["app/contexts/"],
         },
         "skipLibCheck": true
     }

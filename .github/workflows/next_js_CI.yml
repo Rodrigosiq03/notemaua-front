@@ -8,6 +8,8 @@ jobs:
     name: Run Next.js test
     runs-on: ubuntu-latest
     steps:
+      with:
+        node-version: 18.x
       - name: Checkout code
         uses: actions/checkout@v2
       
