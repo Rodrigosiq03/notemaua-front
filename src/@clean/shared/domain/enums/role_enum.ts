@@ -1,18 +1,18 @@
 export enum ROLE {
-  ADMIN = "ADMIN",
-  STUDENT = "STUDENT",
-  EMPLOYEE = "EMPLOYEE",
+  ADMIN = 'ADMIN',
+  STUDENT = 'STUDENT',
+  EMPLOYEE = 'EMPLOYEE',
 }
 
 export function toEnum(value: string): ROLE {
   switch (value) {
-    case "ADMIN":
+    case 'ADMIN':
       return ROLE.ADMIN;
-    case "STUDENT":
+    case 'STUDENT':
       return ROLE.STUDENT;
-    case "EMPLOYEE":
+    case 'EMPLOYEE':
       return ROLE.EMPLOYEE;
     default:
-      throw new Error("Invalid value for enum");
+      throw new Error('Invalid value for enum');
   }
 }

@@ -1,4 +1,4 @@
-import { EntityError } from "../helpers/errors/domain_error";
+import { EntityError } from '../helpers/errors/domain_error';
 
 export type WithdrawProps = {
   numSerie: string;
@@ -17,20 +17,20 @@ export type JsonProps = {
 export class Withdraw {
   constructor(public props: WithdrawProps) {
     if (!Withdraw.validateNumSerie(props.numSerie)) {
-      throw new EntityError("props.num_serie");
+      throw new EntityError('props.num_serie');
     }
     this.props.numSerie = props.numSerie;
     if (!Withdraw.validateEmail(props.email)) {
-      throw new EntityError("props.email");
+      throw new EntityError('props.email');
     }
     this.props.email = props.email;
     if (!Withdraw.validateWithdraw_time(props.withdrawTime)) {
-      throw new EntityError("props.withdraw_time");
+      throw new EntityError('props.withdraw_time');
     }
     this.props.withdrawTime = props.withdrawTime;
     if (props.finishTime != null) {
       if (!Withdraw.validateFinish_time(props.finishTime)) {
-        throw new EntityError("props.finish_time");
+        throw new EntityError('props.finish_time');
       }
       this.props.finishTime = props.finishTime;
     }
@@ -42,7 +42,7 @@ export class Withdraw {
 
   set setNumSerie(numSerie: string) {
     if (!Withdraw.validateNumSerie(numSerie)) {
-      throw new EntityError("props.numSerie");
+      throw new EntityError('props.numSerie');
     }
     this.props.numSerie = numSerie;
   }
@@ -53,7 +53,7 @@ export class Withdraw {
 
   set setEmail(email: string) {
     if (!Withdraw.validateEmail(email)) {
-      throw new EntityError("props.email");
+      throw new EntityError('props.email');
     }
     this.props.email = email;
   }
@@ -64,7 +64,7 @@ export class Withdraw {
 
   set setWithdrawTime(withdrawTime: number) {
     if (!Withdraw.validateWithdraw_time(withdrawTime)) {
-      throw new EntityError("props.withdrawTime");
+      throw new EntityError('props.withdrawTime');
     }
     this.props.withdrawTime = withdrawTime;
   }
@@ -76,7 +76,7 @@ export class Withdraw {
   set setFinishTime(finishTime: number | null) {
     if (finishTime != null) {
       if (!Withdraw.validateFinish_time(finishTime)) {
-        throw new EntityError("props.finishTime");
+        throw new EntityError('props.finishTime');
       }
       this.props.finishTime = finishTime;
     }
@@ -108,7 +108,7 @@ export class Withdraw {
     if (num_serie == null) {
       return false;
     }
-    if (typeof num_serie != "string") {
+    if (typeof num_serie !== 'string') {
       return false;
     }
     if (num_serie.length != 5) {
@@ -118,18 +118,18 @@ export class Withdraw {
   }
 
   static validateEmail(email: string): boolean {
-    const regexp = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)";
+    const regexp = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)';
 
     if (email == null) {
       return false;
     }
-    if (typeof email != "string") {
+    if (typeof email !== 'string') {
       return false;
     }
     if (!email.match(regexp)) {
       return false;
     }
-    if (email.substring(email.length - 8, email.length) != "@maua.br") {
+    if (email.substring(email.length - 8, email.length) != '@maua.br') {
       return false;
     }
     return true;
@@ -139,7 +139,7 @@ export class Withdraw {
     if (withdraw_time == null) {
       return false;
     }
-    if (typeof withdraw_time != "number") {
+    if (typeof withdraw_time !== 'number') {
       return false;
     }
     // 1672585200000 = Janeiro de 2023, dia 01.
@@ -153,7 +153,7 @@ export class Withdraw {
     if (finish_time == null) {
       return false;
     }
-    if (typeof finish_time != "number") {
+    if (typeof finish_time !== 'number') {
       return false;
     }
     if (finish_time < 1672585200000) {

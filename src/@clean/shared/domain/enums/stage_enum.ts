@@ -1,18 +1,18 @@
 export enum STAGE {
-  TEST = "TEST",
-  DEV = "DEV",
-  PROD = "PROD",
+  TEST = 'TEST',
+  DEV = 'DEV',
+  PROD = 'PROD',
 }
 
 export function toEnum(value: string): STAGE {
   switch (value) {
-    case "TEST":
+    case 'TEST':
       return STAGE.TEST;
-    case "DEV":
+    case 'DEV':
       return STAGE.DEV;
-    case "PROD":
+    case 'PROD':
       return STAGE.PROD;
     default:
-      throw new Error("Invalid value");
+      throw new Error('Invalid value');
   }
 }

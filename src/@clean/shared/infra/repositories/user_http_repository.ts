@@ -1,8 +1,8 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 // import { IUserRepository } from "@/@clean/modules/user/domain/repositories/user_repository_interface";
 // import { User } from "../../../modules/domain/entities/user";
-import { decorate, injectable } from "inversify";
-import { AxiosError, AxiosInstance } from "axios";
+import { decorate, injectable } from 'inversify';
+import { AxiosError, AxiosInstance } from 'axios';
 
 // export class UserHttpRepository implements IUserRepository {
 //     constructor(private http: AxiosInstance) {}

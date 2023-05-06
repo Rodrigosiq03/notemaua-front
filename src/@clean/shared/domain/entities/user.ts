@@ -1,5 +1,5 @@
-import { ROLE } from "../enums/role_enum";
-import { EntityError } from "../helpers/errors/domain_error";
+import { ROLE } from '../enums/role_enum';
+import { EntityError } from '../helpers/errors/domain_error';
 
 export type UserProps = {
   ra: string | null;
@@ -20,36 +20,36 @@ export class User {
   constructor(
     public props: UserProps = {
       ra: null,
-      name: "",
-      email: "",
+      name: '',
+      email: '',
       password: null,
       role: ROLE.STUDENT,
     }
   ) {
     if (!User.validateRa(props.ra)) {
-      throw new EntityError("props.ra");
+      throw new EntityError('props.ra');
     }
     if (this.props.ra != null) {
       props.role = ROLE.STUDENT;
     }
     this.props.ra = props.ra;
     if (!User.validateName(props.name)) {
-      throw new EntityError("props.name");
+      throw new EntityError('props.name');
     }
     this.props.name = props.name;
     if (!User.validateEmail(props.email)) {
-      throw new EntityError("props.email");
+      throw new EntityError('props.email');
     }
     this.props.email = props.email;
     if (!User.validatePassword(props.password)) {
-      throw new EntityError("props.password");
+      throw new EntityError('props.password');
     }
     this.props.password = props.password;
     if (props.role == null) {
       this.props.role = ROLE.STUDENT;
     }
-    if (typeof props.role != "string") {
-      throw new EntityError("props.role");
+    if (typeof props.role !== 'string') {
+      throw new EntityError('props.role');
     }
     this.props.role = props.role;
   }
@@ -60,7 +60,7 @@ export class User {
 
   set setRa(ra: string) {
     if (!User.validateRa(ra)) {
-      throw new EntityError("props.ra");
+      throw new EntityError('props.ra');
     }
     this.props.ra = ra;
   }
@@ -71,7 +71,7 @@ export class User {
 
   set setPassword(password: string) {
     if (!User.validatePassword(password)) {
-      throw new EntityError("props.password");
+      throw new EntityError('props.password');
     }
     this.props.password = password;
   }
@@ -82,7 +82,7 @@ export class User {
 
   set setName(name: string) {
     if (!User.validateName(name)) {
-      throw new EntityError("props.name");
+      throw new EntityError('props.name');
     }
     this.props.name = name;
   }
@@ -93,7 +93,7 @@ export class User {
 
   set setEmail(email: string) {
     if (!User.validateEmail(email)) {
-      throw new EntityError("props.email");
+      throw new EntityError('props.email');
     }
     this.props.email = email;
   }
@@ -103,8 +103,8 @@ export class User {
   }
 
   set setRole(role: ROLE) {
-    if (typeof role != "string") {
-      throw new EntityError("props.role");
+    if (typeof role !== 'string') {
+      throw new EntityError('props.role');
     }
     this.props.role = role;
   }
@@ -133,7 +133,7 @@ export class User {
 
   static validateRa(ra: string | null): boolean {
     if (ra != null) {
-      if (typeof ra != "string") {
+      if (typeof ra !== 'string') {
         return false;
       }
       if (ra.length != 10) {
@@ -141,7 +141,7 @@ export class User {
         return false;
       }
       // model of ra is 22.00680-0
-      if (ra[2] != "." && ra[8] != "-") {
+      if (ra[2] != '.' && ra[8] != '-') {
         return false;
       }
       return true;
@@ -154,7 +154,7 @@ export class User {
     if (name == null) {
       return false;
     }
-    if (typeof name != "string") {
+    if (typeof name !== 'string') {
       return false;
     }
     if (name.length < 3) {
@@ -164,18 +164,18 @@ export class User {
   }
 
   static validateEmail(email: string): boolean {
-    const regexp = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)";
+    const regexp = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)';
 
     if (email == null) {
       return false;
     }
-    if (typeof email != "string") {
+    if (typeof email !== 'string') {
       return false;
     }
     if (!email.match(regexp)) {
       return false;
     }
-    if (email.substring(email.length - 8, email.length) != "@maua.br") {
+    if (email.substring(email.length - 8, email.length) != '@maua.br') {
       return false;
     }
     return true;
@@ -193,7 +193,7 @@ export class User {
       if (password == null) {
         return false;
       }
-      if (typeof password != "string") {
+      if (typeof password !== 'string') {
         return false;
       }
       if (password.length <= 7) {

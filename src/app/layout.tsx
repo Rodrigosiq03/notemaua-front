@@ -1,10 +1,10 @@
-import { UserProvider } from "@/contexts/user_provider";
-import "./globals.css";
+import { UserProvider } from '@/contexts/user_provider';
+import './globals.css';
 
 export const metadata = {
-  title: "NoteMauá",
+  title: 'NoteMauá',
   description:
-    "NoteMauá é uma plataforma de retirada de notebook para os alunos do IMT",
+    'NoteMauá é uma plataforma de retirada de notebook para os alunos do IMT',
 };
 
 export default function RootLayout({

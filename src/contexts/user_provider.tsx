@@ -1,15 +1,15 @@
-"use client";
-import React, { createContext, PropsWithChildren, useState } from "react";
-import { User } from "../@clean/shared/domain/entities/user";
+'use client';
+import React, { createContext, PropsWithChildren, useState } from 'react';
+import { User } from '../@clean/shared/domain/entities/user';
 import {
   containerUser,
   Registry,
-} from "../@clean/shared/infra/containers/container_user";
-import { GetUserUsecase } from "../@clean/modules/user/usecases/get_user_usecase";
-import { CreateUserUsecase } from "../@clean/modules/user/usecases/create_user_usecase";
-import { UpdateUserUsecase } from "../@clean/modules/user/usecases/update_user_usecase";
-import { DeleteUserUsecase } from "../@clean/modules/user/usecases/delete_user_usecase";
-import { AxiosError } from "axios";
+} from '../@clean/shared/infra/containers/container_user';
+import { GetUserUsecase } from '../@clean/modules/user/usecases/get_user_usecase';
+import { CreateUserUsecase } from '../@clean/modules/user/usecases/create_user_usecase';
+import { UpdateUserUsecase } from '../@clean/modules/user/usecases/update_user_usecase';
+import { DeleteUserUsecase } from '../@clean/modules/user/usecases/delete_user_usecase';
+import { AxiosError } from 'axios';
 
 export type UserContextType = {
   users: User[];

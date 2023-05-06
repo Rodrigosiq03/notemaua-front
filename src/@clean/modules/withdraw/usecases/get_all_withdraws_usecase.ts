@@ -1,4 +1,4 @@
-import { IWithdrawRepository } from "../domain/repositories/withdraw_repository_interface";
+import { IWithdrawRepository } from '../domain/repositories/withdraw_repository_interface';
 
 export class GetAllWithdrawsUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
@@ -6,7 +6,7 @@ export class GetAllWithdrawsUsecase {
   async execute() {
     const withdraws = await this.withdrawRepo.getAllWithdraws();
     if (withdraws.length == 0) {
-      throw Error("Withdraws empty");
+      throw Error('Withdraws empty');
     }
     return withdraws;
   }

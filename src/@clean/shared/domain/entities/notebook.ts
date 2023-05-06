@@ -1,4 +1,4 @@
-import { EntityError } from "../helpers/errors/domain_error";
+import { EntityError } from '../helpers/errors/domain_error';
 
 export type NotebookProps = {
   numSerie: string;
@@ -23,12 +23,12 @@ export class Notebook {
     if (this.props.isActive == undefined) {
       this.props.isActive = false;
     }
-    if (typeof props.isActive != "boolean") {
-      throw new EntityError("props.isActive");
+    if (typeof props.isActive !== 'boolean') {
+      throw new EntityError('props.isActive');
     }
     this.props.isActive = props.isActive;
     if (!Notebook.validateNumSerie(props.numSerie)) {
-      throw new EntityError("props.numSerie");
+      throw new EntityError('props.numSerie');
     }
   }
 
@@ -38,7 +38,7 @@ export class Notebook {
 
   set setNumSerie(numSerie: string) {
     if (!Notebook.validateNumSerie(numSerie)) {
-      throw new EntityError("props.num_serie");
+      throw new EntityError('props.num_serie');
     }
     this.props.numSerie = numSerie;
   }
@@ -48,15 +48,15 @@ export class Notebook {
   }
 
   set setIsActive(isActive: boolean) {
-    if (typeof isActive != "boolean") {
-      throw new EntityError("props.isActive");
+    if (typeof isActive !== 'boolean') {
+      throw new EntityError('props.isActive');
     }
     this.props.isActive = isActive;
   }
 
   setNotebookIsActive(numSerie: string) {
     if (!Notebook.validateNumSerie(numSerie)) {
-      throw new EntityError("props.numSerie");
+      throw new EntityError('props.numSerie');
     }
     this.props.numSerie = numSerie;
     this.props.isActive = true;
@@ -84,7 +84,7 @@ export class Notebook {
     if (numSerie == null) {
       return false;
     }
-    if (typeof numSerie != "string") {
+    if (typeof numSerie !== 'string') {
       return false;
     }
     if (numSerie.length != 5) {
