@@ -18,8 +18,8 @@ jobs:
           fail_ci_if_error: true
           flags: unittests
           files: ./coverage/lcov.info
-        with:
-          node-version: 18.x
+          verbose: true
+          node_version: 18
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
