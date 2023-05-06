@@ -28,14 +28,22 @@
     "**/*.ts", 
     "**/*.tsx", 
     ".next/types/**/*.ts", 
-    "**/tests/**/*.ts", 
+    "**/__tests__/**/*.ts", 
     "jest.config.js", 
     "jest.setup.ts", 
     "**/infra/**/*.ts",
+    "**/containers/**/*.ts",
+    "**/components/**/*.ts",
+    "**/pages/**/*.ts",
+    "**/store/**/*.ts",
+    "**/utils/**/*.ts",
+    "**/types/**/*.ts",
+    "**/contexts/**/*.ts",
     "env.d.ts"
   ],
   "exclude": ["node_modules"]
 }
+
 
 
 

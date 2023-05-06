@@ -8,11 +8,6 @@ import { Title } from './components/Title';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { Auth } from 'aws-amplify';
-import { Amplify } from 'aws-amplify';
-import config from '../aws-exports';
-Amplify.configure(config);
-
 import {Hind} from 'next/font/google';
 const hind = Hind({subsets: ['latin'], weight: ['700', '300']})
 
@@ -30,7 +25,7 @@ export interface IFormlogin {
 
 export default function LoginPage() {
   const {register, handleSubmit } = useForm<IFormlogin>();
-  const { users } = useContext(UserContext); 
+  const { users, getUser } = useContext(UserContext); 
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => { 
     const findUser = users.find(user => user.email === data.email); 
@@ -42,6 +37,12 @@ export default function LoginPage() {
       }
     }
   };
+
+  const getUserFunction = async () => {
+    const user = getUser('22.00680-0@maua.br');
+    console.log(user)
+    console.log(users)
+  }
 
   return (
     <Container className={hind.className}>
@@ -65,9 +66,9 @@ export default function LoginPage() {
           </ContainerCardContent>
         </CardWhite>
       </CardGray>
-        <ImageComponentMaua />
+      <ImageComponentMaua />
     </Container>
-  )
+  );
 }
 
 
