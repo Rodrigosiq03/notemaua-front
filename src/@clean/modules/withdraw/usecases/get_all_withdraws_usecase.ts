@@ -2,11 +2,11 @@ import { IWithdrawRepository } from "../domain/repositories/withdraw_repository_
 
 export class GetAllWithdrawsUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
-    
+
   async execute() {
     const withdraws = await this.withdrawRepo.getAllWithdraws();
     if (withdraws.length == 0) {
-      throw Error('Withdraws empty')
+      throw Error("Withdraws empty");
     }
     return withdraws;
   }

@@ -1,18 +1,38 @@
 name: Next.js CI TEST
 
 on:
+  push:
+    branches: [main, develop  ]
   pull_request:
-    branches: [develop, main]
+    types: [opened, synchronize]
 jobs:
   next_js_test:
     name: Run Next.js test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+        
+      - name: Install dependencies
+        run: yarn install
+      
+      - name: Build
+        run: yarn build
+      
+      - name: Run tests
+        run: yarn test --coverage --watchAll=false
       
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
+
+      - name: Lint with ESLint and Prettier 
+        run: yarn lint
+      
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
@@ -20,11 +40,5 @@ jobs:
           files: ./coverage/lcov.info
           verbose: true
           node_version: 18
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn run build
-
-      - name: Test
-        run: yarn run test
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3

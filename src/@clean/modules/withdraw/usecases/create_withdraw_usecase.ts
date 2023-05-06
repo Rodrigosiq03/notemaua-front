@@ -4,7 +4,7 @@ import { EntityError } from "../../../shared/domain/helpers/errors/domain_error"
 
 export class CreateWithdrawUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
-  
+
   async execute(numSerie: string, email: string) {
     if (!Withdraw.validateEmail(email)) {
       throw new EntityError("email");

@@ -1,6 +1,5 @@
 import { User } from "../../../../shared/domain/entities/user";
 
-
 export interface IUserRepository {
   createUser(email: string, password: string): Promise<User>;
   getUser(email: string): Promise<User>;

@@ -3,17 +3,16 @@ import { User } from "../../../shared/domain/entities/user";
 import { IUserRepository } from "../domain/repositories/user_repository_interface";
 
 export class UpdateUserUsecase {
-    constructor(private userRepo: IUserRepository) {}
+  constructor(private userRepo: IUserRepository) {}
 
-    async execute(email: string, newPassword: string): Promise<User> {
-        if (!User.validateEmail(email)) {
-          throw new EntityError("email");
-        }
-        if (!User.validatePassword(newPassword)) {
-          throw new EntityError("newPassword");
-        }
-        const user = await this.userRepo.updateUser(email, newPassword);
-        return user;
-        
+  async execute(email: string, newPassword: string): Promise<User> {
+    if (!User.validateEmail(email)) {
+      throw new EntityError("email");
     }
+    if (!User.validatePassword(newPassword)) {
+      throw new EntityError("newPassword");
+    }
+    const user = await this.userRepo.updateUser(email, newPassword);
+    return user;
+  }
 }

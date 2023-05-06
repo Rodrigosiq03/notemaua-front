@@ -3,13 +3,13 @@ import { INotebookRepository } from "../domain/repositories/notebook_repository_
 import { EntityError } from "../../../shared/domain/helpers/errors/domain_error";
 
 export class GetNotebookUsecase {
-    constructor(private notebookRepo: INotebookRepository) {}
+  constructor(private notebookRepo: INotebookRepository) {}
 
-    async execute(numSerie: string): Promise<Notebook> {
-        if (!Notebook.validateNumSerie(numSerie)) {
-            throw new EntityError("numSerie");
-        }
-        const notebook = await this.notebookRepo.getNotebook(numSerie);
-        return notebook;
+  async execute(numSerie: string): Promise<Notebook> {
+    if (!Notebook.validateNumSerie(numSerie)) {
+      throw new EntityError("numSerie");
     }
+    const notebook = await this.notebookRepo.getNotebook(numSerie);
+    return notebook;
+  }
 }

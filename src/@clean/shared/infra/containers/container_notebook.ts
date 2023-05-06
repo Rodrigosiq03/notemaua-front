@@ -5,15 +5,15 @@ import { http } from "../http";
 import { NotebookRepositoryMock } from "../repositories/notebook_repository_mock";
 
 export const RegistryNotebook = {
-    // Axios Adapter
-    AxiosAdapter: Symbol.for("AxiosAdapter"),
+  // Axios Adapter
+  AxiosAdapter: Symbol.for("AxiosAdapter"),
 
-    // Repositories
-    NotebookRepositoryMock: Symbol.for("NotebookRepositoryMock"),
-    NotebookRepositoryHttp: Symbol.for("NotebookRepositoryHttp"),
+  // Repositories
+  NotebookRepositoryMock: Symbol.for("NotebookRepositoryMock"),
+  NotebookRepositoryHttp: Symbol.for("NotebookRepositoryHttp"),
 
-    // Usecases
-    GetNotebookUsecase: Symbol.for("GetNotebookUsecase"),
+  // Usecases
+  GetNotebookUsecase: Symbol.for("GetNotebookUsecase"),
 };
 
 export const containerNotebook = new Container();
@@ -23,15 +23,24 @@ containerNotebook.bind(RegistryNotebook.AxiosAdapter).toConstantValue(http);
 //     return new UserHttpRepository(context.containerUser.get(RegistryNotebook.AxiosAdapter));
 // });
 
-containerNotebook.bind(RegistryNotebook.NotebookRepositoryMock).to(NotebookRepositoryMock);
+containerNotebook
+  .bind(RegistryNotebook.NotebookRepositoryMock)
+  .to(NotebookRepositoryMock);
 
-containerNotebook.bind(RegistryNotebook.GetNotebookUsecase).toDynamicValue((context) => {
-  if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
-    return new GetNotebookUsecase(context.container.get(RegistryNotebook.NotebookRepositoryMock));
-  } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {
-    return new GetNotebookUsecase(context.container.get(RegistryNotebook.NotebookRepositoryHttp));
-  }
-  else {
-    return new GetNotebookUsecase(context.container.get(RegistryNotebook.NotebookRepositoryMock));
-  }
-});
+containerNotebook
+  .bind(RegistryNotebook.GetNotebookUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === "TEST") {
+      return new GetNotebookUsecase(
+        context.container.get(RegistryNotebook.NotebookRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === "DEV") {
+      return new GetNotebookUsecase(
+        context.container.get(RegistryNotebook.NotebookRepositoryHttp)
+      );
+    } else {
+      return new GetNotebookUsecase(
+        context.container.get(RegistryNotebook.NotebookRepositoryMock)
+      );
+    }
+  });

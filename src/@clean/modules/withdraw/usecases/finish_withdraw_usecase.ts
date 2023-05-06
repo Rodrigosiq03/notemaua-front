@@ -4,7 +4,7 @@ import { EntityError } from "../../../shared/domain/helpers/errors/domain_error"
 
 export class FinishWithdrawUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
-    
+
   async execute(numSerie: string) {
     if (!Withdraw.validateNumSerie(numSerie)) {
       throw new EntityError("numSerie");
