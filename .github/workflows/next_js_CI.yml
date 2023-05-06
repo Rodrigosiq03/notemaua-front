@@ -2,7 +2,7 @@ name: Next.js CI TEST
 
 on:
   push:
-    branches: [main, develop  ]
+    branches: [main, develop]
   pull_request:
     types: [opened, synchronize]
 jobs:
@@ -33,12 +33,12 @@ jobs:
       - name: Lint with ESLint and Prettier 
         run: yarn lint
       
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          flags: unittests
-          files: ./coverage/lcov.info
-          verbose: true
-          node_version: 18
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        flags: unittests
+        files: ./coverage/lcov.info
+        verbose: true
+        node_version: 18
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
