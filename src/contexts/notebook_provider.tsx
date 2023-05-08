@@ -1,3 +1,4 @@
+'use client';
 import { createContext, PropsWithChildren, useState } from 'react';
 import { Notebook } from '../@clean/shared/domain/entities/notebook';
 import { RegistryNotebook, containerNotebook } from '@/@clean/shared/infra/containers/container_notebook';
@@ -39,6 +40,7 @@ export function NotebookProvider({ children }: PropsWithChildren) {
     function setErrorNull() {
         setError(null);
     }
+
     return (
         <NotebookContext.Provider
             value={{
