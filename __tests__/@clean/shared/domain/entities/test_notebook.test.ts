@@ -1,5 +1,5 @@
-import { Notebook } from "@/@clean/shared/domain/entities/notebook";
-import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { Notebook } from "../../../../../src/@clean/shared/domain/entities/notebook";
+import { EntityError } from "../../../../../src/@clean/shared/domain/helpers/errors/domain_error";
 
 test('[ENTITY] - Notebook - should create a valid notebook', () => {
     const notebook = new Notebook({
@@ -19,7 +19,7 @@ test('[ENTITY] - Notebook - should create a invalid notebook', () => {
         new Notebook({
             numSerie: '1234'
         })
-    }).toThrowError('Field props.num_serie is not valid');
+    }).toThrowError('Field props.numSerie is not valid');
 });
 test('[ENTITY] - Notebook - test to json', () => {
     const notebook = new Notebook({

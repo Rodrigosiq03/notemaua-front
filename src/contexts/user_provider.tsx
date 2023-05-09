@@ -1,95 +1,120 @@
 'use client';
-import React, { createContext, PropsWithChildren, useState } from "react";
-import { User } from "../@clean/shared/domain/entities/user";
-import { container, Registry } from "../@clean/shared/infra/containers/container_user";
-import { GetUserUsecase } from "../@clean/modules/user/usecases/get_user_usecase";
-import { CreateUserUsecase } from "../@clean/modules/user/usecases/create_user_usecase";
-import { UpdateUserUsecase } from "../@clean/modules/user/usecases/update_user_usecase";
-import { DeleteUserUsecase } from "../@clean/modules/user/usecases/delete_user_usecase";
-import { AxiosError } from "axios";
-import { NoItemsFoundError } from "../@clean/shared/domain/helpers/errors/domain_error";
+import React, { createContext, PropsWithChildren, useState } from 'react';
+import { User } from '../@clean/shared/domain/entities/user';
+import {
+  containerUser,
+  Registry,
+} from '../@clean/shared/infra/containers/container_user';
+import { GetUserUsecase } from '../@clean/modules/user/usecases/get_user_usecase';
+import { CreateUserUsecase } from '../@clean/modules/user/usecases/create_user_usecase';
+import { UpdateUserUsecase } from '../@clean/modules/user/usecases/update_user_usecase';
+import { DeleteUserUsecase } from '../@clean/modules/user/usecases/delete_user_usecase';
+import { AxiosError } from 'axios';
 
 export type UserContextType = {
-    users: User[];
-    createUser: (user: User) => void;
-    getUser: (userId: number) => void;
-    updateUser: (id: number, newName: string) => void;
-    deleteUser: (id: number) => void;
-    error: NoItemsFoundError | null;
-    setErrorNull: () => void;
-}
-
+  users: User[];
+  createUser: (email: string, password: string) => void;
+  getUser: (email: string) => void;
+  updateUser: (email: string, newPassword: string) => void;
+  deleteUser: (email: string) => void;
+  error: Error | null;
+  setErrorNull: () => void;
+};
 
 const defaultContext: UserContextType = {
-    users: [],
-    createUser: (user: User) => {},
-    getUser: (userId: number) => {},
-    updateUser: (id: number, newName: string) => {},
-    deleteUser: (id: number) => {},
-    error: null,
-    setErrorNull: () => {}
-}
+  users: [],
+  createUser: (email: string, password: string) => {},
+  getUser: (email: string) => {},
+  updateUser: (email: string, newPassword: string) => {},
+  deleteUser: (email: string) => {},
+  error: null,
+  setErrorNull: () => {},
+};
 
 export const UserContext = createContext(defaultContext);
 
-const getUserUsecase = container.get<GetUserUsecase>(Registry.GetUsersUsecase)
-const createUserUseCase = container.get<CreateUserUsecase>(Registry.CreateUserUsecase)
-const updateUserUseCase = container.get<UpdateUserUsecase>(Registry.UpdateUserUsecase)
-const deleteUserUseCase = container.get<DeleteUserUsecase>(Registry.DeleteUserUsecase)
+const getUserUsecase = containerUser.get<GetUserUsecase>(
+  Registry.GetUsersUsecase
+);
+const createUserUseCase = containerUser.get<CreateUserUsecase>(
+  Registry.CreateUserUsecase
+);
+const updateUserUseCase = containerUser.get<UpdateUserUsecase>(
+  Registry.UpdateUserUsecase
+);
+const deleteUserUseCase = containerUser.get<DeleteUserUsecase>(
+  Registry.DeleteUserUsecase
+);
 
 export function UserProvider({ children }: PropsWithChildren) {
-    const [users, setUsers] = useState<User[]>([]);
-    // State for error in API
-    // const [error, setError] = useState<AxiosError | Error | null>(null);
-    const [error, setError] = useState<NoItemsFoundError | null>(null);
+  // State for error in API
+  // const [error, setError] = useState<AxiosError | Error | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
-    async function createUser(user: User) {
-        // const userCreated = await createUserUseCase.execute(user)
-        // setUsers([...users, userCreated])
+  async function createUser(email: string, password: string) {
+    try {
+      const userCreated = await createUserUseCase.execute(email, password);
+      setUsers([...users, userCreated]);
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
     }
+  }
 
-    async function getUser(userId: number) {
-        // try {
-        //     const userGetted = await getUserUsecase.execute(userId);
-        //     setUsers([...users, userGetted])
-        // } catch (error: any) {
-        //     console.log(`ERROR PROVIDER: ${error}`)
-        //     const setNotFoundError = new NoItemsFoundError(`id`)
-        //     setError(setNotFoundError)
-        // }
+  async function getUser(email: string) {
+    try {
+      const userFound = await getUserUsecase.execute(email);
+      setUsers([...users, userFound]);
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
     }
+  }
 
-    async function updateUser(userId: number, newName: string) { 
-        // const userUpdated = await updateUserUseCase.execute(userId, newName)
-        // users.filter(user => user.id !== userId)
-        // setUsers([...users, userUpdated])
-        
+  async function updateUser(email: string, newPassword: string) {
+    try {
+      const userUpdated = await updateUserUseCase.execute(email, newPassword);
+      const usersFiltered = users.filter((user) => user.email !== email);
+      setUsers([...usersFiltered, userUpdated]);
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
     }
+  }
 
-    async function deleteUser(userId: number) {
-        // await deleteUserUseCase.execute(userId)
-        // const usersFilteredAfterDelete = users.filter(user => user.id !== userId)
-        // setUsers(usersFilteredAfterDelete)
-
+  async function deleteUser(email: string) {
+    try {
+      await deleteUserUseCase.execute(email);
+      const usersFiltered = users.filter((user) => user.email !== email);
+      setUsers(usersFiltered);
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
     }
+  }
 
-    function setErrorNull() {
-        setError(null)
-    }
+  function setErrorNull() {
+    setError(null);
+  }
 
-    return (
-        <UserContext.Provider 
-            value={{ users, 
-                    createUser, 
-                    getUser, 
-                    updateUser, 
-                    deleteUser, 
-                    error, 
-                    setErrorNull 
-                }}
-        >
-            { children }
-        </UserContext.Provider>
-    )
+  return (
+    <UserContext.Provider
+      value={{
+        users,
+        createUser,
+        getUser,
+        updateUser,
+        deleteUser,
+        error,
+        setErrorNull,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 }
-
