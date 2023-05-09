@@ -5,14 +5,18 @@ import { IUserRepository } from '../domain/repositories/user_repository_interfac
 export class UpdateUserUsecase {
   constructor(private userRepo: IUserRepository) {}
 
-  async execute(email: string, newPassword: string): Promise<User> {
+  async execute(
+    email: string,
+    newPassword: string,
+    code: string
+  ): Promise<User> {
     if (!User.validateEmail(email)) {
       throw new EntityError('email');
     }
     if (!User.validatePassword(newPassword)) {
       throw new EntityError('newPassword');
     }
-    const user = await this.userRepo.updateUser(email, newPassword);
+    const user = await this.userRepo.updateUser(email, newPassword, code);
     return user;
   }
 }

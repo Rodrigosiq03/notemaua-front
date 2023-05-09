@@ -45,8 +45,20 @@ export class UserRepositoryHttp implements IUserRepository {
       password: password,
     });
   }
-  updateUser(email: string, newPassword: string): Promise<User> {
-    throw new Error('Method not implemented.');
+  updateUser(email: string, newPassword: string, code: string): Promise<User> {
+    const userUpdated = Auth.forgotPasswordSubmit(
+      email,
+      code,
+      newPassword
+    ).then(() => {
+      return new User({
+        email: email,
+        name: this.getNameFromJson(email.substring(0, 10)),
+        ra: email.substring(0, 10),
+        password: newPassword,
+      });
+    });
+    return userUpdated;
   }
   deleteUser(email: string): Promise<User> {
     throw new Error('Method not implemented.');
@@ -65,6 +77,15 @@ export class UserRepositoryHttp implements IUserRepository {
   }
   async confirmUser(email: string, code: string): Promise<User> {
     const user = await Auth.confirmSignUp(email, code);
+    return new User({
+      email: user.attributes.email,
+      name: user.attributes.name,
+      ra: user.attributes.email.substring(0, 10),
+      password: 'cannot_pass_by_here',
+    });
+  }
+  async forgotPassword(email: string): Promise<User> {
+    const user = await Auth.forgotPassword(email);
     return new User({
       email: user.attributes.email,
       name: user.attributes.name,

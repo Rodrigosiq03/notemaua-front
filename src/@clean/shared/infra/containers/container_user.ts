@@ -7,6 +7,7 @@ import { GetUserUsecase } from '@/@clean/modules/user/usecases/get_user_usecase'
 import { UpdateUserUsecase } from '@/@clean/modules/user/usecases/update_user_usecase';
 import { DeleteUserUsecase } from '@/@clean/modules/user/usecases/delete_user_usecase';
 import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_usecase';
+import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_password_usecase';
 
 // import { UserHttpRepository } from "../repositories/user_http_repository";
 import { http } from '../http';
@@ -27,6 +28,7 @@ export const Registry = {
   DeleteUserUsecase: Symbol.for('DeleteUserUsecase'),
   GetNameFromJsonUsecase: Symbol.for('GetNameFromJsonUsecase'),
   ConfirmUserUsecase: Symbol.for('ConfirmUserUsecase'),
+  ForgotPasswordUsecase: Symbol.for('ForgotPasswordUsecase'),
 };
 
 export const containerUser = new Container();
@@ -130,6 +132,22 @@ containerUser.bind(Registry.ConfirmUserUsecase).toDynamicValue((context) => {
     );
   } else {
     return new ConfirmUserUsecase(
+      context.container.get(Registry.UserRepositoryMock)
+    );
+  }
+});
+
+containerUser.bind(Registry.ForgotPasswordUsecase).toDynamicValue((context) => {
+  if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+    return new ForgotPasswordUsecase(
+      context.container.get(Registry.UserRepositoryMock)
+    );
+  } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+    return new ForgotPasswordUsecase(
+      context.container.get(Registry.UserRepositoryHttp)
+    );
+  } else {
+    return new ForgotPasswordUsecase(
       context.container.get(Registry.UserRepositoryMock)
     );
   }
