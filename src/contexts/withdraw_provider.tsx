@@ -5,7 +5,6 @@ import { RegistryWithdraw, containerWithdraw } from '../@clean/shared/infra/cont
 import { CreateWithdrawUsecase } from '../@clean/modules/withdraw/usecases/create_withdraw_usecase';
 import  { FinishWithdrawUsecase } from '../@clean/modules/withdraw/usecases/finish_withdraw_usecase';
 import { GetAllWithdrawsUsecase } from '../@clean/modules/withdraw/usecases/get_all_withdraws_usecase';
-import { Registry } from '@/@clean/shared/infra/containers/container_user';
 
 
 export type WithdrawContextType = {

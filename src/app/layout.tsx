@@ -1,5 +1,6 @@
 import { UserProvider } from '@/contexts/user_provider';
 import './globals.css';
+import { NotebookProvider } from '@/contexts/notebook_provider';
 
 export const metadata = {
   title: 'NoteMauá',
@@ -15,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <NotebookProvider>
+            {children}
+          </NotebookProvider>
+        </UserProvider>
       </body>
     </html>
   );

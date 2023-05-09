@@ -24,7 +24,10 @@ import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
+import { NotebookContext } from '@/contexts/notebook_provider';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
+
+
 
 export interface IFormlogin {
   email: string;
@@ -51,6 +54,15 @@ export default function LoginPage() {
     console.log(user);
     console.log(users);
   };
+
+  const {getNotebook, notebooks} = useContext(NotebookContext);
+  async function saco(){
+    const notebook = await getNotebook('34100');
+    console.log(process.env.NEXT_PUBLIC_STAGE);
+    console.log('getNotebook ', notebook );
+    console.log(notebooks);
+  }
+ 
 
   return (
     <Container className={hind.className}>
