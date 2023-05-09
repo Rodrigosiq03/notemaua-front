@@ -16,6 +16,21 @@ const Container = styled.div`
   }
 `;
 
+const ContainerCenterMiddle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 43%;
+  left: 45%;
+
+  @media (max-width: 450px) {
+    top: 40%;
+    left: 38%;
+  }
+`;
+
 const ContainerCardContent = styled.div`
   display: flex;
   align-items: center;
@@ -47,4 +62,10 @@ const ContainerRow = styled.div`
   }
 `;
 
-export { Container, ContainerCardContent, ContainerRowLink, ContainerRow };
+export {
+  Container,
+  ContainerCardContent,
+  ContainerRowLink,
+  ContainerRow,
+  ContainerCenterMiddle,
+};

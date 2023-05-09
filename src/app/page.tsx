@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import {
   Container,
@@ -24,6 +24,9 @@ import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
+import { useRouter, useSearchParams } from 'next/navigation';
+import SnackbarComponent from './components/SnackbarMUI/Snackbar';
+import { SnackbarOrigin } from '@mui/material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -31,9 +34,51 @@ export interface IFormlogin {
   password: string;
 }
 
+export interface StateSnackBar extends SnackbarOrigin {
+  open: boolean;
+}
+
 export default function LoginPage() {
   const { register, handleSubmit } = useForm<IFormlogin>();
-  const { users, getUser } = useContext(UserContext);
+  const { users, confirmUser } = useContext(UserContext);
+  const searchParams = useSearchParams();
+
+  // Snackbar Logic
+
+  const [stateSnackbar, setStateSnackbar] = React.useState<StateSnackBar>({
+    vertical: 'top',
+    horizontal: 'center',
+    open: false,
+  });
+
+  const handleOpen = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbar({ open: true, ...newOpenState });
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStateSnackbar({ ...stateSnackbar, open: false });
+  };
+
+  // confirm user logic
+
+  useEffect(() => {
+    if (searchParams.has('email') && searchParams.has('code')) {
+      const email = searchParams.get('email');
+      const code = searchParams.get('code');
+      if (email && code) {
+        confirmUser(email, code);
+        console.log('confirmado!!!!!!');
+        handleOpen({ vertical: 'bottom', horizontal: 'center' });
+      }
+    }
+  }, [searchParams, confirmUser]);
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
     const findUser = users.find((user) => user.email === data.email);
@@ -44,12 +89,6 @@ export default function LoginPage() {
         console.log('Senha incorreta!');
       }
     }
-  };
-
-  const getUserFunction = async () => {
-    const user = getUser('22.00680-0@maua.br');
-    console.log(user);
-    console.log(users);
   };
 
   return (
@@ -65,9 +104,7 @@ export default function LoginPage() {
                 type="email"
                 {...register('email', { required: true })}
               />
-              <FormLabel style={{ paddingRight: '' }} htmlFor="password">
-                Senha
-              </FormLabel>
+              <FormLabel htmlFor="password">Senha</FormLabel>
               <FormInput
                 type="password"
                 {...register('password', { required: true })}
@@ -83,6 +120,13 @@ export default function LoginPage() {
         </CardWhite>
       </CardGray>
       <ImageComponentMaua />
+      <SnackbarComponent
+        handleClose={handleClose}
+        open={stateSnackbar.open}
+        horizontal={stateSnackbar.horizontal}
+        vertical={stateSnackbar.vertical}
+        message="Email verificado com sucesso!"
+      />
     </Container>
   );
 }

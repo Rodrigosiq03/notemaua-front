@@ -9,7 +9,8 @@ import { GetUserUsecase } from '../@clean/modules/user/usecases/get_user_usecase
 import { CreateUserUsecase } from '../@clean/modules/user/usecases/create_user_usecase';
 import { UpdateUserUsecase } from '../@clean/modules/user/usecases/update_user_usecase';
 import { DeleteUserUsecase } from '../@clean/modules/user/usecases/delete_user_usecase';
-import { AxiosError } from 'axios';
+import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_from_json';
+import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_usecase';
 
 export type UserContextType = {
   users: User[];
@@ -17,6 +18,8 @@ export type UserContextType = {
   getUser: (email: string) => void;
   updateUser: (email: string, newPassword: string) => void;
   deleteUser: (email: string) => void;
+  getNameFromJson: (ra: string) => void;
+  confirmUser: (email: string, code: string) => void;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -27,6 +30,8 @@ const defaultContext: UserContextType = {
   getUser: (email: string) => {},
   updateUser: (email: string, newPassword: string) => {},
   deleteUser: (email: string) => {},
+  getNameFromJson: (ra: string) => {},
+  confirmUser: (email: string, code: string) => {},
   error: null,
   setErrorNull: () => {},
 };
@@ -44,6 +49,12 @@ const updateUserUseCase = containerUser.get<UpdateUserUsecase>(
 );
 const deleteUserUseCase = containerUser.get<DeleteUserUsecase>(
   Registry.DeleteUserUsecase
+);
+const getNameFromJsonUseCase = containerUser.get<GetNameFromJsonUsecase>(
+  Registry.GetNameFromJsonUsecase
+);
+const confirmUserUseCase = containerUser.get<ConfirmUserUsecase>(
+  Registry.ConfirmUserUsecase
 );
 
 export function UserProvider({ children }: PropsWithChildren) {
@@ -98,6 +109,28 @@ export function UserProvider({ children }: PropsWithChildren) {
     }
   }
 
+  function getNameFromJson(ra: string) {
+    try {
+      const name = getNameFromJsonUseCase.execute(ra);
+      return name;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
+    }
+  }
+
+  async function confirmUser(email: string, code: string) {
+    try {
+      const userConfirmed = await confirmUserUseCase.execute(email, code);
+      return userConfirmed;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      const setError = error;
+      setError(setError);
+    }
+  }
+
   function setErrorNull() {
     setError(null);
   }
@@ -110,6 +143,8 @@ export function UserProvider({ children }: PropsWithChildren) {
         getUser,
         updateUser,
         deleteUser,
+        getNameFromJson,
+        confirmUser,
         error,
         setErrorNull,
       }}

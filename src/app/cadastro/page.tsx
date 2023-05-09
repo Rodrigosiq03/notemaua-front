@@ -42,6 +42,7 @@ export default function CadastroPage() {
     const userCreated = createUser(data.email, data.password);
     console.log('User created: ', userCreated);
     console.log('Users: ', users);
+    console.log(process.env.NEXT_PUBLIC_STAGE);
   };
 
   return (

@@ -6,4 +6,6 @@ export interface IUserRepository {
   updateUser(email: string, newPassword: string): Promise<User>;
   deleteUser(email: string): Promise<User>;
   getLength(): number;
+  getNameFromJson(ra: string): string;
+  confirmUser(email: string, code: string): Promise<User>;
 }
