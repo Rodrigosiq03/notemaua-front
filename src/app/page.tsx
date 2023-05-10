@@ -81,28 +81,29 @@ export default function LoginPage() {
 
   // confirm user logic
 
-  useEffect(() => {
-    if (searchParams.has('email') && searchParams.has('code')) {
-      const email = searchParams.get('email');
-      const code = searchParams.get('code');
-      if (email && code) {
-        confirmUser(email, code);
-        console.log('confirmado!!!!!!');
-        setMessageSnackbar('Usuário confirmado com sucesso!');
-        setTimeout(() => {
-          handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
-        }, 3000);
-      }
-    }
-    if (searchParams.has('passwordReset')) {
-      setMessageSnackbar('Senha alterada com sucesso!');
+  if (searchParams.has('email') && searchParams.has('code')) {
+    const email = searchParams.get('email');
+    const code = searchParams.get('code');
+    if (email && code) {
+      confirmUser(email, code);
+      console.log('confirmado!!!!!!');
+      setMessageSnackbar('Usuário confirmado com sucesso!');
       setTimeout(() => {
         handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
       }, 3000);
     }
-  }, [searchParams, confirmUser]);
+  }
+  if (searchParams.has('passwordReset')) {
+    setMessageSnackbar('Senha alterada com sucesso!');
+    setTimeout(() => {
+      handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+    }, 3000);
+  }
 
-  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
+    setMessageSnackbar('Usuário confirmado com sucesso!');
+    handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+  };
 
   return (
     <Container className={hind.className}>
@@ -134,7 +135,7 @@ export default function LoginPage() {
       </CardGray>
       <ImageComponentMaua />
       <SnackbarComponent
-        style={{ paddingBottom: '310px' }}
+        style={undefined}
         handleClose={handleCloseSnack}
         open={stateSnackbar.open}
         horizontal={stateSnackbar.horizontal}
