@@ -25,6 +25,8 @@ import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
 import { NotebookContext } from '@/contexts/notebook_provider';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -54,12 +56,36 @@ export default function LoginPage() {
   };
 
   const { getNotebook, notebooks } = useContext(NotebookContext);
-  async function saco() {
+  async function teste_notebook() {
     const notebook = await getNotebook('34100');
     console.log(process.env.NEXT_PUBLIC_STAGE);
     console.log('getNotebook ', notebook);
     console.log(notebooks);
   }
+
+  const { withdraws, createWithdraw } = useContext(WithdrawContext);
+  async function teste_withdraw() {
+    const withdraw = await createWithdraw('34100', '22.00680-0@maua.br');
+    console.log('createWithdraw ', withdraw);
+    console.log(withdraws);
+  }  
+
+  const { finishWithdraw } = useContext(WithdrawContext);
+  async function teste_finish_withdraw() {
+    const withdraw = await finishWithdraw('34100');
+    console.log('finishWithdraw ', withdraw);
+    console.log(withdraws);
+  }
+
+  const { getAllWithdraws } = useContext(WithdrawContext);
+  async function teste_get_all_withdraws() {
+    const withdraw = await getAllWithdraws();
+    console.log('getAllWithdraws ', withdraw);
+    console.log(withdraws);
+  }
+
+
+  
 
   return (
     <Container className={hind.className}>
@@ -92,6 +118,9 @@ export default function LoginPage() {
         </CardWhite>
       </CardGray>
       <ImageComponentMaua />
+      <button onClick={teste_withdraw}>Create Withdraw</button>
+      <button onClick={teste_finish_withdraw}>Finish Witdraw</button>
+      <button onClick={teste_get_all_withdraws}>Get All Witdraws</button>
     </Container>
   );
 }
