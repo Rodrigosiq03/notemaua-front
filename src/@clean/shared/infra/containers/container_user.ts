@@ -12,6 +12,7 @@ import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_pas
 // import { UserHttpRepository } from "../repositories/user_http_repository";
 import { http } from '../http';
 import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_from_json';
+import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
 
 export const Registry = {
   // Axios Adapter
@@ -29,6 +30,7 @@ export const Registry = {
   GetNameFromJsonUsecase: Symbol.for('GetNameFromJsonUsecase'),
   ConfirmUserUsecase: Symbol.for('ConfirmUserUsecase'),
   ForgotPasswordUsecase: Symbol.for('ForgotPasswordUsecase'),
+  ForgotPasswordSubmitUsecase: Symbol.for('ForgotPasswordSubmitUsecase'),
 };
 
 export const containerUser = new Container();
@@ -152,3 +154,21 @@ containerUser.bind(Registry.ForgotPasswordUsecase).toDynamicValue((context) => {
     );
   }
 });
+
+containerUser
+  .bind(Registry.ForgotPasswordSubmitUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(Registry.UserRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(Registry.UserRepositoryHttp)
+      );
+    } else {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(Registry.UserRepositoryMock)
+      );
+    }
+  });

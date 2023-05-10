@@ -13,18 +13,21 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 export default function SnackbarComponent({
   handleClose,
   open,
-  message,
+  children,
   horizontal,
   vertical,
+  style,
 }: {
   handleClose: () => void;
   open: boolean;
-  message: string;
+  children: React.ReactNode;
   horizontal: 'left' | 'center' | 'right';
   vertical: 'top' | 'bottom';
+  style: React.CSSProperties;
 }) {
   return (
     <SnackbarSc
+      style={style}
       open={open}
       autoHideDuration={300000}
       anchorOrigin={{ vertical, horizontal }}
@@ -35,7 +38,7 @@ export default function SnackbarComponent({
         severity="success"
         sx={{ width: '80%', color: 'white' }}
       >
-        {message}
+        {children}
       </Alert>
     </SnackbarSc>
   );

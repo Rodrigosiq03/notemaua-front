@@ -24,7 +24,7 @@ import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import SnackbarComponent from './components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
@@ -50,12 +50,13 @@ export default function LoginPage() {
     horizontal: 'center',
     open: false,
   });
+  const [messageSnackbar, setMessageSnackbar] = React.useState<string>('');
 
-  const handleOpen = (newOpenState: SnackbarOrigin) => {
+  const handleOpenSnack = (newOpenState: SnackbarOrigin) => {
     setStateSnackbar({ open: true, ...newOpenState });
   };
 
-  const handleClose = (
+  const handleCloseSnack = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
@@ -64,6 +65,18 @@ export default function LoginPage() {
     }
 
     setStateSnackbar({ ...stateSnackbar, open: false });
+  };
+
+  // dialog logic
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   // confirm user logic
@@ -75,21 +88,21 @@ export default function LoginPage() {
       if (email && code) {
         confirmUser(email, code);
         console.log('confirmado!!!!!!');
-        handleOpen({ vertical: 'bottom', horizontal: 'center' });
+        setMessageSnackbar('Usuário confirmado com sucesso!');
+        setTimeout(() => {
+          handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+        }, 3000);
       }
+    }
+    if (searchParams.has('passwordReset')) {
+      setMessageSnackbar('Senha alterada com sucesso!');
+      setTimeout(() => {
+        handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+      }, 3000);
     }
   }, [searchParams, confirmUser]);
 
-  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    const findUser = users.find((user) => user.email === data.email);
-    if (findUser) {
-      if (findUser.password === data.password) {
-        console.log('Login realizado com sucesso!');
-      } else {
-        console.log('Senha incorreta!');
-      }
-    }
-  };
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
 
   return (
     <Container className={hind.className}>
@@ -121,12 +134,14 @@ export default function LoginPage() {
       </CardGray>
       <ImageComponentMaua />
       <SnackbarComponent
-        handleClose={handleClose}
+        style={{ paddingBottom: '310px' }}
+        handleClose={handleCloseSnack}
         open={stateSnackbar.open}
         horizontal={stateSnackbar.horizontal}
         vertical={stateSnackbar.vertical}
-        message="Email verificado com sucesso!"
-      />
+      >
+        {messageSnackbar}
+      </SnackbarComponent>
     </Container>
   );
 }

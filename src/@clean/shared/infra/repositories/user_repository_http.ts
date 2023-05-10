@@ -45,22 +45,24 @@ export class UserRepositoryHttp implements IUserRepository {
       password: password,
     });
   }
-  updateUser(email: string, newPassword: string, code: string): Promise<User> {
-    const userUpdated = Auth.forgotPasswordSubmit(
+  async updateUser(
+    email: string,
+    newPassword: string,
+    code: string
+  ): Promise<User> {
+    const userUpdated = await Auth.forgotPasswordSubmit(
       email,
       code,
       newPassword
-    ).then(() => {
-      return new User({
-        email: email,
-        name: this.getNameFromJson(email.substring(0, 10)),
-        ra: email.substring(0, 10),
-        password: newPassword,
-      });
+    );
+    return new User({
+      email: email,
+      name: this.getNameFromJson(email.substring(0, 10)),
+      ra: email.substring(0, 10),
+      password: 'cannot_pass_by_here',
     });
-    return userUpdated;
   }
-  deleteUser(email: string): Promise<User> {
+  async deleteUser(email: string): Promise<User> {
     throw new Error('Method not implemented.');
   }
   getLength(): number {
@@ -90,6 +92,19 @@ export class UserRepositoryHttp implements IUserRepository {
       email: user.attributes.email,
       name: user.attributes.name,
       ra: user.attributes.email.substring(0, 10),
+      password: 'cannot_pass_by_here',
+    });
+  }
+  async forgotPasswordSubmit(
+    email: string,
+    code: string,
+    newPassword: string
+  ): Promise<User> {
+    const user = await Auth.forgotPasswordSubmit(email, code, newPassword);
+    return new User({
+      email: email,
+      name: this.getNameFromJson(email.substring(0, 10)),
+      ra: email.substring(0, 10),
       password: 'cannot_pass_by_here',
     });
   }

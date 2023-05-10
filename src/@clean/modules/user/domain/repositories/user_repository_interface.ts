@@ -9,4 +9,9 @@ export interface IUserRepository {
   getNameFromJson(ra: string): string;
   confirmUser(email: string, code: string): Promise<User>;
   forgotPassword(email: string): Promise<User>;
+  forgotPasswordSubmit(
+    email: string,
+    code: string,
+    newPassword: string
+  ): Promise<User>;
 }

@@ -3,7 +3,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 const SnackbarSc = styled(Snackbar)`
   @media (max-width: 450px) {
-    padding-bottom: 180px;
+    padding-bottom: 350px;
   }
 `;
 
