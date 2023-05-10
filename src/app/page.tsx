@@ -27,8 +27,6 @@ import { UserContext } from '../contexts/user_provider';
 import { NotebookContext } from '@/contexts/notebook_provider';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
-
-
 export interface IFormlogin {
   email: string;
   password: string;
@@ -55,14 +53,13 @@ export default function LoginPage() {
     console.log(users);
   };
 
-  const {getNotebook, notebooks} = useContext(NotebookContext);
-  async function saco(){
+  const { getNotebook, notebooks } = useContext(NotebookContext);
+  async function saco() {
     const notebook = await getNotebook('34100');
     console.log(process.env.NEXT_PUBLIC_STAGE);
-    console.log('getNotebook ', notebook );
+    console.log('getNotebook ', notebook);
     console.log(notebooks);
   }
- 
 
   return (
     <Container className={hind.className}>
