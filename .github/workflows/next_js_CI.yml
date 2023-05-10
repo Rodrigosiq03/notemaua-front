@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  next_js_test:
-    name: Run Next.js test
+  next_js_ci:
+    name: Run Next.js CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
