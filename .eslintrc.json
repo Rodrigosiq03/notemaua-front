@@ -10,6 +10,11 @@
   "rules": {
     "semi": "warn",
     "quotes": ["warn", "single"],
-    "prettier/prettier": "warn"
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }
