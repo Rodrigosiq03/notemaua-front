@@ -36,8 +36,14 @@ export default function CadastroPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormlogin>();
-  const { createUser, users } = useContext(UserContext);
+    setError,
+  } = useForm<IFormlogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const { createUser, users, error } = useContext(UserContext);
 
   // dialog logic
 
@@ -54,11 +60,28 @@ export default function CadastroPage() {
   };
 
   const onSubmit: SubmitHandler<IFormlogin> = (data) => {
-    const userCreated = createUser(data.email, data.password);
-    setTimeout(() => {
-      handleClickOpenDialog(data.email);
-    }, 3000);
-    console.log('User created: ', userCreated);
+    if (!error) {
+      const userCreated = createUser(data.email, data.password);
+      setTimeout(() => {
+        handleClickOpenDialog(data.email);
+      }, 3000);
+      console.log('User created: ', userCreated);
+    } else {
+      if (error?.message === 'Usuário já cadastrado') {
+        setError('email', {
+          type: 'manual',
+          message: 'Usuário já cadastrado',
+        });
+      }
+      if (errors.password?.type === 'pattern') {
+        setError('password', {
+          type: 'pattern',
+          message:
+            'Padrão de senha inválido, deve conter no mínimo 8 caracteres, 1 letra maiúscula, 1 letra minúscula e 1 número',
+        });
+      }
+    }
+    console.log('Erro ao criar usuário: ');
     // console.log('Users: ', users);
     // console.log(process.env.NEXT_PUBLIC_STAGE);
   };
@@ -76,18 +99,42 @@ export default function CadastroPage() {
               </FormLabel>
               <FormInput
                 type="email"
-                {...register('email', { required: true })}
+                {...register('email', { required: true, pattern: /@maua.br/ })}
               />
-              {errors.email && (
-                <span style={{ color: 'red' }}>Este campo é obrigatório</span>
+              {errors.email?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              {errors.email?.type === 'pattern' && (
+                <span style={{ color: 'red' }}>
+                  O e-mail deve conter @maua.br
+                </span>
               )}
               <FormLabel style={{ paddingRight: '' }} htmlFor="password">
                 Digite uma senha
               </FormLabel>
               <FormInput
                 type="password"
-                {...register('password', { required: true })}
+                {...register('password', {
+                  required: true,
+                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                })}
               />
+              {errors.password?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              {errors.password?.type === 'pattern' && (
+                <span style={{ color: 'red' }}>
+                  Sua senha deve conter: <br />
+                  - no mínimo 8 caracteres <br />
+                  - 1 letra maiúscula <br />
+                  - 1 letra minúscula <br />
+                  - 1 número <br />- 1 caractere especial
+                </span>
+              )}
               <FormButton type="submit">Cadastrar</FormButton>
             </FormContainer>
             <ContainerRow>

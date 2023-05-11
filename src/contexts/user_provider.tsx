@@ -146,7 +146,6 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userConfirmed;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      setError(error);
     }
   }
 
@@ -156,7 +155,6 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userForgotPassword;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      setError(error);
     }
   }
 
@@ -171,6 +169,7 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userForgotPasswordSubmit;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
     }
   }
 

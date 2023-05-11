@@ -27,23 +27,36 @@ export class UserRepositoryHttp implements IUserRepository {
   }
 
   async createUser(email: string, password: string): Promise<User> {
-    const user = await Auth.signUp({
-      username: email,
-      password: password,
-      attributes: {
+    try {
+      const user = await Auth.signUp({
+        username: email,
+        password: password,
+        attributes: {
+          email: email,
+          name: this.getNameFromJson(email.substring(0, 10)),
+          'custom:ra': email.substring(0, 10),
+          'custom:role': 'STUDENT',
+        },
+      });
+      console.log(user);
+      return new User({
         email: email,
         name: this.getNameFromJson(email.substring(0, 10)),
-        'custom:ra': email.substring(0, 10),
-        'custom:role': 'STUDENT',
-      },
-    });
-    console.log(user);
-    return new User({
-      email: email,
-      name: this.getNameFromJson(email.substring(0, 10)),
-      ra: email.substring(0, 10),
-      password: password,
-    });
+        ra: email.substring(0, 10),
+        password: password,
+      });
+    } catch (error: any) {
+      switch (error.code) {
+        case 'UsernameExistsException':
+          throw new Error('Usuário já existe');
+        case 'InvalidPasswordException':
+          throw new Error('Senha inválida');
+        case 'InvalidParameterException':
+          throw new Error('Email inválido');
+        default:
+          throw new Error('Erro desconhecido');
+      }
+    }
   }
   async updateUser(
     email: string,

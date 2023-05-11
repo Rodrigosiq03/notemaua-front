@@ -40,7 +40,7 @@ export interface StateSnackBar extends SnackbarOrigin {
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm<IFormlogin>();
-  const { users, confirmUser } = useContext(UserContext);
+  const { users, confirmUser, error } = useContext(UserContext);
   const searchParams = useSearchParams();
 
   // Snackbar Logic
@@ -122,6 +122,9 @@ export default function LoginPage() {
                 type="password"
                 {...register('password', { required: true })}
               />
+              {error?.message === 'Senha inválida' && (
+                <p style={{ color: 'red' }}>{error?.message}</p>
+              )}
               <FormButton type="submit">Entrar</FormButton>
             </FormContainer>
             <ContainerRowLink>
