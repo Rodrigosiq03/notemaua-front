@@ -29,7 +29,9 @@ export class UserRepositoryHttp implements IUserRepository {
   async createUser(email: string, password: string): Promise<User> {
     try {
       const user = await Auth.signUp({
-        username: email,
+        username: this.validateEmailInJson(email)
+          ? email
+          : '22.00000-0@maua.br',
         password: password,
         attributes: {
           email: email,
@@ -58,6 +60,7 @@ export class UserRepositoryHttp implements IUserRepository {
       }
     }
   }
+
   async updateUser(
     email: string,
     newPassword: string,
@@ -75,12 +78,15 @@ export class UserRepositoryHttp implements IUserRepository {
       password: 'cannot_pass_by_here',
     });
   }
+
   async deleteUser(email: string): Promise<User> {
     throw new Error('Method not implemented.');
   }
+
   getLength(): number {
     throw new Error('Method not implemented.');
   }
+
   async getUser(): Promise<User> {
     const user = await Auth.currentAuthenticatedUser();
     return new User({
@@ -90,24 +96,57 @@ export class UserRepositoryHttp implements IUserRepository {
       password: 'cannot_pass_by_here',
     });
   }
+
   async confirmUser(email: string, code: string): Promise<User> {
-    const user = await Auth.confirmSignUp(email, code);
-    return new User({
-      email: user.attributes.email,
-      name: user.attributes.name,
-      ra: user.attributes.email.substring(0, 10),
-      password: 'cannot_pass_by_here',
-    });
+    try {
+      const user = await Auth.confirmSignUp(email, code);
+      return new User({
+        email: user.attributes.email,
+        name: user.attributes.name,
+        ra: user.attributes.email.substring(0, 10),
+        password: 'cannot_pass_by_here',
+      });
+    } catch (error: any) {
+      switch (error.code) {
+        case 'UserNotFoundException':
+          throw new Error('Usuário não encontrado');
+        case 'CodeMismatchException':
+          throw new Error('Código inválido');
+        case 'ExpiredCodeException':
+          throw new Error('Código expirado');
+        case 'NotAuthorizedException':
+          throw new Error(
+            'Usuário não pode ser confirmado. Usuário já confirmado'
+          );
+        case 'TooManyFailedAttemptsException':
+          throw new Error('Muitas tentativas');
+        case 'LimitExceededException':
+          throw new Error('Limite excedido');
+        default:
+          throw new Error(error.code);
+      }
+    }
   }
+
   async forgotPassword(email: string): Promise<User> {
-    const user = await Auth.forgotPassword(email);
-    return new User({
-      email: user.attributes.email,
-      name: user.attributes.name,
-      ra: user.attributes.email.substring(0, 10),
-      password: 'cannot_pass_by_here',
-    });
+    try {
+      const user = await Auth.forgotPassword(email);
+      return new User({
+        email: user.attributes.email,
+        name: user.attributes.name,
+        ra: user.attributes.email.substring(0, 10),
+        password: 'cannot_pass_by_here',
+      });
+    } catch (error: any) {
+      switch (error.code) {
+        case 'UserNotFoundException':
+          throw new Error('Usuário não encontrado');
+        default:
+          throw new Error(error.code);
+      }
+    }
   }
+
   async forgotPasswordSubmit(
     email: string,
     code: string,
@@ -120,6 +159,18 @@ export class UserRepositoryHttp implements IUserRepository {
       ra: email.substring(0, 10),
       password: 'cannot_pass_by_here',
     });
+  }
+
+  validateEmailInJson(email: string): boolean {
+    const jsonData = JSON.parse(JSON.stringify(userJson)) as StudentJson[];
+    const ra = email.substring(0, 10);
+
+    for (const student of jsonData) {
+      if (student.RA === ra) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

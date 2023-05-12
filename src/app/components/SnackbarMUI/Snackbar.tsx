@@ -17,6 +17,7 @@ export default function SnackbarComponent({
   horizontal,
   vertical,
   style,
+  severity,
 }: {
   handleClose: () => void;
   open: boolean;
@@ -24,6 +25,7 @@ export default function SnackbarComponent({
   horizontal: 'left' | 'center' | 'right';
   vertical: 'top' | 'bottom';
   style: React.CSSProperties;
+  severity: 'success' | 'info' | 'warning' | 'error';
 }) {
   return (
     <SnackbarSc

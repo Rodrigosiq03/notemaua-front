@@ -24,7 +24,7 @@ import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '@/contexts/user_provider';
 import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
-import DialogComponent from '../components/DialogMUI/Dialog';
+import DialogComponent from '../components/DialogMUI/DialogSignUp';
 
 export interface IFormResetPassword {
   email: string;
@@ -35,7 +35,11 @@ export interface StateSnackBar extends SnackbarOrigin {
 }
 
 export default function ResetPasswordPage() {
-  const { register, handleSubmit } = useForm<IFormResetPassword>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormResetPassword>();
   const { forgotPassword } = useContext(UserContext);
 
   // dialog logic
@@ -83,8 +87,18 @@ export default function ResetPasswordPage() {
               <FormLabel htmlFor="email">E-mail (@maua.br)</FormLabel>
               <FormInput
                 type="email"
-                {...register('email', { required: true })}
+                {...register('email', { required: true, pattern: /@maua.br/ })}
               />
+              {errors.email?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              {errors.email?.type === 'pattern' && (
+                <span style={{ color: 'red' }}>
+                  O e-mail deve conter @maua.br
+                </span>
+              )}
               <FormButton type="submit">Enviar</FormButton>
             </FormContainer>
             <ContainerRow>

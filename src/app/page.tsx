@@ -39,24 +39,48 @@ export interface StateSnackBar extends SnackbarOrigin {
 }
 
 export default function LoginPage() {
-  const { register, handleSubmit } = useForm<IFormlogin>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IFormlogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
   const { users, confirmUser, error } = useContext(UserContext);
   const searchParams = useSearchParams();
 
   // Snackbar Logic
 
-  const [stateSnackbar, setStateSnackbar] = React.useState<StateSnackBar>({
-    vertical: 'top',
-    horizontal: 'center',
-    open: false,
-  });
-  const [messageSnackbar, setMessageSnackbar] = React.useState<string>('');
+  // STATE SNACKBAR SUCCESS
+  const [stateSnackbarSuccess, setStateSnackbarSuccess] =
+    React.useState<StateSnackBar>({
+      vertical: 'top',
+      horizontal: 'center',
+      open: false,
+    });
+  const [messageSnackbarSuccess, setMessageSnackbarSuccess] =
+    React.useState<string>('');
 
-  const handleOpenSnack = (newOpenState: SnackbarOrigin) => {
-    setStateSnackbar({ open: true, ...newOpenState });
+  // STATE SNACKBAR ERROR
+  const [stateSnackbarError, setStateSnackbarError] =
+    React.useState<StateSnackBar>({
+      vertical: 'top',
+      horizontal: 'center',
+      open: false,
+    });
+  const [messageSnackbarError, setMessageSnackbarError] =
+    React.useState<string>('');
+
+  // ACTIONS SNACKBAR SUCCESS
+  const handleOpenSnackSuccess = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbarSuccess({ open: true, ...newOpenState });
   };
 
-  const handleCloseSnack = (
+  const handleCloseSnackSuccess = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
@@ -64,43 +88,67 @@ export default function LoginPage() {
       return;
     }
 
-    setStateSnackbar({ ...stateSnackbar, open: false });
+    setStateSnackbarSuccess({ ...stateSnackbarSuccess, open: false });
   };
 
-  // dialog logic
-
-  const [openDialog, setOpenDialog] = React.useState(false);
-
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
+  // ACTIONS SNACKBAR ERROR
+  const handleOpenSnackError = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbarError({ open: true, ...newOpenState });
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const handleCloseSnackError = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStateSnackbarError({ ...stateSnackbarError, open: false });
   };
 
   // confirm user logic
 
-  useEffect(() => {
-    if (searchParams.has('email') && searchParams.has('code')) {
-      const email = searchParams.get('email');
-      const code = searchParams.get('code');
-      if (email && code) {
+  if (searchParams.has('email') && searchParams.has('code')) {
+    const email = searchParams.get('email');
+    const code = searchParams.get('code');
+    if (email && code) {
+      try {
         confirmUser(email, code);
         console.log('confirmado!!!!!!');
-        setMessageSnackbar('Usuário confirmado com sucesso!');
+        setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
         setTimeout(() => {
-          handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+          handleOpenSnackSuccess({
+            vertical: 'bottom',
+            horizontal: 'center',
+          });
+        }, 3000);
+      } catch (e) {
+        if (
+          error?.message ===
+          'Usuário não pode ser confirmado. Usuário já confirmado'
+        ) {
+          setMessageSnackbarError('Usuário já confirmado!');
+          setTimeout(() => {
+            handleOpenSnackError({
+              vertical: 'bottom',
+              horizontal: 'center',
+            });
+          }, 3000);
+        }
+        setMessageSnackbarError('Erro ao confirmar usuário!');
+        setTimeout(() => {
+          handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
         }, 3000);
       }
     }
-    if (searchParams.has('passwordReset')) {
-      setMessageSnackbar('Senha alterada com sucesso!');
-      setTimeout(() => {
-        handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
-      }, 3000);
-    }
-  }, [searchParams, confirmUser]);
+  }
+  if (searchParams.has('passwordReset')) {
+    setMessageSnackbarSuccess('Senha alterada com sucesso!');
+    setTimeout(() => {
+      handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
+    }, 3000);
+  }
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
 
@@ -117,13 +165,20 @@ export default function LoginPage() {
                 type="email"
                 {...register('email', { required: true })}
               />
+              {errors.email?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
               <FormLabel htmlFor="password">Senha</FormLabel>
               <FormInput
                 type="password"
                 {...register('password', { required: true })}
               />
-              {error?.message === 'Senha inválida' && (
-                <p style={{ color: 'red' }}>{error?.message}</p>
+              {errors.password?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
               )}
               <FormButton type="submit">Entrar</FormButton>
             </FormContainer>
@@ -138,12 +193,23 @@ export default function LoginPage() {
       <ImageComponentMaua />
       <SnackbarComponent
         style={{ paddingBottom: '310px' }}
-        handleClose={handleCloseSnack}
-        open={stateSnackbar.open}
-        horizontal={stateSnackbar.horizontal}
-        vertical={stateSnackbar.vertical}
+        handleClose={handleCloseSnackSuccess}
+        open={stateSnackbarSuccess.open}
+        horizontal={stateSnackbarSuccess.horizontal}
+        vertical={stateSnackbarSuccess.vertical}
+        severity="success"
       >
-        {messageSnackbar}
+        {messageSnackbarSuccess}
+      </SnackbarComponent>
+      <SnackbarComponent
+        style={{ paddingBottom: '310px' }}
+        handleClose={handleCloseSnackError}
+        open={stateSnackbarError.open}
+        horizontal={stateSnackbarError.horizontal}
+        vertical={stateSnackbarError.vertical}
+        severity="error"
+      >
+        {messageSnackbarError}
       </SnackbarComponent>
     </Container>
   );
