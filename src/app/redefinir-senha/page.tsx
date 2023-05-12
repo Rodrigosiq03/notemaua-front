@@ -39,8 +39,9 @@ export default function ResetPasswordPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IFormResetPassword>();
-  const { forgotPassword } = useContext(UserContext);
+  const { forgotPassword, validateEmailInJson } = useContext(UserContext);
 
   // dialog logic
 
@@ -59,6 +60,13 @@ export default function ResetPasswordPage() {
   // form logic
 
   const onSubmit: SubmitHandler<IFormResetPassword> = (data) => {
+    if (!validateEmailInJson(data.email)) {
+      setError('email', {
+        type: 'manual',
+        message: 'Email não válido para cadastro',
+      });
+      return;
+    }
     // console.log(process.env.NEXT_PUBLIC_STAGE);
     // console.log('Email: ', data.email);
     const forgotPasswordResponse = forgotPassword(data.email);
@@ -99,6 +107,12 @@ export default function ResetPasswordPage() {
                   O e-mail deve conter @maua.br
                 </span>
               )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Email não válido para cadastro' && (
+                  <span style={{ color: 'red' }}>
+                    Email inválido para redefinir a senha
+                  </span>
+                )}
               <FormButton type="submit">Enviar</FormButton>
             </FormContainer>
             <ContainerRow>
