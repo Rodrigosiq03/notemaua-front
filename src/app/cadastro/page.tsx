@@ -48,7 +48,7 @@ export default function CadastroPage() {
       password: '',
     },
   });
-  const { createUser, users, error } = useContext(UserContext);
+  const { createUser, error, validateEmailInJson } = useContext(UserContext);
 
   // dialog logic
 
@@ -75,19 +75,18 @@ export default function CadastroPage() {
 
   const onSubmit: SubmitHandler<IFormlogin> = (data) => {
     if (!error) {
-      if (data.email === '22.00000-0@maua.br') {
+      if (!validateEmailInJson(data.email)) {
         setError('email', {
           type: 'manual',
           message: 'Email não válido para cadastro',
         });
         return;
-      } else {
-        const userCreated = createUser(data.email, data.password);
-        setTimeout(() => {
-          handleClickOpenDialog(data.email);
-        }, 3000);
-        console.log('User created: ', userCreated);
       }
+      const userCreated = createUser(data.email, data.password);
+      setTimeout(() => {
+        handleClickOpenDialog(data.email);
+      }, 3000);
+      console.log('User created: ', userCreated);
     } else {
       if (error?.message === 'Usuário já cadastrado') {
         setError('email', {
@@ -161,8 +160,7 @@ export default function CadastroPage() {
               )}
               {errors.password?.type === 'pattern' && (
                 <span style={{ color: 'red' }}>
-                  Senha inválida. Confira e<br />
-                  verifique as informações.
+                  Senha inválida. Confira as informações
                 </span>
               )}
               <FormButton type="submit">Cadastrar</FormButton>

@@ -29,9 +29,7 @@ export class UserRepositoryHttp implements IUserRepository {
   async createUser(email: string, password: string): Promise<User> {
     try {
       const user = await Auth.signUp({
-        username: this.validateEmailInJson(email)
-          ? email
-          : '22.00000-0@maua.br',
+        username: email,
         password: password,
         attributes: {
           email: email,
