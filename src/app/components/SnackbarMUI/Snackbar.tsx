@@ -16,16 +16,14 @@ export default function SnackbarComponent({
   children,
   horizontal,
   vertical,
-  style,
-  severity,
+  style = undefined,
 }: {
   handleClose: () => void;
   open: boolean;
   children: React.ReactNode;
   horizontal: 'left' | 'center' | 'right';
   vertical: 'top' | 'bottom';
-  style: React.CSSProperties;
-  severity: 'success' | 'info' | 'warning' | 'error';
+  style: React.CSSProperties | undefined;
 }) {
   return (
     <SnackbarSc

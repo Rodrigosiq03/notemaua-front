@@ -103,10 +103,6 @@ export class UserRepositoryMock implements IUserRepository {
   ): Promise<User> {
     throw new Error('Method not implemented.');
   }
-
-  validateEmailInJson(email: string): boolean {
-    throw new Error('Method not implemented.');
-  }
 }
 
 decorate(injectable(), UserRepositoryMock);
