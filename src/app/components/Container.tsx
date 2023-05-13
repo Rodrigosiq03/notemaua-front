@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,16 +10,11 @@ const Container = styled.div`
 
   @media (max-width: 450px) {
     padding-top: 0px;
-    margin-right: -20px;
-  }
-
-  @media (max-width: 400px) {
-    padding-top: 0px;
     margin-right: -45px;
   }
   @media (max-width: 380px) {
     padding-left: 8px;
-    margin-right: -96px;
+    margin-right: -84px;
   }
 `;
 

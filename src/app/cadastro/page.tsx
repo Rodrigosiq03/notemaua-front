@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useContext } from 'react';
 
 import {
@@ -22,9 +23,13 @@ import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Hind } from 'next/font/google';
-import { UserContext } from '../../contexts/user_provider';
-import DialogComponent from '../components/DialogMUI/Dialog';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
+
+import { UserContext } from '../../contexts/user_provider';
+
+import DialogComponentSignUp from '../components/DialogMUI/DialogSignUp';
+import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
+import { InfoIcon, InfoButton } from '../components/Icon';
 
 export interface IFormlogin {
   email: string;
@@ -36,12 +41,19 @@ export default function CadastroPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormlogin>();
-  const { createUser, users } = useContext(UserContext);
+    setError,
+  } = useForm<IFormlogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const { createUser, error, validateEmailInJson } = useContext(UserContext);
 
   // dialog logic
 
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialogPassword, setOpenDialogPassword] = React.useState(false);
   const [emailDialog, setEmailDialog] = React.useState('');
 
   const handleClickOpenDialog = (email: string) => {
@@ -53,12 +65,37 @@ export default function CadastroPage() {
     setOpenDialog(false);
   };
 
+  const handleClickOpenDialogPassword = () => {
+    setOpenDialogPassword(true);
+  };
+
+  const handleCloseDialogPassword = () => {
+    setOpenDialogPassword(false);
+  };
+
   const onSubmit: SubmitHandler<IFormlogin> = (data) => {
-    const userCreated = createUser(data.email, data.password);
-    setTimeout(() => {
-      handleClickOpenDialog(data.email);
-    }, 3000);
-    console.log('User created: ', userCreated);
+    if (!error) {
+      if (!validateEmailInJson(data.email)) {
+        setError('email', {
+          type: 'manual',
+          message: 'Email não válido para cadastro',
+        });
+        return;
+      }
+      const userCreated = createUser(data.email, data.password);
+      setTimeout(() => {
+        handleClickOpenDialog(data.email);
+      }, 3000);
+      console.log('User created: ', userCreated);
+    } else {
+      if (error?.message === 'Usuário já cadastrado') {
+        setError('email', {
+          type: 'manual',
+          message: 'Usuário já cadastrado',
+        });
+      }
+    }
+    console.log('Erro ao criar usuário: ');
     // console.log('Users: ', users);
     // console.log(process.env.NEXT_PUBLIC_STAGE);
   };
@@ -76,18 +113,57 @@ export default function CadastroPage() {
               </FormLabel>
               <FormInput
                 type="email"
-                {...register('email', { required: true })}
+                {...register('email', { required: true, pattern: /@maua.br/ })}
               />
-              {errors.email && (
-                <span style={{ color: 'red' }}>Este campo é obrigatório</span>
+              {errors.email?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
               )}
-              <FormLabel style={{ paddingRight: '' }} htmlFor="password">
-                Digite uma senha
-              </FormLabel>
+              {errors.email?.type === 'pattern' && (
+                <span style={{ color: 'red' }}>
+                  O e-mail deve conter @maua.br
+                </span>
+              )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Usuário já cadastrado' && (
+                  <span style={{ color: 'red' }}>Usuário já cadastrado</span>
+                )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Email não válido para cadastro' && (
+                  <span style={{ color: 'red' }}>
+                    Email não válido para cadastro
+                  </span>
+                )}
+              <ContainerRow
+                style={{ paddingTop: '0px', textDecoration: 'none' }}
+              >
+                <FormLabel style={{ paddingTop: '8px' }} htmlFor="password">
+                  Digite uma senha
+                </FormLabel>
+                <InfoButton onClick={handleClickOpenDialogPassword}>
+                  <InfoIcon />
+                </InfoButton>
+              </ContainerRow>
               <FormInput
                 type="password"
-                {...register('password', { required: true })}
+                {...register('password', {
+                  required: true,
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                })}
               />
+              {errors.password?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              {errors.password?.type === 'pattern' && (
+                <span style={{ color: 'red' }}>
+                  Senha inválida. Verifique as <br />
+                  informações
+                </span>
+              )}
               <FormButton type="submit">Cadastrar</FormButton>
             </FormContainer>
             <ContainerRow>
@@ -98,12 +174,23 @@ export default function CadastroPage() {
         </CardWhite>
       </CardGray>
       <ImageComponentMaua />
-      <DialogComponent open={openDialog} handleClose={handleCloseDialog}>
+      <DialogComponentSignUp open={openDialog} handleClose={handleCloseDialog}>
         <p style={{ textAlign: 'center', fontSize: '20px' }}>
           Um e-mail foi enviado para <strong>{emailDialog}.</strong> Confirme
-          seu cadastro.
+          seu cadastro. Isso pode levar até 5 minutos.
         </p>
-      </DialogComponent>
+      </DialogComponentSignUp>
+      <DialogComponentInfoPassword
+        open={openDialogPassword}
+        handleClose={handleCloseDialogPassword}
+      >
+        <p style={{ textAlign: 'center', fontSize: '20px' }}>
+          Sua senha deve conter: <br />- no mínimo <strong>8</strong> caracteres{' '}
+          <br /> - <strong>1</strong> letra maiúscula <br />- <strong>1</strong>{' '}
+          letra minúscula <br />- <strong>1</strong> número <br />-{' '}
+          <strong>1</strong> caractere especial
+        </p>
+      </DialogComponentInfoPassword>
     </Container>
   );
 }
