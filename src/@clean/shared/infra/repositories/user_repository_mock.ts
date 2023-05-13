@@ -84,6 +84,29 @@ export class UserRepositoryMock implements IUserRepository {
   getLength(): number {
     return this.users.length;
   }
+
+  getNameFromJson(ra: string): string {
+    throw new Error('Method not implemented.');
+  }
+
+  confirmUser(email: string, code: string): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+
+  forgotPassword(email: string): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+  forgotPasswordSubmit(
+    email: string,
+    code: string,
+    newPassword: string
+  ): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+
+  validateEmailInJson(email: string): boolean {
+    throw new Error('Method not implemented.');
+  }
 }
 
 decorate(injectable(), UserRepositoryMock);

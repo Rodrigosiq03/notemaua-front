@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import {
   Container,
@@ -27,6 +27,9 @@ import { UserContext } from '../contexts/user_provider';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { WithdrawContext } from '@/contexts/withdraw_provider';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { useSearchParams } from 'next/navigation';
+import SnackbarComponent from './components/SnackbarMUI/Snackbar';
+import { SnackbarOrigin } from '@mui/material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -34,58 +37,123 @@ export interface IFormlogin {
   password: string;
 }
 
-export default function LoginPage() {
-  const { register, handleSubmit } = useForm<IFormlogin>();
-  const { users, getUser } = useContext(UserContext);
+export interface StateSnackBar extends SnackbarOrigin {
+  open: boolean;
+}
 
-  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    const findUser = users.find((user) => user.email === data.email);
-    if (findUser) {
-      if (findUser.password === data.password) {
-        console.log('Login realizado com sucesso!');
-      } else {
-        console.log('Senha incorreta!');
+export default function LoginPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IFormlogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const { users, confirmUser, error } = useContext(UserContext);
+  const searchParams = useSearchParams();
+
+  // Snackbar Logic
+
+  // STATE SNACKBAR SUCCESS
+  const [stateSnackbarSuccess, setStateSnackbarSuccess] =
+    React.useState<StateSnackBar>({
+      vertical: 'top',
+      horizontal: 'center',
+      open: false,
+    });
+  const [messageSnackbarSuccess, setMessageSnackbarSuccess] =
+    React.useState<string>('');
+
+  // STATE SNACKBAR ERROR
+  const [stateSnackbarError, setStateSnackbarError] =
+    React.useState<StateSnackBar>({
+      vertical: 'top',
+      horizontal: 'center',
+      open: false,
+    });
+  const [messageSnackbarError, setMessageSnackbarError] =
+    React.useState<string>('');
+
+  // ACTIONS SNACKBAR SUCCESS
+  const handleOpenSnackSuccess = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbarSuccess({ open: true, ...newOpenState });
+  };
+
+  const handleCloseSnackSuccess = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStateSnackbarSuccess({ ...stateSnackbarSuccess, open: false });
+  };
+
+  // ACTIONS SNACKBAR ERROR
+  const handleOpenSnackError = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbarError({ open: true, ...newOpenState });
+  };
+
+  const handleCloseSnackError = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStateSnackbarError({ ...stateSnackbarError, open: false });
+  };
+
+  // confirm user logic
+
+  if (searchParams.has('email') && searchParams.has('code')) {
+    const email = searchParams.get('email');
+    const code = searchParams.get('code');
+    if (email && code) {
+      try {
+        confirmUser(email, code);
+        console.log('confirmado!!!!!!');
+        setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
+        setTimeout(() => {
+          handleOpenSnackSuccess({
+            vertical: 'bottom',
+            horizontal: 'center',
+          });
+        }, 3000);
+      } catch (e) {
+        if (
+          error?.message ===
+          'Usuário não pode ser confirmado. Usuário já confirmado'
+        ) {
+          setMessageSnackbarError('Usuário já confirmado!');
+          setTimeout(() => {
+            handleOpenSnackError({
+              vertical: 'bottom',
+              horizontal: 'center',
+            });
+          }, 3000);
+        }
+        setMessageSnackbarError('Erro ao confirmar usuário!');
+        setTimeout(() => {
+          handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
+        }, 3000);
       }
     }
-  };
-
-  const getUserFunction = async () => {
-    const user = getUser('22.00680-0@maua.br');
-    console.log(user);
-    console.log(users);
-  };
-
-  const { getNotebook, notebooks } = useContext(NotebookContext);
-  async function teste_notebook() {
-    const notebook = await getNotebook('34100');
-    console.log(process.env.NEXT_PUBLIC_STAGE);
-    console.log('getNotebook ', notebook);
-    console.log(notebooks);
+  }
+  if (searchParams.has('passwordReset')) {
+    setMessageSnackbarSuccess('Senha alterada com sucesso!');
+    setTimeout(() => {
+      handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
+    }, 3000);
   }
 
-  const { withdraws, createWithdraw } = useContext(WithdrawContext);
-  async function teste_withdraw() {
-    const withdraw = await createWithdraw('34100', '22.00680-0@maua.br');
-    console.log('createWithdraw ', withdraw);
-    console.log(withdraws);
-  }  
-
-  const { finishWithdraw } = useContext(WithdrawContext);
-  async function teste_finish_withdraw() {
-    const withdraw = await finishWithdraw('34100');
-    console.log('finishWithdraw ', withdraw);
-    console.log(withdraws);
-  }
-
-  const { getAllWithdraws } = useContext(WithdrawContext);
-  async function teste_get_all_withdraws() {
-    const withdraw = await getAllWithdraws();
-    console.log('getAllWithdraws ', withdraw);
-    console.log(withdraws);
-  }
-
-
-  
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
 
   return (
     <Container className={hind.className}>
@@ -100,13 +168,21 @@ export default function LoginPage() {
                 type="email"
                 {...register('email', { required: true })}
               />
-              <FormLabel style={{ paddingRight: '' }} htmlFor="password">
-                Senha
-              </FormLabel>
+              {errors.email?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              <FormLabel htmlFor="password">Senha</FormLabel>
               <FormInput
                 type="password"
                 {...register('password', { required: true })}
               />
+              {errors.password?.type === 'required' && (
+                <span style={{ color: 'red' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
               <FormButton type="submit">Entrar</FormButton>
             </FormContainer>
             <ContainerRowLink>
@@ -118,9 +194,26 @@ export default function LoginPage() {
         </CardWhite>
       </CardGray>
       <ImageComponentMaua />
-      <button onClick={teste_withdraw}>Create Withdraw</button>
-      <button onClick={teste_finish_withdraw}>Finish Witdraw</button>
-      <button onClick={teste_get_all_withdraws}>Get All Witdraws</button>
+      <SnackbarComponent
+        style={{ paddingBottom: '310px' }}
+        handleClose={handleCloseSnackSuccess}
+        open={stateSnackbarSuccess.open}
+        horizontal={stateSnackbarSuccess.horizontal}
+        vertical={stateSnackbarSuccess.vertical}
+        severity="success"
+      >
+        {messageSnackbarSuccess}
+      </SnackbarComponent>
+      <SnackbarComponent
+        style={{ paddingBottom: '310px' }}
+        handleClose={handleCloseSnackError}
+        open={stateSnackbarError.open}
+        horizontal={stateSnackbarError.horizontal}
+        vertical={stateSnackbarError.vertical}
+        severity="error"
+      >
+        {messageSnackbarError}
+      </SnackbarComponent>
     </Container>
   );
 }
