@@ -1,3 +1,4 @@
+
 export interface IProcessEnv {
   NEXT_PUBLIC_STAGE: string;
   NEXT_PUBLIC_REGION: string;
