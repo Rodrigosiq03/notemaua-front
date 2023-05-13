@@ -160,7 +160,8 @@ export default function CadastroPage() {
               )}
               {errors.password?.type === 'pattern' && (
                 <span style={{ color: 'red' }}>
-                  Senha inválida. Confira as informações
+                  Senha inválida. Verifique as <br />
+                  informações
                 </span>
               )}
               <FormButton type="submit">Cadastrar</FormButton>
