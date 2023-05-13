@@ -121,7 +121,7 @@ export default function LoginPage() {
     const withdraw = await createWithdraw('34100', '22.00680-0@maua.br');
     console.log('createWithdraw ', withdraw);
     console.log(withdraws);
-  }  
+  }
 
   const { finishWithdraw } = useContext(WithdrawContext);
   async function teste_finish_withdraw() {
@@ -136,9 +136,6 @@ export default function LoginPage() {
     console.log('getAllWithdraws ', withdraw);
     console.log(withdraws);
   }
-
-
-  
 
   return (
     <Container className={hind.className}>
