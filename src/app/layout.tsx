@@ -19,8 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <UserProvider>
-          <NotebookProvider>{children}</NotebookProvider>
-          <WithdrawProvider>{children}</WithdrawProvider>
+          <NotebookProvider>
+            <WithdrawProvider>
+              <div id="root">{children}</div>
+            </WithdrawProvider>
+          </NotebookProvider>
         </UserProvider>
       </body>
     </html>

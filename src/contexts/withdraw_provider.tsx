@@ -72,8 +72,8 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
 
   async function getAllWithdraws() {
     try {
-      const AllWithdrawsFound = await getAllWithdrawsUsecase.execute();
-      setWithdraws(AllWithdrawsFound);
+      const allWithdrawsFound = await getAllWithdrawsUsecase.execute();
+      setWithdraws(allWithdrawsFound);
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       const setError = error;
