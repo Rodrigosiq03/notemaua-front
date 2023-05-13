@@ -112,46 +112,48 @@ export default function LoginPage() {
 
   // confirm user logic
 
-  if (searchParams.has('email') && searchParams.has('code')) {
-    const email = searchParams.get('email');
-    const code = searchParams.get('code');
-    if (email && code) {
-      try {
-        confirmUser(email, code);
-        console.log('confirmado!!!!!!');
-        setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
-        setTimeout(() => {
-          handleOpenSnackSuccess({
-            vertical: 'bottom',
-            horizontal: 'center',
-          });
-        }, 3000);
-      } catch (e) {
-        if (
-          error?.message ===
-          'Usuário não pode ser confirmado. Usuário já confirmado'
-        ) {
-          setMessageSnackbarError('Usuário já confirmado!');
+  useEffect(() => {
+    if (searchParams.has('email') && searchParams.has('code')) {
+      const email = searchParams.get('email');
+      const code = searchParams.get('code');
+      if (email && code) {
+        try {
+          confirmUser(email, code);
+          console.log('confirmado!!!!!!');
+          setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
           setTimeout(() => {
-            handleOpenSnackError({
+            handleOpenSnackSuccess({
               vertical: 'bottom',
               horizontal: 'center',
             });
           }, 3000);
+        } catch (e) {
+          if (
+            error?.message ===
+            'Usuário não pode ser confirmado. Usuário já confirmado'
+          ) {
+            setMessageSnackbarError('Usuário já confirmado!');
+            setTimeout(() => {
+              handleOpenSnackError({
+                vertical: 'bottom',
+                horizontal: 'center',
+              });
+            }, 3000);
+          }
+          setMessageSnackbarError('Erro ao confirmar usuário!');
+          setTimeout(() => {
+            handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
+          }, 3000);
         }
-        setMessageSnackbarError('Erro ao confirmar usuário!');
-        setTimeout(() => {
-          handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
-        }, 3000);
       }
     }
-  }
-  if (searchParams.has('passwordReset')) {
-    setMessageSnackbarSuccess('Senha alterada com sucesso!');
-    setTimeout(() => {
-      handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
-    }, 3000);
-  }
+    if (searchParams.has('passwordReset')) {
+      setMessageSnackbarSuccess('Senha alterada com sucesso!');
+      setTimeout(() => {
+        handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
+      }, 3000);
+    }
+  }, [confirmUser, error?.message, searchParams]);
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
 
