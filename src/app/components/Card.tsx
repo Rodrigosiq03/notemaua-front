@@ -20,7 +20,7 @@ const CardGray = styled.div`
   align-items: center;
   margin-top: 120px;
 
-  @media (max-width: 450px) {
+  @media (max-width: 400px) {
     background-color: white;
     margin-top: 0px;
   }

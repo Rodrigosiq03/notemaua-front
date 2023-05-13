@@ -13,6 +13,7 @@ import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_
 import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_usecase';
 import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_password_usecase';
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
+import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
 
 export type UserContextType = {
   users: User[];
@@ -28,6 +29,7 @@ export type UserContextType = {
     code: string,
     newPassword: string
   ) => void;
+  validateEmailInJson: (email: string) => boolean;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -46,6 +48,7 @@ const defaultContext: UserContextType = {
     code: string,
     newPassword: string
   ) => {},
+  validateEmailInJson: (email: string) => false,
   error: null,
   setErrorNull: () => {},
 };
@@ -76,6 +79,10 @@ const forgotPasswordUseCase = containerUser.get<ForgotPasswordUsecase>(
 const forgotPasswordSubmitUsecase =
   containerUser.get<ForgotPasswordSubmitUsecase>(
     Registry.ForgotPasswordSubmitUsecase
+  );
+const validateEmailInJsonUsecase =
+  containerUser.get<ValidateEmailInJsonUsecase>(
+    Registry.ValidateEmailInJsonUsecase
   );
 
 export function UserProvider({ children }: PropsWithChildren) {
@@ -146,7 +153,6 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userConfirmed;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      setError(error);
     }
   }
 
@@ -156,7 +162,6 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userForgotPassword;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      setError(error);
     }
   }
 
@@ -171,6 +176,18 @@ export function UserProvider({ children }: PropsWithChildren) {
       return userForgotPasswordSubmit;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
+  function validateEmailInJson(email: string): boolean {
+    try {
+      const isValid = validateEmailInJsonUsecase.execute(email);
+      return isValid;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+      return false;
     }
   }
 
@@ -190,6 +207,7 @@ export function UserProvider({ children }: PropsWithChildren) {
         confirmUser,
         forgotPassword,
         forgotPasswordSubmit,
+        validateEmailInJson,
         error,
         setErrorNull,
       }}
