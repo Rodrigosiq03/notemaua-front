@@ -1,14 +1,14 @@
-import { EntityError } from '../../../../@clean/shared/domain/helpers/errors/domain_error';
-import { User } from '../../../shared/domain/entities/user';
+import { User } from '@/@clean/shared/domain/entities/user';
 import { IUserRepository } from '../domain/repositories/user_repository_interface';
+import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error';
 
-export class UpdateUserUsecase {
+export class ForgotPasswordSubmitUsecase {
   constructor(private userRepo: IUserRepository) {}
 
   async execute(
     email: string,
-    newPassword: string,
-    code: string
+    code: string,
+    newPassword: string
   ): Promise<User> {
     if (!User.validateEmail(email)) {
       throw new EntityError('email');
@@ -16,7 +16,12 @@ export class UpdateUserUsecase {
     if (!User.validatePassword(newPassword)) {
       throw new EntityError('newPassword');
     }
-    const user = await this.userRepo.updateUser(email, newPassword, code);
+
+    const user = await this.userRepo.forgotPasswordSubmit(
+      email,
+      code,
+      newPassword
+    );
     return user;
   }
 }

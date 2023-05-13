@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import {
   Container,
@@ -27,6 +27,9 @@ import { UserContext } from '../contexts/user_provider';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { WithdrawContext } from '@/contexts/withdraw_provider';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { useSearchParams } from 'next/navigation';
+import SnackbarComponent from './components/SnackbarMUI/Snackbar';
+import { SnackbarOrigin } from '@mui/material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -34,25 +37,75 @@ export interface IFormlogin {
   password: string;
 }
 
+export interface StateSnackBar extends SnackbarOrigin {
+  open: boolean;
+}
+
 export default function LoginPage() {
   const { register, handleSubmit } = useForm<IFormlogin>();
-  const { users, getUser } = useContext(UserContext);
+  const { users, confirmUser } = useContext(UserContext);
+  const searchParams = useSearchParams();
 
-  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    const findUser = users.find((user) => user.email === data.email);
-    if (findUser) {
-      if (findUser.password === data.password) {
-        console.log('Login realizado com sucesso!');
-      } else {
-        console.log('Senha incorreta!');
-      }
-    }
+  // Snackbar Logic
+
+  const [stateSnackbar, setStateSnackbar] = React.useState<StateSnackBar>({
+    vertical: 'top',
+    horizontal: 'center',
+    open: false,
+  });
+  const [messageSnackbar, setMessageSnackbar] = React.useState<string>('');
+
+  const handleOpenSnack = (newOpenState: SnackbarOrigin) => {
+    setStateSnackbar({ open: true, ...newOpenState });
   };
 
-  const getUserFunction = async () => {
-    const user = getUser('22.00680-0@maua.br');
-    console.log(user);
-    console.log(users);
+  const handleCloseSnack = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStateSnackbar({ ...stateSnackbar, open: false });
+  };
+
+  // dialog logic
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  // confirm user logic
+
+  if (searchParams.has('email') && searchParams.has('code')) {
+    const email = searchParams.get('email');
+    const code = searchParams.get('code');
+    if (email && code) {
+      confirmUser(email, code);
+      console.log('confirmado!!!!!!');
+      setMessageSnackbar('Usuário confirmado com sucesso!');
+      setTimeout(() => {
+        handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+      }, 3000);
+    }
+  }
+  if (searchParams.has('passwordReset')) {
+    setMessageSnackbar('Senha alterada com sucesso!');
+    setTimeout(() => {
+      handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
+    }, 3000);
+  }
+
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
+    setMessageSnackbar('Usuário confirmado com sucesso!');
+    handleOpenSnack({ vertical: 'bottom', horizontal: 'center' });
   };
 
   const { getNotebook, notebooks } = useContext(NotebookContext);
@@ -100,9 +153,7 @@ export default function LoginPage() {
                 type="email"
                 {...register('email', { required: true })}
               />
-              <FormLabel style={{ paddingRight: '' }} htmlFor="password">
-                Senha
-              </FormLabel>
+              <FormLabel htmlFor="password">Senha</FormLabel>
               <FormInput
                 type="password"
                 {...register('password', { required: true })}
@@ -121,6 +172,15 @@ export default function LoginPage() {
       <button onClick={teste_withdraw}>Create Withdraw</button>
       <button onClick={teste_finish_withdraw}>Finish Witdraw</button>
       <button onClick={teste_get_all_withdraws}>Get All Witdraws</button>
+      <SnackbarComponent
+        style={undefined}
+        handleClose={handleCloseSnack}
+        open={stateSnackbar.open}
+        horizontal={stateSnackbar.horizontal}
+        vertical={stateSnackbar.vertical}
+      >
+        {messageSnackbar}
+      </SnackbarComponent>
     </Container>
   );
 }

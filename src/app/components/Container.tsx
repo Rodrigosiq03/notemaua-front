@@ -10,9 +10,31 @@ const Container = styled.div`
 
   @media (max-width: 450px) {
     padding-top: 0px;
+    margin-right: -20px;
+  }
+
+  @media (max-width: 400px) {
+    padding-top: 0px;
+    margin-right: -45px;
   }
   @media (max-width: 380px) {
     padding-left: 8px;
+    margin-right: -96px;
+  }
+`;
+
+const ContainerCenterMiddle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 43%;
+  left: 45%;
+
+  @media (max-width: 450px) {
+    top: 40%;
+    left: 38%;
   }
 `;
 
@@ -47,4 +69,10 @@ const ContainerRow = styled.div`
   }
 `;
 
-export { Container, ContainerCardContent, ContainerRowLink, ContainerRow };
+export {
+  Container,
+  ContainerCardContent,
+  ContainerRowLink,
+  ContainerRow,
+  ContainerCenterMiddle,
+};

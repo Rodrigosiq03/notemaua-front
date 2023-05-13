@@ -23,6 +23,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Hind } from 'next/font/google';
 import { UserContext } from '../../contexts/user_provider';
+import DialogComponent from '../components/DialogMUI/Dialog';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -38,10 +39,28 @@ export default function CadastroPage() {
   } = useForm<IFormlogin>();
   const { createUser, users } = useContext(UserContext);
 
+  // dialog logic
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [emailDialog, setEmailDialog] = React.useState('');
+
+  const handleClickOpenDialog = (email: string) => {
+    setOpenDialog(true);
+    setEmailDialog(email);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   const onSubmit: SubmitHandler<IFormlogin> = (data) => {
     const userCreated = createUser(data.email, data.password);
+    setTimeout(() => {
+      handleClickOpenDialog(data.email);
+    }, 3000);
     console.log('User created: ', userCreated);
-    console.log('Users: ', users);
+    // console.log('Users: ', users);
+    // console.log(process.env.NEXT_PUBLIC_STAGE);
   };
 
   return (
@@ -79,6 +98,12 @@ export default function CadastroPage() {
         </CardWhite>
       </CardGray>
       <ImageComponentMaua />
+      <DialogComponent open={openDialog} handleClose={handleCloseDialog}>
+        <p style={{ textAlign: 'center', fontSize: '20px' }}>
+          Um e-mail foi enviado para <strong>{emailDialog}.</strong> Confirme
+          seu cadastro.
+        </p>
+      </DialogComponent>
     </Container>
   );
 }

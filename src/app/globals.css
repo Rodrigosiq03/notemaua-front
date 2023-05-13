@@ -1,4 +1,4 @@
-body {
+html, body {
   background-color: #B2DAFF;
 } 
 
@@ -7,8 +7,11 @@ input:-webkit-autofill {
 }
 
 @media (max-width: 450px) {
-  body {
+  html, body {
     background-color: white;
+    position: fixed;
   }
 }
+
+
 
