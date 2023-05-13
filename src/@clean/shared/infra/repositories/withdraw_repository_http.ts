@@ -1,3 +1,4 @@
+import { decorate, injectable } from 'inversify';
 import { IWithdrawRepository } from '../../../modules/withdraw/domain/repositories/withdraw_repository_interface';
 import { Withdraw } from '../../domain/entities/withdraw';
 
@@ -14,3 +15,5 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
     throw new Error('Method not implemented.');
   }
 }
+
+decorate(injectable(), WithdrawRepositoryHttp);

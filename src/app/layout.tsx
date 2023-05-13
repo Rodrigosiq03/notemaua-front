@@ -1,7 +1,6 @@
 import { UserProvider } from '@/contexts/user_provider';
 import './globals.css';
 import { NotebookProvider } from '@/contexts/notebook_provider';
-import { Withdraw } from '@/@clean/shared/domain/entities/withdraw';
 import { WithdrawProvider } from '@/contexts/withdraw_provider';
 
 export const metadata = {
@@ -20,9 +19,7 @@ export default function RootLayout({
       <body>
         <UserProvider>
           <NotebookProvider>
-            <WithdrawProvider>
-              <div id="root">{children}</div>
-            </WithdrawProvider>
+            <WithdrawProvider>{children}</WithdrawProvider>
           </NotebookProvider>
         </UserProvider>
       </body>

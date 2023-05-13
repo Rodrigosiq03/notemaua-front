@@ -26,6 +26,9 @@ jobs:
 
       - name: Lint with ESLint and Prettier 
         run: yarn lint
+      
+      - name: Build Next.js app
+        run: yarn build
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

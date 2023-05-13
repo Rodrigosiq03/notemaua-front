@@ -3,6 +3,7 @@ import { Container } from 'inversify';
 import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_notebook_usecase';
 import { http } from '../http';
 import { NotebookRepositoryMock } from '../repositories/notebook_repository_mock';
+import { NotebookRepositoryHttp } from '../repositories/notebook_repository_http';
 
 export const RegistryNotebook = {
   // Axios Adapter
@@ -18,7 +19,6 @@ export const RegistryNotebook = {
 
 export const containerNotebook = new Container();
 
-containerNotebook.bind(RegistryNotebook.AxiosAdapter).toConstantValue(http);
 // containerUser.bind(RegistryNotebook.UserHttpRepository).toDynamicValue((context) => {
 //     return new UserHttpRepository(context.containerUser.get(RegistryNotebook.AxiosAdapter));
 // });
@@ -26,6 +26,10 @@ containerNotebook.bind(RegistryNotebook.AxiosAdapter).toConstantValue(http);
 containerNotebook
   .bind(RegistryNotebook.NotebookRepositoryMock)
   .to(NotebookRepositoryMock);
+
+containerNotebook
+  .bind(RegistryNotebook.NotebookRepositoryHttp)
+  .to(NotebookRepositoryHttp);
 
 containerNotebook
   .bind(RegistryNotebook.GetNotebookUsecase)
