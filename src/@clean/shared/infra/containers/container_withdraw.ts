@@ -5,6 +5,7 @@ import { CreateWithdrawUsecase } from '@/@clean/modules/withdraw/usecases/create
 import { GetAllWithdrawsUsecase } from '@/@clean/modules/withdraw/usecases/get_all_withdraws_usecase';
 import { FinishWithdrawUsecase } from '@/@clean/modules/withdraw/usecases/finish_withdraw_usecase';
 import { WithdrawRepositoryMock } from '../repositories/withdraw_repository_mock';
+import { WithdrawRepositoryHttp } from '../repositories/withdraw_repository_http';
 
 export const RegistryWithdraw = {
   // Axios Adapter
@@ -27,6 +28,10 @@ containerWithdraw.bind(RegistryWithdraw.AxiosAdapter).toConstantValue(http);
 containerWithdraw
   .bind(RegistryWithdraw.WithdrawRepositoryMock)
   .to(WithdrawRepositoryMock);
+
+containerWithdraw
+  .bind(RegistryWithdraw.WithdrawRepositoryHttp)
+  .to(WithdrawRepositoryHttp);
 
 containerWithdraw
   .bind(RegistryWithdraw.CreateWithdrawUsecase)
