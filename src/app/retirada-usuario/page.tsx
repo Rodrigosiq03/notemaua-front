@@ -34,7 +34,7 @@ export default function RetiradaPage(){
                   <TextForLink style={{fontWeight: '300'}}>Concordo com os</TextForLink>
                   <LinkStyled href="/termosDeUso">termos de uso.</LinkStyled>
               </ContainerRowLink>
-              <FormButton type="submit">Confirmar</FormButton>
+              <FormButton type="submit" style={{backgroundColor: '#00CE3A'}}>Confirmar</FormButton>
             </FormContainer>
             <ContainerRow>
               <ReturnLink href="/">Sair</ReturnLink>
