@@ -42,4 +42,23 @@ const FormButton = styled.button`
   }
 `;
 
-export { FormContainer, FormInput, FormLabel, FormButton };
+const FormButtonScan = styled.button`
+  margin: 0px;
+  width: 150px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 10px;
+  color: white;
+  background-color: #B3C3FF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  font-weight: bold;
+  position: relative;
+  left: 20%;
+
+  &:hover {
+    background-color: #1669b6;
+  }
+`;
+
+export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan };
