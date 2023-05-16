@@ -10,11 +10,11 @@ const Container = styled.div`
 
   @media (max-width: 450px) {
     padding-top: 0px;
-    margin-right: -45px;
+    margin-right: -25px;
   }
-  @media (max-width: 380px) {
+  @media (max-width: 400px) {
     padding-left: 8px;
-    margin-right: -84px;
+    margin-right: -96px;
   }
 `;
 
