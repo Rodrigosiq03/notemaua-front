@@ -26,7 +26,7 @@ export default function ConfirmReturnPage() {
                 <Title style={{ paddingTop: '0px', marginBottom: '0px' }}>
                   Retirada Confirmada
                 </Title>
-                <CheckCircleIcon style={{ fontSize: '140px', color: '#00b300', paddingTop: '5px' }} />
+                <CheckCircleIcon style={{ fontSize: '140px', color: '#00b300', paddingTop: '10px', paddingBottom: '20px' }} />
                     <div>
                         <p style={{ textAlign: 'center', fontSize: '13px', margin: '0px' }}>Horário de Retirada: <strong>7:40</strong></p>
                         {/* <p style={{ textAlign: 'center', fontSize: '13px', margin: '0px', paddingTop: '2px'  }}></p> */}
