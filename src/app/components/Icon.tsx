@@ -2,6 +2,7 @@ import { styled } from '@mui/system';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButtonMui from '@mui/material/IconButton';
 import IIcon from '@mui/icons-material/Info';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const ExitIcon = styled(ExitToAppIcon)({
   color: '#545454',
@@ -20,4 +21,15 @@ const InfoButton = styled(IconButtonMui)({
   width: '30px',
 });
 
-export { ExitIcon, InfoIcon, InfoButton };
+const CheckCircle = styled(CheckCircleIcon)({
+  // color: '#00b300',
+  // fontSize: '300px',
+
+  
+
+
+})
+
+
+
+export { ExitIcon, InfoIcon, InfoButton, CheckCircle };
