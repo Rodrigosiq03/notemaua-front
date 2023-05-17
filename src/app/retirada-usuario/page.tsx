@@ -1,8 +1,8 @@
 'use client';
 import { CardGray, CardWhite } from "../components/Card";
 import { Container, ContainerCardContent, ContainerRow, ContainerRowLink } from "../components/Container";
-import { FormButton, FormButtonScan, FormButtonTerms, FormContainer, FormInput, FormLabel } from "../components/Form";
-import { ReturnIcon, ScanIcon } from "../components/Icon";
+import { FormButton, FormButtonScan, FormContainer, FormInput, FormLabel } from "../components/Form";
+import { ReturnIcon, ScanIcon, TermsButton } from "../components/Icon";
 import ImageComponentMaua from "../components/ImageComponent/LogoMaua";
 import ImageComponentNoteMaua from "../components/ImageComponent/LogoNoteMaua";
 import { LinkStyled, ReturnLink, TextForLink } from "../components/Link";
@@ -50,8 +50,8 @@ export default function RetiradaPage(){
                 <ScanIcon/>
               </FormButtonScan>
               <ContainerRowLink style={{paddingTop: '34px'}}>
-                  <TextForLink style={{fontWeight: '300'}}><input type="checkbox" required/>Concordo com os</TextForLink>
-                  <FormButtonTerms onClick={handleClickOpenDialogTermsOfUse}>termos de uso.</FormButtonTerms>
+                  <TextForLink style={{fontWeight: '300'}}><input type="checkbox"/>Concordo com os</TextForLink>
+                  <TermsButton onClick={handleClickOpenDialogTermsOfUse}>termos de uso.</TermsButton>
               </ContainerRowLink>
               <FormButton type="submit" style={{backgroundColor: '#00CE3A'}}>Confirmar</FormButton>
             </FormContainer>
@@ -63,7 +63,6 @@ export default function RetiradaPage(){
         </CardWhite>
       </CardGray>
       <ImageComponentMaua/>
-      <FormButtonTerms onClick={handleClickOpenDialogTermsOfUse}>termos de uso.</FormButtonTerms>
       <DialogComponentTermsOfUse
         open={open}
         handleClose={handleClose}     

@@ -4,6 +4,7 @@ import IconButtonMui from '@mui/material/IconButton';
 import IIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import Button from '@mui/material/Button';
 
 const ScanIcon = styled(QrCodeScannerIcon)({
   color: '#000000',
@@ -32,5 +33,16 @@ const InfoIcon = styled(IIcon)({
 const InfoButton = styled(IconButtonMui)({
   width: '30px',
 });
-
-export { ExitIcon, InfoIcon, InfoButton, ReturnIcon, ScanIcon };
+const TermsButton = styled(Button)({
+  background: 'none!important',
+  border: 'none',
+  padding: '0!important',
+  color: '#1669b6',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: '700',
+  '&:hover': {
+    textDecoration: 'underline',
+  }
+});
+export { ExitIcon, InfoIcon, InfoButton, ReturnIcon, ScanIcon, TermsButton };

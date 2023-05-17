@@ -62,19 +62,4 @@ const FormButtonScan = styled.button`
   }
 `;
 
-const FormButtonTerms = styled.button`
-  background: none!important;
-  border: none;
-  padding: 0!important;
-  color: #1669b6;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
-
-
-  &&:hover {
-    text-decoration: underline;
-  }
-`;
-
-export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan, FormButtonTerms };
+export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan };
