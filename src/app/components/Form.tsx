@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
+  
 `;
 
 const FormInput = styled.input`
@@ -69,6 +70,7 @@ const FormButtonTerms = styled.button`
   cursor: pointer;
   font-size: 15px;
   font-weight: 700;
+
 
   &&:hover {
     text-decoration: underline;

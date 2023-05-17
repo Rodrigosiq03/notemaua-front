@@ -50,11 +50,11 @@ export default function ScrollDialog({
             '& .MuiDialog-paper': {
               borderRadius: '20px',
               border: '10px solid #D6D6D6',
-              marginBottom: '230px',
+              marginBottom: '20px',
             },
           }}
         >
-          <DialogTitle id="scroll-dialog-title">Termos De Uso</DialogTitle>
+          <DialogTitle id="scroll-dialog-title" style={{textAlign:"center" }}><strong>Termos De Uso</strong></DialogTitle>
           <DialogContent dividers={scroll === 'paper'}
             sx={{
                 '& .MuiDialogContent-root': {
