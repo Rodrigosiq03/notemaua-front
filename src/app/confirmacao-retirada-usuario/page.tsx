@@ -22,7 +22,7 @@ export default function ConfirmReturnPage() {
           <CardGray>
             <CardWhite>
               <ContainerCardContent>
-                <ImageComponentNoteMaua />
+                <ImageComponentNoteMaua /> 
                 <Title style={{ paddingTop: '0px', marginBottom: '0px' }}>
                   Retirada Confirmada
                 </Title>
