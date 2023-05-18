@@ -5,7 +5,7 @@ import { FormButton, FormButtonScan, FormContainer, FormInput, FormLabel } from 
 import { ReturnIcon, ScanIcon, TermsButton } from "../components/Icon";
 import ImageComponentMaua from "../components/ImageComponent/LogoMaua";
 import ImageComponentNoteMaua from "../components/ImageComponent/LogoNoteMaua";
-import { LinkStyled, ReturnLink, TextForLink } from "../components/Link";
+import { ReturnLink, TextForLink } from "../components/Link";
 import { Title } from "../components/Title";
 
 import { Hind } from 'next/font/google';
@@ -13,14 +13,23 @@ const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 
 import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
-import React from "react";
-import { DialogProps } from "@mui/material";
+import React, { useContext } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { NotebookContext } from "@/contexts/notebook_provider";
 
 export interface IFormRetirada{
   numSerie: string;
 }
 
 export default function RetiradaPage(){
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IFormRetirada>();
+  const { getNotebook } = useContext(NotebookContext);
+  
 
   // logic dialog for terms of use
 
@@ -33,6 +42,11 @@ export default function RetiradaPage(){
     const handleClose = () => {
       setOpen(false);
     };
+
+  // form logic
+  const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
+    console.log(data.numSerie)
+  }
   
 
   return(
@@ -42,15 +56,33 @@ export default function RetiradaPage(){
           <ContainerCardContent>
             <ImageComponentNoteMaua/>
             <Title>Retirada de Notebook</Title>
-            <FormContainer>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
               <FormLabel htmlFor="numSerie">Digite/Escaneie o número de serie:</FormLabel>
-              <FormInput type="numSerie" style={{marginBottom: '0px'}}/>
+              <FormInput type="text" style={{marginBottom: '0px'}}
+                {...register("numSerie", {required: true, maxLength:5, minLength: 5})}
+              />
+              {errors.numSerie?.type === 'required' && (
+                <span style={{ color: 'red', paddingTop: '4px' }}>
+                  Este campo é um campo obrigatório
+                </span>
+              )}
+              {errors.numSerie?.type === 'minLength' && (
+                <span style={{ color: 'red', textAlign: 'center', paddingTop: '4px' }}>
+                  Número de série inválido
+                </span>
+              )}
+              {/* {errors.numSerie?.type === 'manual' &&
+                errors.numSerie?.message === 'Notebook não encontrado' && (
+                  <span style={{ color: 'red' }}>
+                    Notebook inexistente
+                  </span>
+                )} */}
               <h4 style={{fontWeight: '300', margin: '1px', textAlign: 'center'}}>ou</h4>
               <FormButtonScan>
                 <ScanIcon/>
               </FormButtonScan>
               <ContainerRowLink style={{paddingTop: '34px'}}>
-                  <TextForLink style={{fontWeight: '300'}}><input type="checkbox"/>Concordo com os</TextForLink>
+                  <TextForLink style={{fontWeight: '300'}}><input type="checkbox" required/>Concordo com os</TextForLink>
                   <TermsButton onClick={handleClickOpenDialogTermsOfUse}>termos de uso.</TermsButton>
               </ContainerRowLink>
               <FormButton type="submit" style={{backgroundColor: '#00CE3A'}}>Confirmar</FormButton>
