@@ -87,7 +87,7 @@ export default function RetiradaPage(){
               </ContainerRowLink>
               <FormButton type="submit" style={{backgroundColor: '#00CE3A'}}>Confirmar</FormButton>
             </FormContainer>
-            <ContainerRow>
+            <ContainerRow style={{paddingTop: "20px"}}>
               <ReturnLink href="/">Sair</ReturnLink>
               <ReturnIcon/>
             </ContainerRow>

@@ -45,7 +45,7 @@ const FormButton = styled.button`
 
 const FormButtonScan = styled.button`
   margin: 0px;
-  width: 150px;
+  width: 157px;
   height: 30px;
   border-radius: 5px;
   font-size: 10px;
