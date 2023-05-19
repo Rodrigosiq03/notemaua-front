@@ -71,7 +71,7 @@ export default function ScrollDialog({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <DialogButtonOK onClick={handleClose}>OK</DialogButtonOK>
+            <DialogButtonOK onClick={handleClose}>Aceitar</DialogButtonOK>
           </DialogActions>
         </Dialog>
     );
