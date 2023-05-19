@@ -119,7 +119,9 @@ export class UserRepositoryHttp implements IUserRepository {
         case 'TooManyFailedAttemptsException':
           throw new Error('Muitas tentativas');
         case 'LimitExceededException':
-          throw new Error('Limite excedido');
+          throw new Error(
+            'Limites de confirmação de usuário excedidos. Usuário já confirmado'
+          );
         default:
           throw new Error(error.code);
       }
@@ -169,6 +171,10 @@ export class UserRepositoryHttp implements IUserRepository {
       }
     }
     return false;
+  }
+
+  async resendConfirmationCode(email: string): Promise<User> {
+    throw new Error('Method not implemented.');
   }
 }
 
