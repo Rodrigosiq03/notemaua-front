@@ -31,13 +31,13 @@ export default function SnackbarComponent({
     <SnackbarSc
       style={style}
       open={open}
-      autoHideDuration={300000}
+      autoHideDuration={8000}
       anchorOrigin={{ vertical, horizontal }}
       onClose={handleClose}
     >
       <Alert
         onClose={handleClose}
-        severity="success"
+        severity={severity}
         sx={{ width: '80%', color: 'white' }}
       >
         {children}

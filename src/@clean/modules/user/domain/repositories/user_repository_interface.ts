@@ -15,4 +15,5 @@ export interface IUserRepository {
     newPassword: string
   ): Promise<User>;
   validateEmailInJson(email: string): boolean;
+  resendConfirmationCode(email: string): Promise<User>;
 }

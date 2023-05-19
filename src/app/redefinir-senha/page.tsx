@@ -25,6 +25,7 @@ import { UserContext } from '@/contexts/user_provider';
 import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
 import DialogComponent from '../components/DialogMUI/DialogSignUp';
+import { useRouter } from 'next/navigation';
 
 export interface IFormResetPassword {
   email: string;
@@ -42,6 +43,7 @@ export default function ResetPasswordPage() {
     setError,
   } = useForm<IFormResetPassword>();
   const { forgotPassword, validateEmailInJson } = useContext(UserContext);
+  const router = useRouter();
 
   // dialog logic
 
@@ -55,6 +57,12 @@ export default function ResetPasswordPage() {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  // go to login function
+
+  const goToLoginFunction = () => {
+    router.push('/');
   };
 
   // form logic
