@@ -96,8 +96,6 @@ export default function CadastroPage() {
       }
     }
     console.log('Erro ao criar usuário: ');
-    // console.log('Users: ', users);
-    // console.log(process.env.NEXT_PUBLIC_STAGE);
   };
 
   return (
@@ -150,7 +148,7 @@ export default function CadastroPage() {
                 {...register('password', {
                   required: true,
                   pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*_?&ç()-])[A-Za-z\d@$!%*_?&ç()-]{8,}$/,
                 })}
               />
               {errors.password?.type === 'required' && (

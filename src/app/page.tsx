@@ -24,9 +24,6 @@ import { LinkStyled, TextForLink } from './components/Link';
 import ImageComponentMaua from './components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
-import { NotebookContext } from '@/contexts/notebook_provider';
-import { WithdrawContext } from '@/contexts/withdraw_provider';
-import { ConnectingAirportsOutlined } from '@mui/icons-material';
 import { useSearchParams } from 'next/navigation';
 import SnackbarComponent from './components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
@@ -116,36 +113,15 @@ export default function LoginPage() {
     if (searchParams.has('email') && searchParams.has('code')) {
       const email = searchParams.get('email');
       const code = searchParams.get('code');
-      if (email && code) {
-        try {
-          confirmUser(email, code);
-          console.log('confirmado!!!!!!');
-          setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
-          setTimeout(() => {
-            handleOpenSnackSuccess({
-              vertical: 'bottom',
-              horizontal: 'center',
-            });
-          }, 3000);
-        } catch (e) {
-          if (
-            error?.message ===
-            'Usuário não pode ser confirmado. Usuário já confirmado'
-          ) {
-            setMessageSnackbarError('Usuário já confirmado!');
-            setTimeout(() => {
-              handleOpenSnackError({
-                vertical: 'bottom',
-                horizontal: 'center',
-              });
-            }, 3000);
-          }
-          setMessageSnackbarError('Erro ao confirmar usuário!');
-          setTimeout(() => {
-            handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
-          }, 3000);
-        }
-      }
+      confirmUser(email as string, code as string);
+      console.log('confirmado!!!!!!');
+      setMessageSnackbarSuccess('Usuário confirmado com sucesso!');
+      setTimeout(() => {
+        handleOpenSnackSuccess({
+          vertical: 'bottom',
+          horizontal: 'center',
+        });
+      }, 3000);
     }
     if (searchParams.has('passwordReset')) {
       setMessageSnackbarSuccess('Senha alterada com sucesso!');
@@ -153,9 +129,14 @@ export default function LoginPage() {
         handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
       }, 3000);
     }
-  }, [confirmUser, error?.message, searchParams]);
+  }, [confirmUser, error, searchParams]);
 
-  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {};
+  const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
+    setMessageSnackbarError('Funcionalidade não implementada!');
+    setTimeout(() => {
+      handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
+    }, 3000);
+  };
 
   return (
     <Container className={hind.className}>
@@ -197,7 +178,7 @@ export default function LoginPage() {
       </CardGray>
       <ImageComponentMaua />
       <SnackbarComponent
-        style={{ paddingBottom: '310px' }}
+        style={undefined}
         handleClose={handleCloseSnackSuccess}
         open={stateSnackbarSuccess.open}
         horizontal={stateSnackbarSuccess.horizontal}
@@ -207,7 +188,7 @@ export default function LoginPage() {
         {messageSnackbarSuccess}
       </SnackbarComponent>
       <SnackbarComponent
-        style={{ paddingBottom: '310px' }}
+        style={undefined}
         handleClose={handleCloseSnackError}
         open={stateSnackbarError.open}
         horizontal={stateSnackbarError.horizontal}
