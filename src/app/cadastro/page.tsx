@@ -148,7 +148,7 @@ export default function CadastroPage() {
                 {...register('password', {
                   required: true,
                   pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*_?&ç()-])[A-Za-z\d@$!%*_?&ç()-]{8,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
                 })}
               />
               {errors.password?.type === 'required' && (
