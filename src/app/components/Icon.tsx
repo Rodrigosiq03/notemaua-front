@@ -41,6 +41,8 @@ const TermsButton = styled(Button)({
   cursor: 'pointer',
   fontSize: '12px',
   fontWeight: '700',
+  marginTop: '1px',
+
   '&:hover': {
     textDecoration: 'underline',
   }
