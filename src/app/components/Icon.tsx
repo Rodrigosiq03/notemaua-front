@@ -45,16 +45,23 @@ const TermsButton = styled(Button)({
   fontSize: '12px',
   fontWeight: '700',
   marginTop: '1px',
-    
+
   '&:hover': {
     textDecoration: 'underline',
-  }
+  },
 });
 
 const CheckCircle = styled(CheckCircleIcon)({
   // color: '#00b300',
   // fontSize: '300px',
-})
+});
 
-export { ExitIcon, InfoIcon, InfoButton, ReturnIcon, ScanIcon, TermsButton, CheckCircle };
-
+export {
+  ExitIcon,
+  InfoIcon,
+  InfoButton,
+  ReturnIcon,
+  ScanIcon,
+  TermsButton,
+  CheckCircle,
+};
