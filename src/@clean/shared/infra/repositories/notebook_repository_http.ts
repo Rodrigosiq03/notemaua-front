@@ -6,6 +6,10 @@ export class NotebookRepositoryHttp implements INotebookRepository {
   getNotebook(numSerie: string): Promise<Notebook> {
     throw new Error('Method not implemented.');
   }
+
+  validateNumSerie(numSerie: string): boolean {
+    throw new Error('Method not implemented.');
+  }
 }
 
 decorate(injectable(), NotebookRepositoryHttp);

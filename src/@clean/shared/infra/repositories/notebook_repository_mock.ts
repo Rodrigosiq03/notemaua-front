@@ -51,6 +51,10 @@ export class NotebookRepositoryMock implements INotebookRepository {
       throw new NoItemsFoundError(`notebook numSerie: ${numSerie}`);
     }
   }
+
+  validateNumSerie(numSerie: string): boolean {
+    throw new Error('Method not implemented.');
+  }
 }
 
 decorate(injectable(), NotebookRepositoryMock);

@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react';
 import {
   Container,
   ContainerCardContent,
+  ContainerEyeInput,
   ContainerRowLink,
 } from './components/Container';
 import { CardGray, CardWhite } from './components/Card';
@@ -27,6 +28,7 @@ import { UserContext } from '../contexts/user_provider';
 import { useSearchParams } from 'next/navigation';
 import SnackbarComponent from './components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export interface IFormlogin {
@@ -36,6 +38,10 @@ export interface IFormlogin {
 
 export interface StateSnackBar extends SnackbarOrigin {
   open: boolean;
+}
+
+export interface StatePassword {
+  type: 'text' | 'password';
 }
 
 export default function LoginPage() {
@@ -50,7 +56,7 @@ export default function LoginPage() {
       password: '',
     },
   });
-  const { users, confirmUser, error } = useContext(UserContext);
+  const { signIn, confirmUser, error } = useContext(UserContext);
   const searchParams = useSearchParams();
 
   // Snackbar Logic
@@ -131,11 +137,39 @@ export default function LoginPage() {
     }
   }, [confirmUser, error, searchParams]);
 
+  // eye input logic
+
+  const [eyeInput, setEyeInput] = React.useState<StatePassword>({
+    type: 'password',
+  });
+
+  const handleEyeInput = () => {
+    setEyeInput({
+      type: eyeInput.type === 'password' ? 'text' : 'password',
+    });
+  };
+
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    setMessageSnackbarError('Funcionalidade não implementada!');
-    setTimeout(() => {
-      handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
-    }, 3000);
+    // setMessageSnackbarError('Funcionalidade não implementada!');
+    // setTimeout(() => {
+    //   handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
+    // }, 3000);
+
+    const response = signIn(data.email, data.password);
+    if (error) {
+      if (error?.message === 'Usuário não encontrado') {
+        setError('email', {
+          type: 'manual',
+          message: 'Usuário ou senha incorretos',
+        });
+      }
+      if (error?.message === 'Usuário ou senha incorretos') {
+        setError('password', {
+          type: 'manual',
+          message: 'Usuário ou senha incorretos',
+        });
+      }
+    }
   };
 
   return (
@@ -158,15 +192,41 @@ export default function LoginPage() {
               )}
               <FormLabel htmlFor="password">Senha</FormLabel>
               <FormInput
-                type="password"
-                {...register('password', { required: true })}
+                type={eyeInput.type}
+                {...register('password', {
+                  required: true,
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
+                })}
               />
+              <ContainerEyeInput onClick={handleEyeInput}>
+                <VisibilityIcon sx={{ color: '#545454', fontSize: '20px' }} />
+              </ContainerEyeInput>
               {errors.password?.type === 'required' && (
                 <span style={{ color: 'red' }}>
                   Este campo é um campo obrigatório
                 </span>
               )}
-              <FormButton type="submit">Entrar</FormButton>
+              {errors.password?.type === 'pattern' && (
+                <span style={{ color: 'red', textAlign: 'center' }}>
+                  Senha inválida
+                </span>
+              )}
+              {errors.password?.type === 'manual' &&
+                errors.password?.message === 'Usuário ou senha incorretos' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                    Usuário ou senha incorretos
+                  </span>
+                )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Usuário ou senha incorretos' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                    Usuário ou senha incorretos
+                  </span>
+                )}
+              <FormButton id="loginButton" type="submit">
+                Entrar
+              </FormButton>
             </FormContainer>
             <ContainerRowLink>
               <TextForLink>Primeiro Acesso?</TextForLink>

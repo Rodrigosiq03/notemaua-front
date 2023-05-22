@@ -5,6 +5,7 @@ import React, { useContext } from 'react';
 import {
   Container,
   ContainerCardContent,
+  ContainerEyeInput,
   ContainerRow,
 } from '../components/Container';
 import { CardGray, CardWhite } from '../components/Card';
@@ -30,10 +31,15 @@ import { UserContext } from '../../contexts/user_provider';
 import DialogComponentSignUp from '../components/DialogMUI/DialogSignUp';
 import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
 import { InfoIcon, InfoButton } from '../components/Icon';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export interface IFormlogin {
   email: string;
   password: string;
+}
+
+export interface StatePassword {
+  type: 'text' | 'password';
 }
 
 export default function CadastroPage() {
@@ -71,6 +77,17 @@ export default function CadastroPage() {
 
   const handleCloseDialogPassword = () => {
     setOpenDialogPassword(false);
+  };
+
+  // eye input logic
+  const [eyeInput, setEyeInput] = React.useState<StatePassword>({
+    type: 'password',
+  });
+
+  const handleEyeInput = () => {
+    setEyeInput({
+      type: eyeInput.type === 'password' ? 'text' : 'password',
+    });
   };
 
   const onSubmit: SubmitHandler<IFormlogin> = (data) => {
@@ -144,13 +161,19 @@ export default function CadastroPage() {
                 </InfoButton>
               </ContainerRow>
               <FormInput
-                type="password"
+                type={eyeInput.type}
                 {...register('password', {
                   required: true,
                   pattern:
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
                 })}
               />
+              <ContainerEyeInput
+                style={{ marginTop: '15px' }}
+                onClick={handleEyeInput}
+              >
+                <VisibilityIcon sx={{ color: '#545454', fontSize: '20px' }} />
+              </ContainerEyeInput>
               {errors.password?.type === 'required' && (
                 <span style={{ color: 'red' }}>
                   Este campo é um campo obrigatório

@@ -64,10 +64,44 @@ const ContainerRow = styled.div`
   }
 `;
 
+const ContainerEyeInput = styled.span`
+  position: absolute;
+  right: 0;
+  top: 446px;
+  margin-right: 826px;
+  cursor: pointer;
+
+  @media (max-width: 820px) {
+    top: 447px;
+    margin-right: 296px;
+  }
+
+  @media (max-width: 500px) {
+    top: 447px;
+    margin-right: 134px;
+  }
+
+  @media (max-width: 450px) {
+    top: 318px;
+    margin-right: 70px;
+  }
+
+  @media (max-width: 400px) {
+    top: 318px;
+    margin-right: 70px;
+  }
+
+  @media (max-width: 380px) {
+    top: 330px;
+    margin-right: 50px;
+  }
+`;
+
 export {
   Container,
   ContainerCardContent,
   ContainerRowLink,
   ContainerRow,
   ContainerCenterMiddle,
+  ContainerEyeInput,
 };
