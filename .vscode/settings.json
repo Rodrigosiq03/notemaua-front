@@ -9,5 +9,6 @@
     "amplify/backend/awscloudformation": true
   },
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "debug.javascript.unmapMissingSources": true
 }

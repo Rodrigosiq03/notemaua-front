@@ -16,7 +16,7 @@ export default function SnackbarComponent({
   children,
   horizontal,
   vertical,
-  style,
+  style = undefined,
   severity,
 }: {
   handleClose: () => void;
@@ -24,20 +24,20 @@ export default function SnackbarComponent({
   children: React.ReactNode;
   horizontal: 'left' | 'center' | 'right';
   vertical: 'top' | 'bottom';
-  style: React.CSSProperties;
+  style: React.CSSProperties | undefined;
   severity: 'success' | 'info' | 'warning' | 'error';
 }) {
   return (
     <SnackbarSc
       style={style}
       open={open}
-      autoHideDuration={300000}
+      autoHideDuration={8000}
       anchorOrigin={{ vertical, horizontal }}
       onClose={handleClose}
     >
       <Alert
         onClose={handleClose}
-        severity="success"
+        severity={severity}
         sx={{ width: '80%', color: 'white' }}
       >
         {children}
