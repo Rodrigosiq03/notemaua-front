@@ -125,7 +125,7 @@ export default function ResetPasswordPage() {
             </FormContainer>
             <ContainerRow>
               <ReturnLink href="/">Voltar</ReturnLink>
-              <ExitIcon />
+              <ExitIcon /> 
             </ContainerRow>
           </ContainerCardContent>
         </CardWhite>
