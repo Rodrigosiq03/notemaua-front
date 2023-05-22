@@ -28,7 +28,7 @@ export default function RetiradaPage(){
     formState: { errors },
     setError,
   } = useForm<IFormRetirada>();
-  const { getNotebook } = useContext(NotebookContext);
+  const { validateNumSerieInJson } = useContext(NotebookContext);
   
 
   // logic dialog for terms of use
@@ -45,7 +45,12 @@ export default function RetiradaPage(){
 
   // form logic
   const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
-    console.log(data.numSerie)
+    if(!validateNumSerieInJson(data.numSerie))
+      setError('numSerie', {
+        type: 'manual', 
+        message: 'Notebook não encontrado'
+      });
+      return;
   }
   
 
@@ -71,12 +76,12 @@ export default function RetiradaPage(){
                   Número de série inválido
                 </span>
               )}
-              {/* {errors.numSerie?.type === 'manual' &&
+              {errors.numSerie?.type === 'manual' &&
                 errors.numSerie?.message === 'Notebook não encontrado' && (
                   <span style={{ color: 'red' }}>
                     Notebook inexistente
                   </span>
-                )} */}
+                )}
               <h4 style={{fontWeight: '300', margin: '1px', textAlign: 'center'}}>ou</h4>
               <FormButtonScan>
                 <ScanIcon/>
