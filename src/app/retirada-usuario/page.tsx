@@ -78,7 +78,7 @@ export default function RetiradaPage(){
               )}
               {errors.numSerie?.type === 'manual' &&
                 errors.numSerie?.message === 'Notebook não encontrado' && (
-                  <span style={{ color: 'red' }}>
+                  <span style={{ color: 'red', textAlign: 'center', paddingTop: '4px' }}>
                     Notebook inexistente
                   </span>
                 )}
