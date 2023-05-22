@@ -17,6 +17,7 @@ const ReturnLink = styled(Link)`
   color: #545454;
   font-weight: 700;
   text-decoration: none;
+  padding-bottom: 10px;
 `;
 
 export { LinkStyled, TextForLink, ReturnLink };
