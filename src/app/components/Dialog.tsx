@@ -7,6 +7,7 @@ const DialogButtonOK = styled.button`
   color: white;
   border: none;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const DialogButtonResend = styled.button`

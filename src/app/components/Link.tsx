@@ -5,6 +5,14 @@ const LinkStyled = styled(Link)`
   text-decoration: none;
   color: #1669b6;
   font-weight: 700;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    text-decoration: underline;
+  }
 `;
 
 const TextForLink = styled.p`
@@ -17,7 +25,14 @@ const ReturnLink = styled(Link)`
   color: #545454;
   font-weight: 700;
   text-decoration: none;
-  padding-bottom: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    text-decoration: underline;
+  }
 `;
 
 export { LinkStyled, TextForLink, ReturnLink };
