@@ -43,6 +43,26 @@ const FormButton = styled.button`
   }
 `;
 
+const FormButtonADM = styled.button`
+  width: 200px;
+  height: 36px;
+  border-radius: 5px;
+  position: relative;
+  left: 5%;
+  font-size: 15px;
+  background-color: #00CE3A;
+  color: black;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  
+  &:hover {
+    background-color: #00a12e;
+    text-decoration: none;
+  }
+
+`;
+
 const FormButtonScan = styled.button`
   margin: 0px;
   width: 157px;
@@ -62,4 +82,4 @@ const FormButtonScan = styled.button`
   }
 `;
 
-export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan };
+export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan, FormButtonADM };

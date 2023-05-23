@@ -26,4 +26,36 @@ const CardGray = styled.div`
   }
 `;
 
-export { CardWhite, CardGray };
+const CardGrayADM = styled.div`
+  width: 1780px;
+  height: 710px;
+  background-color: #bcbcbc;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+
+  @media (max-width: 1550px) {
+    width: 1420px;
+    height: 500px;
+  }
+
+`;
+
+const CardWhiteADM = styled.div`
+  width: 1760px;
+  height: 690px;
+  background-color: white;
+  border-radius: 10px;
+  justify-content: center;
+  display: flex;
+
+  @media (max-width: 1550px) {
+    width: 1400px;
+    height: 480px;
+  }
+`;
+
+export { CardWhite, CardGray, CardGrayADM, CardWhiteADM };

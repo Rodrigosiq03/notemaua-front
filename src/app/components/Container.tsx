@@ -64,10 +64,17 @@ const ContainerRow = styled.div`
   }
 `;
 
+const ConteinerRowADM = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-top: 15px;
+`;
+
 export {
   Container,
   ContainerCardContent,
   ContainerRowLink,
   ContainerRow,
   ContainerCenterMiddle,
+  ConteinerRowADM
 };
