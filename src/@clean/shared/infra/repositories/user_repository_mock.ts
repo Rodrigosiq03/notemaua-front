@@ -115,6 +115,10 @@ export class UserRepositoryMock implements IUserRepository {
   signIn(email: string, password: string): Promise<User> {
     throw new Error('Method not implemented.');
   }
+
+  logout(): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 decorate(injectable(), UserRepositoryMock);

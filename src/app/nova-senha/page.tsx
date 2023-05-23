@@ -4,7 +4,6 @@ import React, { useContext } from 'react';
 import {
   Container,
   ContainerCardContent,
-  ContainerEyeInput,
   ContainerRow,
 } from '../components/Container';
 import { CardGray, CardWhite } from '../components/Card';
@@ -18,11 +17,13 @@ const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { IconButton, InputAdornment } from '@mui/material';
 
 import {
   FormButton,
   FormContainer,
-  FormInput,
+  FormInputEye,
   FormLabel,
 } from '../components/Form';
 import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
@@ -63,44 +64,17 @@ export default function NovaSenhaPage() {
   };
 
   // eye input logic
-  const [eyeInputNewPassword, setEyeInputNewPassword] =
-    React.useState<StatePassword>({
-      type: 'password',
-    });
+  const [showPasswordNewPassword, setShowPasswordNewPassword] =
+    React.useState(false);
+  const [showPasswordConfirmPassword, setShowPasswordConfirmPassword] =
+    React.useState(false);
 
-  const [eyeInputConfirmPassword, setEyeInputConfirmPassword] =
-    React.useState<StatePassword>({
-      type: 'password',
-    });
-
-  const handleEyeInputNewPassword = () => {
-    const newPasswordInput = document.getElementById(
-      'newPassword'
-    ) as HTMLInputElement;
-    if (newPasswordInput) {
-      if (eyeInputNewPassword.type === 'password') {
-        setEyeInputNewPassword({ type: 'text' });
-        newPasswordInput.setAttribute('type', 'text');
-      } else {
-        setEyeInputNewPassword({ type: 'password' });
-        newPasswordInput.setAttribute('type', 'password');
-      }
-    }
+  const handleNewPasswordVisibility = () => {
+    setShowPasswordNewPassword(!showPasswordNewPassword);
   };
 
-  const handleEyeInputConfirmPassword = () => {
-    const confirmPasswordInput = document.getElementById(
-      'confirmPassword'
-    ) as HTMLInputElement;
-    if (confirmPasswordInput) {
-      if (eyeInputConfirmPassword.type === 'password') {
-        setEyeInputConfirmPassword({ type: 'text' });
-        confirmPasswordInput.setAttribute('type', 'text');
-      } else {
-        setEyeInputConfirmPassword({ type: 'password' });
-        confirmPasswordInput.setAttribute('type', 'password');
-      }
-    }
+  const handleConfirmPasswordVisibility = () => {
+    setShowPasswordConfirmPassword(!showPasswordConfirmPassword);
   };
 
   const onSubmit: SubmitHandler<IFormNovaSenha> = (data) => {
@@ -135,21 +109,30 @@ export default function NovaSenhaPage() {
                   <InfoIcon />
                 </InfoButton>
               </ContainerRow>
-              <FormInput
-                id="newPassword"
-                type={eyeInputNewPassword.type}
+              <FormInputEye
+                type={showPasswordNewPassword ? 'text' : 'password'}
                 {...register('password', {
                   required: true,
                   pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
                 })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleNewPasswordVisibility}>
+                      {showPasswordNewPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-              <ContainerEyeInput
-                style={{ marginTop: '-54px' }}
-                onClick={handleEyeInputNewPassword}
-              >
-                <VisibilityIcon sx={{ color: '#545454', fontSize: '20px' }} />
-              </ContainerEyeInput>
               {errors.password?.type === 'pattern' && (
                 <span style={{ color: 'red', textAlign: 'center' }}>
                   Senha inválida. Verifique as <br />
@@ -164,9 +147,8 @@ export default function NovaSenhaPage() {
               <FormLabel style={{ paddingRight: '' }} htmlFor="password">
                 Confirme a Senha
               </FormLabel>
-              <FormInput
-                id="confirmPassword"
-                type={eyeInputConfirmPassword.type}
+              <FormInputEye
+                type={showPasswordConfirmPassword ? 'text' : 'password'}
                 {...register('confirmPassword', {
                   required: true,
                   validate: (value) => {
@@ -176,13 +158,23 @@ export default function NovaSenhaPage() {
                     return true;
                   },
                 })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleConfirmPasswordVisibility}>
+                      {showPasswordConfirmPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-              <ContainerEyeInput
-                style={{ marginTop: '16px' }}
-                onClick={handleEyeInputConfirmPassword}
-              >
-                <VisibilityIcon sx={{ color: '#545454', fontSize: '20px' }} />
-              </ContainerEyeInput>
               {errors.confirmPassword?.type === 'required' && (
                 <span style={{ color: 'red' }}>
                   Este campo é um campo obrigatório

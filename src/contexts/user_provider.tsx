@@ -15,6 +15,7 @@ import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_pas
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
 import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
 import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
+import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
 
 export type UserContextType = {
   users: User[];
@@ -32,6 +33,7 @@ export type UserContextType = {
   ) => void;
   validateEmailInJson: (email: string) => boolean;
   signIn: (email: string, password: string) => void;
+  logOut: () => void;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -52,6 +54,7 @@ const defaultContext: UserContextType = {
   ) => {},
   validateEmailInJson: (email: string) => false,
   signIn: (email: string, password: string) => {},
+  logOut: () => {},
   error: null,
   setErrorNull: () => {},
 };
@@ -87,8 +90,12 @@ const validateEmailInJsonUsecase =
   containerUser.get<ValidateEmailInJsonUsecase>(
     RegistryUser.ValidateEmailInJsonUsecase
   );
-const signInUseCase = containerUser.get<SignInUsecase>(
+const signInUsecase = containerUser.get<SignInUsecase>(
   RegistryUser.SignInUsecase
+);
+
+const logOutUsecase = containerUser.get<LogOutUsecase>(
+  RegistryUser.LogOutUsecase
 );
 
 export function UserProvider({ children }: PropsWithChildren) {
@@ -199,8 +206,17 @@ export function UserProvider({ children }: PropsWithChildren) {
 
   async function signIn(email: string, password: string) {
     try {
-      const userSignedIn = await signInUseCase.execute(email, password);
+      const userSignedIn = await signInUsecase.execute(email, password);
       return userSignedIn;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
+  async function logOut() {
+    try {
+      await logOutUsecase.execute();
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       setError(error);
@@ -225,6 +241,7 @@ export function UserProvider({ children }: PropsWithChildren) {
         forgotPasswordSubmit,
         validateEmailInJson,
         signIn,
+        logOut,
         error,
         setErrorNull,
       }}

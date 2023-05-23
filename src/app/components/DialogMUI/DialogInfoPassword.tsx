@@ -60,7 +60,7 @@ export default function DialogComponent({
           {children}
         </DialogContentText>
         <DialogActions>
-          <DialogButtonOK onClick={goToLogin}>OK</DialogButtonOK>
+          <DialogButtonOK onClick={handleClose}>OK</DialogButtonOK>
         </DialogActions>
       </DialogContent>
     </Dialog>

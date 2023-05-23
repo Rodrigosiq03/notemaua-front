@@ -26,6 +26,7 @@ import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse'
 import React, { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
+import { UserContext } from '@/contexts/user_provider';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -39,6 +40,7 @@ export default function RetiradaPage() {
     setError,
   } = useForm<IFormRetirada>();
   const { validateNumSerieInJson } = useContext(NotebookContext);
+  const { logOut } = useContext(UserContext);
 
   // logic dialog for terms of use
 
@@ -50,6 +52,12 @@ export default function RetiradaPage() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  // logout logic
+
+  const handleLogout = () => {
+    logOut();
   };
 
   // form logic
@@ -136,7 +144,9 @@ export default function RetiradaPage() {
               </FormButton>
             </FormContainer>
             <ContainerRow style={{ paddingTop: '20px' }}>
-              <ReturnLink href="/">Sair</ReturnLink>
+              <ReturnLink onClick={handleLogout} href="/">
+                Sair
+              </ReturnLink>
               <ReturnIcon />
             </ContainerRow>
           </ContainerCardContent>
