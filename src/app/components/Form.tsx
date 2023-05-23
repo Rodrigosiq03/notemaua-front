@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { styled as styledMUI } from '@mui/system';
+import { Input } from '@mui/material';
 
 const FormContainer = styled.form`
   display: flex;
@@ -15,6 +17,17 @@ const FormInput = styled.input`
   background-color: #d6d6d6 !important;
   color: #000;
 `;
+
+const FormInputEye = styledMUI(Input)({
+  marginBottom: '8px',
+  borderRadius: '5px',
+  width: '250px',
+  height: '36px',
+  border: 'none !important',
+  paddingLeft: '8px',
+  backgroundColor: '#d6d6d6 !important',
+  color: '#000',
+});
 
 const FormLabel = styled.label`
   display: inline-block;
@@ -42,4 +55,30 @@ const FormButton = styled.button`
   }
 `;
 
-export { FormContainer, FormInput, FormLabel, FormButton };
+const FormButtonScan = styled.button`
+  margin: 0px;
+  width: 157px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 10px;
+  color: white;
+  background-color: #b3c3ff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  font-weight: bold;
+  position: relative;
+  left: 20%;
+
+  &:hover {
+    background-color: #1669b6;
+  }
+`;
+
+export {
+  FormContainer,
+  FormInput,
+  FormLabel,
+  FormButton,
+  FormButtonScan,
+  FormInputEye,
+};

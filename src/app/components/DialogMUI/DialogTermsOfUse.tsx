@@ -1,13 +1,14 @@
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
-import { useRouter } from 'next/navigation';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -19,7 +20,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DialogComponent({
+export default function ScrollDialog({
   open,
   children,
   handleClose,
@@ -28,41 +29,56 @@ export default function DialogComponent({
   children: React.ReactNode;
   handleClose: () => void;
 }) {
-  const router = useRouter();
-  const goToLogin = () => {
-    router.push('/');
-  };
+  const scroll = 'paper';
+
+  const descriptionElementRef = React.useRef<HTMLElement>(null);
+  React.useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
 
   return (
     <Dialog
       className={hind.className}
       open={open}
-      TransitionComponent={Transition}
-      keepMounted
       onClose={handleClose}
-      aria-describedby="alert-dialog-slide-description"
+      scroll={scroll}
+      aria-labelledby="scroll-dialog-title"
+      aria-describedby="scroll-dialog-description"
       sx={{
         '& .MuiDialog-paper': {
           borderRadius: '20px',
           border: '10px solid #D6D6D6',
-          marginBottom: '230px',
+          marginBottom: '20px',
         },
       }}
     >
+      <DialogTitle id="scroll-dialog-title" style={{ textAlign: 'center' }}>
+        <strong>Termos De Uso</strong>
+      </DialogTitle>
       <DialogContent
+        dividers={scroll === 'paper'}
         sx={{
           '& .MuiDialogContent-root': {
             paddingBottom: '0px',
           },
         }}
       >
-        <DialogContentText id="alert-dialog-slide-description">
+        <DialogContentText
+          id="scroll-dialog-description"
+          ref={descriptionElementRef}
+          tabIndex={-1}
+        >
           {children}
         </DialogContentText>
-        <DialogActions>
-          <DialogButtonOK onClick={handleClose}>OK</DialogButtonOK>
-        </DialogActions>
       </DialogContent>
+      <DialogActions>
+        <DialogButtonOK onClick={handleClose}>Aceitar</DialogButtonOK>
+      </DialogActions>
     </Dialog>
   );
 }
