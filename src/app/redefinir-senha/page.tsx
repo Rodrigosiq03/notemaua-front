@@ -22,7 +22,6 @@ import { ReturnLink } from '../components/Link';
 import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '@/contexts/user_provider';
-import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
 import DialogComponent from '../components/DialogMUI/DialogSignUp';
 import { useRouter } from 'next/navigation';
@@ -39,6 +38,7 @@ export default function ResetPasswordPage() {
   const {
     register,
     handleSubmit,
+
     formState: { errors },
     setError,
   } = useForm<IFormResetPassword>();
@@ -125,7 +125,7 @@ export default function ResetPasswordPage() {
             </FormContainer>
             <ContainerRow>
               <ReturnLink href="/">Voltar</ReturnLink>
-              <ExitIcon /> 
+              <ExitIcon />
             </ContainerRow>
           </ContainerCardContent>
         </CardWhite>
