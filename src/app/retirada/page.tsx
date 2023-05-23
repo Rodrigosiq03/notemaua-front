@@ -214,16 +214,7 @@ export default function RetiradaPage() {
         open={openScanner}
         handleClose={() => setOpenScanner(false)}
       >
-        <BarcodeScannerComponent
-          width={240}
-          height={400}
-          onUpdate={(err, result) => {
-            if (result) {
-              setDataScanner(result.getText());
-              setOpenScanner(false);
-            }
-          }}
-        />
+        Ainda não implementado
       </DialogScanner>
     </Container>
   );
