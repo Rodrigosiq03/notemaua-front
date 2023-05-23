@@ -23,10 +23,13 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
+import DialogScanner from '../components/DialogMUI/DialogScanner';
 import React, { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
+
+import BarcodeScannerComponent from 'react-qr-barcode-scanner';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -41,6 +44,11 @@ export default function RetiradaPage() {
   } = useForm<IFormRetirada>();
   const { validateNumSerieInJson } = useContext(NotebookContext);
   const { logOut } = useContext(UserContext);
+
+  // Scanner state
+
+  const [dataScanner, setDataScanner] = React.useState('');
+  const [openScanner, setOpenScanner] = React.useState(false);
 
   // logic dialog for terms of use
 
@@ -202,6 +210,12 @@ export default function RetiradaPage() {
           retirei o kit notebook;
         </p>
       </DialogComponentTermsOfUse>
+      <DialogScanner
+        open={openScanner}
+        handleClose={() => setOpenScanner(false)}
+      >
+        Ainda não implementado
+      </DialogScanner>
     </Container>
   );
 }

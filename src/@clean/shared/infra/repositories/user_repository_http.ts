@@ -180,12 +180,7 @@ export class UserRepositoryHttp implements IUserRepository {
   async signIn(email: string, password: string): Promise<User> {
     try {
       const user = await Auth.signIn(email, password);
-      return new User({
-        email: user.attributes.email,
-        name: user.attributes.name,
-        ra: user.attributes.email.substring(0, 10),
-        password: 'cannot_pass_by_here',
-      });
+      return user;
     } catch (error: any) {
       console.log('User repository http error: ', error);
       switch (error.code) {

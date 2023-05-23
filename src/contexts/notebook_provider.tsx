@@ -18,9 +18,10 @@ export type NotebookContextType = {
 const defaultContext: NotebookContextType = {
   notebooks: [],
   getNotebook: (numSerie: string) => {},
-  validateNumSerieInJson(numSerie: string): boolean{
+  validateNumSerieInJson(numSerie: string): boolean {
     return false;
   },
+
   error: null,
   setErrorNull: () => {},
 };
@@ -50,10 +51,10 @@ export function NotebookProvider({ children }: PropsWithChildren) {
   }
 
   function validateNumSerieInJson(numSerie: string): boolean {
-    try{
+    try {
       const isValid = validateNumSerieInJsonUsecase.execute(numSerie);
       return isValid;
-    } catch (error: any){
+    } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       const setError = error;
       setError(setError);
@@ -72,7 +73,7 @@ export function NotebookProvider({ children }: PropsWithChildren) {
         getNotebook,
         error,
         setErrorNull,
-        validateNumSerieInJson
+        validateNumSerieInJson,
       }}
     >
       {children}

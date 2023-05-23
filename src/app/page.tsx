@@ -143,7 +143,7 @@ export default function LoginPage() {
   };
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    signIn(data.email, data.password);
+    const response = await signIn(data.email, data.password);
     if (error) {
       if (error?.message === 'Usuário não encontrado') {
         setError('email', {
@@ -164,23 +164,25 @@ export default function LoginPage() {
         });
       }
     } else {
-      await Auth.currentAuthenticatedUser().then((user) => {
-        const customAttributes = user.attributes['custom:role'];
-        if (customAttributes === 'STUDENT') {
-          router.push('/retirada');
-        }
-        if (customAttributes === 'EMPLOYEE') {
-          setMessageSnackbarError(
-            'Funcionário não pode acessar o sistema ainda'
-          );
-          setTimeout(() => {
-            handleOpenSnackError({
-              vertical: 'bottom',
-              horizontal: 'center',
+      if (response) {
+        await Auth.currentAuthenticatedUser().then((user) => {
+          const customAttributes = user.attributes['custom:role'];
+          if (customAttributes === 'STUDENT') {
+            router.push('/retirada');
+          }
+          if (customAttributes === 'EMPLOYEE') {
+            setMessageSnackbarError(
+              'Funcionário não pode acessar o sistema ainda'
+            );
+            setTimeout(() => {
+              handleOpenSnackError({
+                vertical: 'bottom',
+                horizontal: 'center',
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
     }
   };
 
