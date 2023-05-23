@@ -24,12 +24,10 @@ const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
 import DialogScanner from '../components/DialogMUI/DialogScanner';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
-
-import BarcodeScannerComponent from 'react-qr-barcode-scanner';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -47,8 +45,12 @@ export default function RetiradaPage() {
 
   // Scanner state
 
-  const [dataScanner, setDataScanner] = React.useState('');
+  const setDataScanner = useRef(null);
   const [openScanner, setOpenScanner] = React.useState(false);
+
+  const handleClickOpenDialogScanner = () => {
+    setOpenScanner(true);
+  };
 
   // logic dialog for terms of use
 
@@ -135,7 +137,7 @@ export default function RetiradaPage() {
               >
                 ou
               </h4>
-              <FormButtonScan>
+              <FormButtonScan onClick={handleClickOpenDialogScanner}>
                 <ScanIcon />
               </FormButtonScan>
               <ContainerRowLink style={{ paddingTop: '34px' }}>
@@ -214,7 +216,7 @@ export default function RetiradaPage() {
         open={openScanner}
         handleClose={() => setOpenScanner(false)}
       >
-        Ainda não implementado
+        Não implementado ainda
       </DialogScanner>
     </Container>
   );
