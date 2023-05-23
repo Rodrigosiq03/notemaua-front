@@ -5,6 +5,7 @@ import {
   ContainerCardContent,
   ContainerRow,
   ContainerRowLink,
+  ContainerScanner,
 } from '../components/Container';
 import {
   FormButton,
@@ -23,10 +24,12 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
+import DialogScanner from '../components/DialogMUI/DialogScanner';
 import React, { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
+import Scanner from '../components/Scanner/Scanner';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -54,6 +57,21 @@ export default function RetiradaPage() {
     setOpen(false);
   };
 
+  // scanner dialog logic
+
+  const [openScanner, setOpenScanner] = React.useState(false);
+
+  const handleClickOpenDialogScanner = () => {
+    setOpenScanner(true);
+  };
+
+  const handleCloseScanner = () => {
+    setOpenScanner(false);
+  };
+
+  // React qr code and scanner scanner logic
+
+  const [scanResultFile, setScanResultFile] = React.useState('');
   // logout logic
 
   const handleLogout = () => {
@@ -89,6 +107,7 @@ export default function RetiradaPage() {
                   maxLength: 5,
                   minLength: 5,
                 })}
+                value={scanResultFile}
               />
               {errors.numSerie?.type === 'required' && (
                 <span style={{ color: 'red', paddingTop: '4px' }}>
@@ -127,7 +146,7 @@ export default function RetiradaPage() {
               >
                 ou
               </h4>
-              <FormButtonScan>
+              <FormButtonScan onClick={handleClickOpenDialogScanner}>
                 <ScanIcon />
               </FormButtonScan>
               <ContainerRowLink style={{ paddingTop: '34px' }}>
@@ -160,8 +179,8 @@ export default function RetiradaPage() {
           práticas de computação quando ocorrerem em que não sejam laboratórios
           de informática equipados com desktops. Conforme horário de aulas e
           indicação de uso, poderei retirar com um funcionário do corpo técnico
-          do IMT um kit notebook, composto: de 1 (um) notebook, 1 (uma)
-          fonte e 1 (um) mouse.
+          do IMT um kit notebook, composto: de 1 (um) notebook, 1 (uma) fonte e
+          1 (um) mouse.
         </p>
         <p>
           <strong>
@@ -199,9 +218,21 @@ export default function RetiradaPage() {
           <br />
           <br />- Caso ocorra algo com o kit notebook ou algum problema de
           funcionamento, comunicarei ao técnico responsável na sala em que
-          retirei o kit notebook;
+          retirei o kit notebook;
         </p>
       </DialogComponentTermsOfUse>
+      <DialogScanner handleClose={handleCloseScanner} open={openScanner}>
+        <Scanner
+          onUpdate={(err: any, result: any) => {
+            if (result) {
+              setScanResultFile(result.text);
+              handleCloseScanner();
+            }
+          }}
+          height={400}
+          width={240}
+        />
+      </DialogScanner>
     </Container>
   );
 }
