@@ -64,18 +64,10 @@ const ContainerRow = styled.div`
   }
 `;
 
-const ContainerScanner = styled.div`
-  width: 240px;
-  height: 400px;
-  border-radius: 5px;
-  background-color: red;
-`;
-
 export {
   Container,
   ContainerCardContent,
   ContainerRowLink,
   ContainerRow,
   ContainerCenterMiddle,
-  ContainerScanner,
 };
