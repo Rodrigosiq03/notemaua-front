@@ -52,7 +52,7 @@ export class NotebookRepositoryMock implements INotebookRepository {
     }
   }
 
-  validateNumSerie(numSerie: string): boolean {
+  validateNumSerieInJson(numSerie: string): boolean {
     throw new Error('Method not implemented.');
   }
 }
