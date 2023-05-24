@@ -68,6 +68,17 @@ const ContainerRowADM = styled.div`
   display: flex;
   flex-direction: row;
   padding-top: 15px;
+  position: relative;
+  left: 630px;
+
+  @media (max-width: 1550px) {
+    left: 450px;
+  }
+`;
+const ContainerRowADM2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-top: 5px;
 `;
 
 export {
@@ -76,5 +87,6 @@ export {
   ContainerRowLink,
   ContainerRow,
   ContainerCenterMiddle,
-  ContainerRowADM
+  ContainerRowADM,
+  ContainerRowADM2
 };

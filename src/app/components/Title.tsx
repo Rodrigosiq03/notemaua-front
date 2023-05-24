@@ -15,4 +15,5 @@ const Title = styled.h2`
     margin-top: 0;
   }
 `;
+
 export { Title };

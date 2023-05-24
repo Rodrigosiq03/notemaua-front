@@ -49,7 +49,7 @@ const CardWhiteADM = styled.div`
   height: 690px;
   background-color: white;
   border-radius: 10px;
-  justify-content: center;
+  //justify-content: center;
   display: flex;
 
   @media (max-width: 1550px) {
@@ -59,10 +59,15 @@ const CardWhiteADM = styled.div`
 `;
 
 const CardADM = styled.div`
-  width: 1400px;
-  height: 480px;
+  width: 1760px;
+  height: 680px;
   background-color: none;
-  border: 1px solid black;
+  border: none;
+
+  @media (max-width: 1550px) {
+    width: 1400px;
+    height: 480px;
+  }
 `;
 
 export { CardWhite, CardGray, CardGrayADM, CardWhiteADM, CardADM };

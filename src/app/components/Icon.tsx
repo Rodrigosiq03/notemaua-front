@@ -6,6 +6,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+
+const Search_Icon = styled(SearchIcon)({
+  color: '#000000',
+  fontSize: '24px',
+});
 
 const ScanIcon = styled(QrCodeScannerIcon)({
   color: '#000000',
@@ -64,4 +70,5 @@ export {
   ScanIcon,
   TermsButton,
   CheckCircle,
+  Search_Icon
 };

@@ -48,7 +48,7 @@ const FormButtonADM = styled.button`
   height: 36px;
   border-radius: 5px;
   position: relative;
-  left: 5%;
+  left: 2%;
   font-size: 15px;
   background-color: #00CE3A;
   color: black;
@@ -82,4 +82,22 @@ const FormButtonScan = styled.button`
   }
 `;
 
-export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan, FormButtonADM };
+const FormSelect = styled.select`
+  width: 150px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-left: 15px;
+`;
+
+const FormButtonSearch = styled.button`
+  width: 40px;
+  height: 30px;
+  margin-left: 8px;
+  border: none;
+  background-color: white;
+
+
+`;
+
+export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan, FormButtonADM, FormSelect, FormButtonSearch };
