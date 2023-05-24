@@ -7,16 +7,25 @@ const FormContainer = styled.form`
   flex-direction: column;
 `;
 
-const FormInput = styled.input`
-  margin-bottom: 8px;
-  border-radius: 5px;
-  width: 240px;
-  height: 36px;
-  border: none;
-  padding-left: 8px;
-  background-color: #d6d6d6 !important;
-  color: #000;
-`;
+const FormInput = styledMUI(Input)({
+  marginBottom: '8px',
+  borderRadius: '5px',
+  width: '250px',
+  height: '36px',
+  border: 'none !important',
+  paddingLeft: '8px',
+  backgroundColor: '#d6d6d6 !important',
+  color: '#000',
+  fontSize: '15px',
+});
+// margin-bottom: 8px;
+// border-radius: 5px;
+// width: 240px;
+// height: 36px;
+// border: none;
+// padding-left: 8px;
+// background-color: #d6d6d6 !important;
+// color: #000;
 
 const FormInputEye = styledMUI(Input)({
   marginBottom: '8px',
@@ -27,6 +36,7 @@ const FormInputEye = styledMUI(Input)({
   paddingLeft: '8px',
   backgroundColor: '#d6d6d6 !important',
   color: '#000',
+  fontSize: '15px',
 });
 
 const FormLabel = styled.label`

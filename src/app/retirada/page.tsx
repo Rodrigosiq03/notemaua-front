@@ -28,6 +28,9 @@ import React, { useContext, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
+import { useRouter } from 'next/navigation';
+
+import { Auth } from 'aws-amplify';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -42,6 +45,7 @@ export default function RetiradaPage() {
   } = useForm<IFormRetirada>();
   const { validateNumSerieInJson } = useContext(NotebookContext);
   const { logOut } = useContext(UserContext);
+  const router = useRouter();
 
   // Scanner state
 
@@ -66,8 +70,11 @@ export default function RetiradaPage() {
 
   // logout logic
 
-  const handleLogout = () => {
-    logOut();
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
   };
 
   // form logic
@@ -99,6 +106,7 @@ export default function RetiradaPage() {
                   maxLength: 5,
                   minLength: 5,
                 })}
+                disableUnderline={true}
               />
               {errors.numSerie?.type === 'required' && (
                 <span style={{ color: 'red', paddingTop: '4px' }}>
@@ -154,7 +162,7 @@ export default function RetiradaPage() {
               </FormButton>
             </FormContainer>
             <ContainerRow style={{ paddingTop: '20px' }}>
-              <ReturnLink onClick={handleLogout} href="/">
+              <ReturnLink onClick={handleLogout} href="#">
                 Sair
               </ReturnLink>
               <ReturnIcon />

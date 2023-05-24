@@ -198,6 +198,7 @@ export default function LoginPage() {
               <FormInput
                 type="email"
                 {...register('email', { required: true })}
+                disableUnderline={true}
               />
               {errors.email?.type === 'required' && (
                 <span style={{ color: 'red' }}>

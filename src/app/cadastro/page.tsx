@@ -123,6 +123,7 @@ export default function CadastroPage() {
               <FormInput
                 type="email"
                 {...register('email', { required: true, pattern: /@maua.br/ })}
+                disableUnderline={true}
               />
               {errors.email?.type === 'required' && (
                 <span style={{ color: 'red' }}>
