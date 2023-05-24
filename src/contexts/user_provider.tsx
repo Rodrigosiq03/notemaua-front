@@ -33,7 +33,7 @@ export type UserContextType = {
   ) => void;
   validateEmailInJson: (email: string) => boolean;
   signIn: (email: string, password: string) => Promise<User | undefined>;
-  logOut: () => void;
+  logOut: () => Promise<void>;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -54,7 +54,7 @@ const defaultContext: UserContextType = {
   ) => {},
   validateEmailInJson: (email: string) => false,
   signIn: (email: string, password: string) => new Promise<User>(() => {}),
-  logOut: () => {},
+  logOut: () => new Promise<void>(() => {}),
   error: null,
   setErrorNull: () => {},
 };

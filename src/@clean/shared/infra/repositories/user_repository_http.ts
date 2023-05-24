@@ -204,16 +204,10 @@ export class UserRepositoryHttp implements IUserRepository {
     }
   }
 
-  async logout(): Promise<User> {
+  async logout(): Promise<void> {
     try {
       await Auth.signOut();
       console.log('User signed out');
-      return new User({
-        email: '',
-        name: '',
-        ra: '',
-        password: '',
-      });
     } catch (error: any) {
       throw new Error(error.code);
     }

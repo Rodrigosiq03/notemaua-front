@@ -4,7 +4,7 @@ import { IUserRepository } from '../domain/repositories/user_repository_interfac
 export class LogOutUsecase {
   constructor(private userRepo: IUserRepository) {}
 
-  async execute(): Promise<User> {
+  async execute(): Promise<void> {
     return await this.userRepo.logout();
   }
 }

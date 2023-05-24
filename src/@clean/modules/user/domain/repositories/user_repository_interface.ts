@@ -17,5 +17,5 @@ export interface IUserRepository {
   validateEmailInJson(email: string): boolean;
   resendConfirmationCode(email: string): Promise<User>;
   signIn(email: string, password: string): Promise<User>;
-  logout(): Promise<User>;
+  logout(): Promise<void>;
 }

@@ -15,9 +15,18 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { ReturnLink } from '../components/Link';
 import { ExitIcon } from '../components/Icon';
 import { UserContext } from '@/contexts/user_provider';
+import { useRouter } from 'next/navigation';
 
 export default function ConfirmReturnPage() {
   const { logOut } = useContext(UserContext);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
+  };
 
   return (
     <Container className={hind.className}>
@@ -60,7 +69,7 @@ export default function ConfirmReturnPage() {
               </p>
             </div>
             <ContainerRow>
-              <ReturnLink onClick={logOut} href="/">
+              <ReturnLink onClick={handleLogout} href="#">
                 Sair
               </ReturnLink>
               <ExitIcon style={{ paddingTop: '2px' }} />

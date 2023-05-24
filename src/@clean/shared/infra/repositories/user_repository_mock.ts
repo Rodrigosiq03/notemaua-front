@@ -116,7 +116,7 @@ export class UserRepositoryMock implements IUserRepository {
     throw new Error('Method not implemented.');
   }
 
-  logout(): Promise<User> {
+  logout(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
