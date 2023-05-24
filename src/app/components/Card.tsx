@@ -58,4 +58,11 @@ const CardWhiteADM = styled.div`
   }
 `;
 
-export { CardWhite, CardGray, CardGrayADM, CardWhiteADM };
+const CardADM = styled.div`
+  width: 1400px;
+  height: 480px;
+  background-color: none;
+  border: 1px solid black;
+`;
+
+export { CardWhite, CardGray, CardGrayADM, CardWhiteADM, CardADM };

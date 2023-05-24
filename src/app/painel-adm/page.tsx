@@ -1,8 +1,8 @@
 'use client';
 
-import { CardGrayADM, CardWhiteADM } from '../components/Card';
-import { Container, ConteinerRowADM } from '../components/Container';
-import { FormButton, FormButtonADM, FormContainer, FormInput } from '../components/Form';
+import { CardADM, CardGrayADM, CardWhiteADM } from '../components/Card';
+import { Container, ContainerRowADM } from '../components/Container';
+import { FormButtonADM, FormContainer, FormInput } from '../components/Form';
 import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 
@@ -17,10 +17,12 @@ export default function PainelAdmPage() {
             <ImageComponentNoteMaua />
             <CardGrayADM>
                 <CardWhiteADM>
-                        <ConteinerRowADM>
+                    <FormContainer>
+                        <ContainerRowADM>
                             <FormInput placeholder='Número de série'></FormInput>
                             <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
-                        </ConteinerRowADM>
+                        </ContainerRowADM>
+                    </FormContainer>
                 </CardWhiteADM>
             </CardGrayADM>
             <ImageComponentMaua/>
