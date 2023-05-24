@@ -15,5 +15,11 @@ const Title = styled.h2`
     margin-top: 0;
   }
 `;
+const TitleADM = styled.a`
+  font-weight: 700;
+  font-size: 13px;
+  padding-left: 240px;
 
-export { Title };
+`;
+
+export { Title, TitleADM };

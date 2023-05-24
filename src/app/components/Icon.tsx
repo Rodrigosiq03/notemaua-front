@@ -6,9 +6,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIconMUI from '@mui/icons-material/Search';
+import CircleIconMUI from '@mui/icons-material/Circle';
 
-const Search_Icon = styled(SearchIcon)({
+const SearchIcon = styled(SearchIconMUI)({
   color: '#000000',
   fontSize: '24px',
 });
@@ -62,6 +63,18 @@ const CheckCircle = styled(CheckCircleIcon)({
   // fontSize: '300px',
 });
 
+const CircleIconGreen = styled(CircleIconMUI)({
+  color: '#08D210',
+  fontSize: '16px',
+  paddingTop: '4px',
+});
+
+const CircleIconRed = styled(CircleIconMUI)({
+  color: '#D20808',
+  fontSize: '16px',
+  paddingTop: '4px',
+});
+
 export {
   ExitIcon,
   InfoIcon,
@@ -70,5 +83,7 @@ export {
   ScanIcon,
   TermsButton,
   CheckCircle,
-  Search_Icon
+  SearchIcon, 
+  CircleIconGreen,
+  CircleIconRed
 };
