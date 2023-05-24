@@ -5,10 +5,10 @@ import {
   Container,
   ContainerCardContent,
   ContainerRowLink,
-} from './components/Container';
-import { CardGray, CardWhite } from './components/Card';
+} from '../components/Container';
+import { CardGray, CardWhite } from '../components/Card';
 
-import { Title } from './components/Title';
+import { Title } from '../components/Title';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -19,13 +19,13 @@ import {
   FormContainer,
   FormInput,
   FormLabel,
-} from './components/Form';
-import { LinkStyled, TextForLink } from './components/Link';
-import ImageComponentMaua from './components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
+} from '../components/Form';
+import { LinkStyled, TextForLink } from '../components/Link';
+import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
 import { useSearchParams } from 'next/navigation';
-import SnackbarComponent from './components/SnackbarMUI/Snackbar';
+import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 

@@ -4,16 +4,16 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
-import { Title } from '../components/Title';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
+import { Title } from '../../components/Title';
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { ReturnLink } from '../components/Link';
-import { ExitIcon } from '../components/Icon';
+import { ReturnLink } from '../../components/Link';
+import { ExitIcon } from '../../components/Icon';
 
 export default function ConfirmReturnPage() {
   return (

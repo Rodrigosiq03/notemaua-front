@@ -1,25 +1,33 @@
 'use client';
 
-import { CardADM, CardGrayADM, CardWhiteADM } from '../components/Card';
+import { CardADM, CardGrayADM, CardWhiteADM } from '../../components/Card';
 import {
   Container,
   ContainerRowADM,
   ContainerRowADM2,
-} from '../components/Container';
+} from '../../components/Container';
 import {
   FormButtonADM,
   FormButtonSearch,
   FormContainer,
   FormInput,
   FormSelect,
-} from '../components/Form';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+} from '../../components/Form';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 
 import { Hind } from 'next/font/google';
-import { CircleIconGreen, CircleIconRed, SearchIcon } from '../components/Icon';
-import { TitleADM } from '../components/Title';
-import { ListItemLeft, ListItemRight, ListNumSerie } from '../components/List';
+import {
+  CircleIconGreen,
+  CircleIconRed,
+  SearchIcon,
+} from '../../components/Icon';
+import { TitleADM } from '../../components/Title';
+import {
+  ListItemLeft,
+  ListItemRight,
+  ListNumSerie,
+} from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 export default function PainelAdmPage() {

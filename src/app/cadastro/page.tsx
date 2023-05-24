@@ -6,19 +6,19 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
-import { Title } from '../components/Title';
-import { ExitIcon } from '../components/Icon';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
+import { Title } from '../../components/Title';
+import { ExitIcon } from '../../components/Icon';
 import {
   FormButton,
   FormContainer,
   FormInput,
   FormLabel,
-} from '../components/Form';
-import { ReturnLink } from '../components/Link';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+} from '../../components/Form';
+import { ReturnLink } from '../../components/Link';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -27,9 +27,9 @@ const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import { UserContext } from '../../contexts/user_provider';
 
-import DialogComponentSignUp from '../components/DialogMUI/DialogSignUp';
-import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
-import { InfoIcon, InfoButton } from '../components/Icon';
+import DialogComponentSignUp from '../../components/DialogMUI/DialogSignUp';
+import DialogComponentInfoPassword from '../../components/DialogMUI/DialogInfoPassword';
+import { InfoIcon, InfoButton } from '../../components/Icon';
 
 export interface IFormlogin {
   email: string;

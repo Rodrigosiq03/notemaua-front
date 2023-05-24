@@ -5,10 +5,10 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
-import { Title } from '../components/Title';
-import { ExitIcon } from '../components/Icon';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
+import { Title } from '../../components/Title';
+import { ExitIcon } from '../../components/Icon';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
@@ -17,14 +17,14 @@ import {
   FormContainer,
   FormInput,
   FormLabel,
-} from '../components/Form';
-import { ReturnLink } from '../components/Link';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+} from '../../components/Form';
+import { ReturnLink } from '../../components/Link';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '@/contexts/user_provider';
-import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
+import SnackbarComponent from '../../components/SnackbarMUI/Snackbar';
 import { SnackbarOrigin } from '@mui/material';
-import DialogComponent from '../components/DialogMUI/DialogSignUp';
+import DialogComponent from '../../components/DialogMUI/DialogSignUp';
 import { useRouter } from 'next/navigation';
 
 export interface IFormResetPassword {

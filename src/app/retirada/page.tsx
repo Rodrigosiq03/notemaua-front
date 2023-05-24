@@ -1,28 +1,28 @@
 'use client';
-import { CardGray, CardWhite } from '../components/Card';
+import { CardGray, CardWhite } from '../../components/Card';
 import {
   Container,
   ContainerCardContent,
   ContainerRow,
   ContainerRowLink,
-} from '../components/Container';
+} from '../../components/Container';
 import {
   FormButton,
   FormButtonScan,
   FormContainer,
   FormInput,
   FormLabel,
-} from '../components/Form';
-import { ReturnIcon, ScanIcon, TermsButton } from '../components/Icon';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
-import { ReturnLink, TextForLink } from '../components/Link';
-import { Title } from '../components/Title';
+} from '../../components/Form';
+import { ReturnIcon, ScanIcon, TermsButton } from '../../components/Icon';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
+import { ReturnLink, TextForLink } from '../../components/Link';
+import { Title } from '../../components/Title';
 
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
-import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
+import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfUse';
 import React, { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
