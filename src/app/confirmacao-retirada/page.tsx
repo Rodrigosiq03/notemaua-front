@@ -14,8 +14,11 @@ import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { ReturnLink } from '../components/Link';
 import { ExitIcon } from '../components/Icon';
+import { UserContext } from '@/contexts/user_provider';
 
 export default function ConfirmReturnPage() {
+  const { logOut } = useContext(UserContext);
+
   return (
     <Container className={hind.className}>
       <CardGray>
@@ -57,7 +60,9 @@ export default function ConfirmReturnPage() {
               </p>
             </div>
             <ContainerRow>
-              <ReturnLink href="/">Sair</ReturnLink>
+              <ReturnLink onClick={logOut} href="/">
+                Sair
+              </ReturnLink>
               <ExitIcon style={{ paddingTop: '2px' }} />
             </ContainerRow>
           </ContainerCardContent>
