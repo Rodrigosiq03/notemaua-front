@@ -41,7 +41,6 @@ const CardGrayADM = styled.div`
     width: 1420px;
     height: 500px;
   }
-
 `;
 
 const CardWhiteADM = styled.div`
@@ -49,7 +48,6 @@ const CardWhiteADM = styled.div`
   height: 690px;
   background-color: white;
   border-radius: 10px;
-  //justify-content: center;
   display: flex;
 
   @media (max-width: 1550px) {

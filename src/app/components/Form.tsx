@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  
 `;
 
 const FormInput = styled.input`
@@ -50,17 +49,16 @@ const FormButtonADM = styled.button`
   position: relative;
   left: 2%;
   font-size: 15px;
-  background-color: #00CE3A;
+  background-color: #00ce3a;
   color: black;
   border: none;
   font-weight: bold;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  
+
   &:hover {
     background-color: #00a12e;
     text-decoration: none;
   }
-
 `;
 
 const FormButtonScan = styled.button`
@@ -70,7 +68,7 @@ const FormButtonScan = styled.button`
   border-radius: 5px;
   font-size: 10px;
   color: white;
-  background-color: #B3C3FF;
+  background-color: #b3c3ff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
   font-weight: bold;
@@ -96,8 +94,15 @@ const FormButtonSearch = styled.button`
   margin-left: 8px;
   border: none;
   background-color: white;
-
-
 `;
 
-export { FormContainer, FormInput, FormLabel, FormButton, FormButtonScan, FormButtonADM, FormSelect, FormButtonSearch };
+export {
+  FormContainer,
+  FormInput,
+  FormLabel,
+  FormButton,
+  FormButtonScan,
+  FormButtonADM,
+  FormSelect,
+  FormButtonSearch,
+};
