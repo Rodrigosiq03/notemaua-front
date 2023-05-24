@@ -21,9 +21,11 @@ export default function ConfirmReturnPage() {
   const { logOut } = useContext(UserContext);
   const router = useRouter();
 
-  const handleLogout = () => {
-    logOut();
-    router.push('/');
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
   };
 
   return (
