@@ -29,7 +29,7 @@ const DialogText = styled.p`
   font-size: 20px;
   font-weight: 300;
   margin-bottom: 0px;
-  color: black
+  color: black;
 `;
 
 export { DialogButtonOK, DialogButtonResend, DialogText };

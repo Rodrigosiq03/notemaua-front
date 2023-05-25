@@ -14,8 +14,10 @@ import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/valid
 import { http } from '../http';
 import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_from_json';
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
+import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
+import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
 
-export const Registry = {
+export const RegistryUser = {
   // Axios Adapter
   AxiosAdapter: Symbol.for('AxiosAdapter'),
 
@@ -33,162 +35,200 @@ export const Registry = {
   ForgotPasswordUsecase: Symbol.for('ForgotPasswordUsecase'),
   ForgotPasswordSubmitUsecase: Symbol.for('ForgotPasswordSubmitUsecase'),
   ValidateEmailInJsonUsecase: Symbol.for('ValidateEmailInJsonUsecase'),
+  SignInUsecase: Symbol.for('SignInUsecase'),
+  LogOutUsecase: Symbol.for('LogOutUsecase'),
 };
 
 export const containerUser = new Container();
 
 // HTTP
-containerUser.bind(Registry.AxiosAdapter).toConstantValue(http);
+containerUser.bind(RegistryUser.AxiosAdapter).toConstantValue(http);
 // Repositories
-containerUser.bind(Registry.UserRepositoryMock).to(UserRepositoryMock);
-containerUser.bind(Registry.UserRepositoryHttp).to(UserRepositoryHttp);
+containerUser.bind(RegistryUser.UserRepositoryMock).to(UserRepositoryMock);
+containerUser.bind(RegistryUser.UserRepositoryHttp).to(UserRepositoryHttp);
 // Usecases
-containerUser.bind(Registry.CreateUserUsecase).toDynamicValue((context) => {
+containerUser.bind(RegistryUser.CreateUserUsecase).toDynamicValue((context) => {
   if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
     return new CreateUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
     return new CreateUserUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
+      context.container.get(RegistryUser.UserRepositoryHttp)
     );
   } else {
     return new CreateUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   }
 });
 
-containerUser.bind(Registry.GetUsersUsecase).toDynamicValue((context) => {
+containerUser.bind(RegistryUser.GetUsersUsecase).toDynamicValue((context) => {
   if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
     return new GetUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
     return new GetUserUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
+      context.container.get(RegistryUser.UserRepositoryHttp)
     );
   } else {
     return new GetUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   }
 });
 
-containerUser.bind(Registry.UpdateUserUsecase).toDynamicValue((context) => {
+containerUser.bind(RegistryUser.UpdateUserUsecase).toDynamicValue((context) => {
   if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
     return new UpdateUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
     return new UpdateUserUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
+      context.container.get(RegistryUser.UserRepositoryHttp)
     );
   } else {
     return new UpdateUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   }
 });
 
-containerUser.bind(Registry.DeleteUserUsecase).toDynamicValue((context) => {
+containerUser.bind(RegistryUser.DeleteUserUsecase).toDynamicValue((context) => {
   if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
     return new DeleteUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
     return new DeleteUserUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
+      context.container.get(RegistryUser.UserRepositoryHttp)
     );
   } else {
     return new DeleteUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
+      context.container.get(RegistryUser.UserRepositoryMock)
     );
   }
 });
 
 containerUser
-  .bind(Registry.GetNameFromJsonUsecase)
+  .bind(RegistryUser.GetNameFromJsonUsecase)
   .toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
       return new GetNameFromJsonUsecase(
-        context.container.get(Registry.UserRepositoryMock)
+        context.container.get(RegistryUser.UserRepositoryMock)
       );
     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
       return new GetNameFromJsonUsecase(
-        context.container.get(Registry.UserRepositoryHttp)
+        context.container.get(RegistryUser.UserRepositoryHttp)
       );
     } else {
       return new GetNameFromJsonUsecase(
-        context.container.get(Registry.UserRepositoryMock)
-      );
-    }
-  });
-
-containerUser.bind(Registry.ConfirmUserUsecase).toDynamicValue((context) => {
-  if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-    return new ConfirmUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
-    );
-  } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-    return new ConfirmUserUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
-    );
-  } else {
-    return new ConfirmUserUsecase(
-      context.container.get(Registry.UserRepositoryMock)
-    );
-  }
-});
-
-containerUser.bind(Registry.ForgotPasswordUsecase).toDynamicValue((context) => {
-  if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-    return new ForgotPasswordUsecase(
-      context.container.get(Registry.UserRepositoryMock)
-    );
-  } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-    return new ForgotPasswordUsecase(
-      context.container.get(Registry.UserRepositoryHttp)
-    );
-  } else {
-    return new ForgotPasswordUsecase(
-      context.container.get(Registry.UserRepositoryMock)
-    );
-  }
-});
-
-containerUser
-  .bind(Registry.ForgotPasswordSubmitUsecase)
-  .toDynamicValue((context) => {
-    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new ForgotPasswordSubmitUsecase(
-        context.container.get(Registry.UserRepositoryMock)
-      );
-    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new ForgotPasswordSubmitUsecase(
-        context.container.get(Registry.UserRepositoryHttp)
-      );
-    } else {
-      return new ForgotPasswordSubmitUsecase(
-        context.container.get(Registry.UserRepositoryMock)
+        context.container.get(RegistryUser.UserRepositoryMock)
       );
     }
   });
 
 containerUser
-  .bind(Registry.ValidateEmailInJsonUsecase)
+  .bind(RegistryUser.ConfirmUserUsecase)
   .toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new ValidateEmailInJsonUsecase(
-        context.container.get(Registry.UserRepositoryMock)
+      return new ConfirmUserUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
       );
     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new ValidateEmailInJsonUsecase(
-        context.container.get(Registry.UserRepositoryHttp)
+      return new ConfirmUserUsecase(
+        context.container.get(RegistryUser.UserRepositoryHttp)
       );
     } else {
-      return new ValidateEmailInJsonUsecase(
-        context.container.get(Registry.UserRepositoryMock)
+      return new ConfirmUserUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
       );
     }
   });
+
+containerUser
+  .bind(RegistryUser.ForgotPasswordUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+      return new ForgotPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+      return new ForgotPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryHttp)
+      );
+    } else {
+      return new ForgotPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    }
+  });
+
+containerUser
+  .bind(RegistryUser.ForgotPasswordSubmitUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(RegistryUser.UserRepositoryHttp)
+      );
+    } else {
+      return new ForgotPasswordSubmitUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    }
+  });
+
+containerUser
+  .bind(RegistryUser.ValidateEmailInJsonUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+      return new ValidateEmailInJsonUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+      return new ValidateEmailInJsonUsecase(
+        context.container.get(RegistryUser.UserRepositoryHttp)
+      );
+    } else {
+      return new ValidateEmailInJsonUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    }
+  });
+
+containerUser.bind(RegistryUser.SignInUsecase).toDynamicValue((context) => {
+  if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+    return new SignInUsecase(
+      context.container.get(RegistryUser.UserRepositoryMock)
+    );
+  } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+    return new SignInUsecase(
+      context.container.get(RegistryUser.UserRepositoryHttp)
+    );
+  } else {
+    return new SignInUsecase(
+      context.container.get(RegistryUser.UserRepositoryMock)
+    );
+  }
+});
+
+containerUser.bind(RegistryUser.LogOutUsecase).toDynamicValue((context) => {
+  if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+    return new LogOutUsecase(
+      context.container.get(RegistryUser.UserRepositoryMock)
+    );
+  } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+    return new LogOutUsecase(
+      context.container.get(RegistryUser.UserRepositoryHttp)
+    );
+  } else {
+    return new LogOutUsecase(
+      context.container.get(RegistryUser.UserRepositoryMock)
+    );
+  }
+});

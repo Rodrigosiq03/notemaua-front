@@ -7,7 +7,6 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
-import { useRouter } from 'next/navigation';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -28,11 +27,6 @@ export default function DialogComponent({
   children: React.ReactNode;
   handleClose: () => void;
 }) {
-  const router = useRouter();
-  const goToLogin = () => {
-    router.push('/');
-  };
-
   return (
     <Dialog
       className={hind.className}

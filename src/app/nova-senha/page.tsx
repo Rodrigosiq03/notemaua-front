@@ -16,11 +16,14 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentInfoPassword from '../../components/DialogMUI/DialogInfoPassword';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { IconButton, InputAdornment } from '@mui/material';
 
 import {
   FormButton,
   FormContainer,
-  FormInput,
+  FormInputEye,
   FormLabel,
 } from '../../components/Form';
 import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
@@ -34,6 +37,10 @@ export interface IFormNovaSenha {
   confirmPassword: string;
 }
 
+export interface StatePassword {
+  type: 'text' | 'password';
+}
+
 export default function NovaSenhaPage() {
   const {
     register,
@@ -44,7 +51,7 @@ export default function NovaSenhaPage() {
   } = useForm<IFormNovaSenha>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { updateUser, forgotPasswordSubmit } = useContext(UserContext);
+  const { forgotPasswordSubmit } = useContext(UserContext);
 
   const [openDialogPassword, setOpenDialogPassword] = React.useState(false);
 
@@ -54,6 +61,20 @@ export default function NovaSenhaPage() {
 
   const handleCloseDialogPassword = () => {
     setOpenDialogPassword(false);
+  };
+
+  // eye input logic
+  const [showPasswordNewPassword, setShowPasswordNewPassword] =
+    React.useState(false);
+  const [showPasswordConfirmPassword, setShowPasswordConfirmPassword] =
+    React.useState(false);
+
+  const handleNewPasswordVisibility = () => {
+    setShowPasswordNewPassword(!showPasswordNewPassword);
+  };
+
+  const handleConfirmPasswordVisibility = () => {
+    setShowPasswordConfirmPassword(!showPasswordConfirmPassword);
   };
 
   const onSubmit: SubmitHandler<IFormNovaSenha> = (data) => {
@@ -88,13 +109,29 @@ export default function NovaSenhaPage() {
                   <InfoIcon />
                 </InfoButton>
               </ContainerRow>
-              <FormInput
-                type="password"
+              <FormInputEye
+                type={showPasswordNewPassword ? 'text' : 'password'}
                 {...register('password', {
                   required: true,
                   pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
                 })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleNewPasswordVisibility}>
+                      {showPasswordNewPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
               {errors.password?.type === 'pattern' && (
                 <span style={{ color: 'red', textAlign: 'center' }}>
@@ -110,8 +147,8 @@ export default function NovaSenhaPage() {
               <FormLabel style={{ paddingRight: '' }} htmlFor="password">
                 Confirme a Senha
               </FormLabel>
-              <FormInput
-                type="password"
+              <FormInputEye
+                type={showPasswordConfirmPassword ? 'text' : 'password'}
                 {...register('confirmPassword', {
                   required: true,
                   validate: (value) => {
@@ -121,6 +158,22 @@ export default function NovaSenhaPage() {
                     return true;
                   },
                 })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleConfirmPasswordVisibility}>
+                      {showPasswordConfirmPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
               {errors.confirmPassword?.type === 'required' && (
                 <span style={{ color: 'red' }}>

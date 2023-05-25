@@ -176,6 +176,42 @@ export class UserRepositoryHttp implements IUserRepository {
   async resendConfirmationCode(email: string): Promise<User> {
     throw new Error('Method not implemented.');
   }
+
+  async signIn(email: string, password: string): Promise<User> {
+    try {
+      const user = await Auth.signIn(email, password);
+      return user;
+    } catch (error: any) {
+      console.log('User repository http error: ', error);
+      switch (error.code) {
+        case 'UserNotFoundException':
+          throw new Error('Usuário não encontrado');
+        case 'NotAuthorizedException':
+          throw new Error('Usuário ou senha incorretos');
+        case 'NotAuthorizedException: Password attempts exceeded':
+          throw new Error('Muitas tentativas de login');
+        case 'UserNotConfirmedException':
+          throw new Error('Usuário não confirmado');
+        case 'PasswordResetRequiredException':
+          throw new Error('Senha resetada');
+        case 'TooManyFailedAttemptsException':
+          throw new Error('Muitas tentativas');
+        case 'InvalidPasswordException':
+          throw new Error('Senha inválida');
+        default:
+          throw new Error(error.code);
+      }
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await Auth.signOut();
+      console.log('User signed out');
+    } catch (error: any) {
+      throw new Error(error.code);
+    }
+  }
 }
 
 decorate(injectable(), UserRepositoryHttp);

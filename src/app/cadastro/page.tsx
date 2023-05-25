@@ -14,6 +14,7 @@ import {
   FormButton,
   FormContainer,
   FormInput,
+  FormInputEye,
   FormLabel,
 } from '../../components/Form';
 import { ReturnLink } from '../../components/Link';
@@ -26,10 +27,12 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import { UserContext } from '../../contexts/user_provider';
-
 import DialogComponentSignUp from '../../components/DialogMUI/DialogSignUp';
 import DialogComponentInfoPassword from '../../components/DialogMUI/DialogInfoPassword';
 import { InfoIcon, InfoButton } from '../../components/Icon';
+import { IconButton, InputAdornment } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export interface IFormlogin {
   email: string;
@@ -49,6 +52,13 @@ export default function CadastroPage() {
     },
   });
   const { createUser, error, validateEmailInJson } = useContext(UserContext);
+
+  // mui input eye logic
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   // dialog logic
 
@@ -112,6 +122,7 @@ export default function CadastroPage() {
               <FormInput
                 type="email"
                 {...register('email', { required: true, pattern: /@maua.br/ })}
+                disableUnderline={true}
               />
               {errors.email?.type === 'required' && (
                 <span style={{ color: 'red' }}>
@@ -143,13 +154,29 @@ export default function CadastroPage() {
                   <InfoIcon />
                 </InfoButton>
               </ContainerRow>
-              <FormInput
-                type="password"
+              <FormInputEye
+                type={showPassword ? 'text' : 'password'}
                 {...register('password', {
                   required: true,
                   pattern:
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
                 })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePasswordVisibility}>
+                      {showPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
               {errors.password?.type === 'required' && (
                 <span style={{ color: 'red' }}>

@@ -24,8 +24,13 @@ const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfUse';
 import React, { useContext } from 'react';
+import DialogScanner from '../../components/DialogMUI/DialogScanner';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
+import { UserContext } from '@/contexts/user_provider';
+import { useRouter } from 'next/navigation';
+
+import { Auth } from 'aws-amplify';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -39,6 +44,17 @@ export default function RetiradaPage() {
     setError,
   } = useForm<IFormRetirada>();
   const { validateNumSerieInJson } = useContext(NotebookContext);
+  const { logOut } = useContext(UserContext);
+  const router = useRouter();
+
+  // Scanner state
+
+  const setDataScanner = React.useRef(null);
+  const [openScanner, setOpenScanner] = React.useState(false);
+
+  const handleClickOpenDialogScanner = () => {
+    setOpenScanner(true);
+  };
 
   // logic dialog for terms of use
 
@@ -50,6 +66,15 @@ export default function RetiradaPage() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  // logout logic
+
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
   };
 
   // form logic
@@ -81,6 +106,7 @@ export default function RetiradaPage() {
                   maxLength: 5,
                   minLength: 5,
                 })}
+                disableUnderline={true}
               />
               {errors.numSerie?.type === 'required' && (
                 <span style={{ color: 'red', paddingTop: '4px' }}>
@@ -119,7 +145,7 @@ export default function RetiradaPage() {
               >
                 ou
               </h4>
-              <FormButtonScan>
+              <FormButtonScan onClick={handleClickOpenDialogScanner}>
                 <ScanIcon />
               </FormButtonScan>
               <ContainerRowLink style={{ paddingTop: '34px' }}>
@@ -136,7 +162,9 @@ export default function RetiradaPage() {
               </FormButton>
             </FormContainer>
             <ContainerRow style={{ paddingTop: '20px' }}>
-              <ReturnLink href="/">Sair</ReturnLink>
+              <ReturnLink onClick={handleLogout} href="#">
+                Sair
+              </ReturnLink>
               <ReturnIcon />
             </ContainerRow>
           </ContainerCardContent>
@@ -192,6 +220,12 @@ export default function RetiradaPage() {
           retirei o kit notebook;
         </p>
       </DialogComponentTermsOfUse>
+      <DialogScanner
+        open={openScanner}
+        handleClose={() => setOpenScanner(false)}
+      >
+        Não implementado ainda
+      </DialogScanner>
     </Container>
   );
 }

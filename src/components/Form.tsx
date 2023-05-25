@@ -1,20 +1,43 @@
 import styled from 'styled-components';
+import { styled as styledMUI } from '@mui/system';
+import { Input } from '@mui/material';
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
 `;
 
-const FormInput = styled.input`
-  margin-bottom: 8px;
-  border-radius: 5px;
-  width: 240px;
-  height: 36px;
-  border: none;
-  padding-left: 8px;
-  background-color: #d6d6d6 !important;
-  color: #000;
-`;
+const FormInput = styledMUI(Input)({
+  marginBottom: '8px',
+  borderRadius: '5px',
+  width: '250px',
+  height: '36px',
+  border: 'none !important',
+  paddingLeft: '8px',
+  backgroundColor: '#d6d6d6 !important',
+  color: '#000',
+  fontSize: '15px',
+});
+// margin-bottom: 8px;
+// border-radius: 5px;
+// width: 240px;
+// height: 36px;
+// border: none;
+// padding-left: 8px;
+// background-color: #d6d6d6 !important;
+// color: #000;
+
+const FormInputEye = styledMUI(Input)({
+  marginBottom: '8px',
+  borderRadius: '5px',
+  width: '250px',
+  height: '36px',
+  border: 'none !important',
+  paddingLeft: '8px',
+  backgroundColor: '#d6d6d6 !important',
+  color: '#000',
+  fontSize: '15px',
+});
 
 const FormLabel = styled.label`
   display: inline-block;
@@ -109,4 +132,5 @@ export {
   FormButtonADM,
   FormSelect,
   FormButtonSearch,
+  FormInputEye,
 };

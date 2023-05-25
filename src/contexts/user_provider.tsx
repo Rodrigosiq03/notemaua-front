@@ -3,7 +3,7 @@ import React, { createContext, PropsWithChildren, useState } from 'react';
 import { User } from '../@clean/shared/domain/entities/user';
 import {
   containerUser,
-  Registry,
+  RegistryUser,
 } from '../@clean/shared/infra/containers/container_user';
 import { GetUserUsecase } from '../@clean/modules/user/usecases/get_user_usecase';
 import { CreateUserUsecase } from '../@clean/modules/user/usecases/create_user_usecase';
@@ -14,6 +14,8 @@ import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_
 import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_password_usecase';
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
 import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
+import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
+import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
 
 export type UserContextType = {
   users: User[];
@@ -30,6 +32,8 @@ export type UserContextType = {
     newPassword: string
   ) => void;
   validateEmailInJson: (email: string) => boolean;
+  signIn: (email: string, password: string) => Promise<User | undefined>;
+  logOut: () => Promise<void>;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -49,6 +53,8 @@ const defaultContext: UserContextType = {
     newPassword: string
   ) => {},
   validateEmailInJson: (email: string) => false,
+  signIn: (email: string, password: string) => new Promise<User>(() => {}),
+  logOut: () => new Promise<void>(() => {}),
   error: null,
   setErrorNull: () => {},
 };
@@ -56,34 +62,41 @@ const defaultContext: UserContextType = {
 export const UserContext = createContext(defaultContext);
 
 const getUserUsecase = containerUser.get<GetUserUsecase>(
-  Registry.GetUsersUsecase
+  RegistryUser.GetUsersUsecase
 );
 const createUserUseCase = containerUser.get<CreateUserUsecase>(
-  Registry.CreateUserUsecase
+  RegistryUser.CreateUserUsecase
 );
 const updateUserUseCase = containerUser.get<UpdateUserUsecase>(
-  Registry.UpdateUserUsecase
+  RegistryUser.UpdateUserUsecase
 );
 const deleteUserUseCase = containerUser.get<DeleteUserUsecase>(
-  Registry.DeleteUserUsecase
+  RegistryUser.DeleteUserUsecase
 );
 const getNameFromJsonUseCase = containerUser.get<GetNameFromJsonUsecase>(
-  Registry.GetNameFromJsonUsecase
+  RegistryUser.GetNameFromJsonUsecase
 );
 const confirmUserUseCase = containerUser.get<ConfirmUserUsecase>(
-  Registry.ConfirmUserUsecase
+  RegistryUser.ConfirmUserUsecase
 );
 const forgotPasswordUseCase = containerUser.get<ForgotPasswordUsecase>(
-  Registry.ForgotPasswordUsecase
+  RegistryUser.ForgotPasswordUsecase
 );
 const forgotPasswordSubmitUsecase =
   containerUser.get<ForgotPasswordSubmitUsecase>(
-    Registry.ForgotPasswordSubmitUsecase
+    RegistryUser.ForgotPasswordSubmitUsecase
   );
 const validateEmailInJsonUsecase =
   containerUser.get<ValidateEmailInJsonUsecase>(
-    Registry.ValidateEmailInJsonUsecase
+    RegistryUser.ValidateEmailInJsonUsecase
   );
+const signInUsecase = containerUser.get<SignInUsecase>(
+  RegistryUser.SignInUsecase
+);
+
+const logOutUsecase = containerUser.get<LogOutUsecase>(
+  RegistryUser.LogOutUsecase
+);
 
 export function UserProvider({ children }: PropsWithChildren) {
   // State for error in API
@@ -191,6 +204,25 @@ export function UserProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function signIn(email: string, password: string) {
+    try {
+      const userSignedIn = await signInUsecase.execute(email, password);
+      return userSignedIn;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
+  async function logOut() {
+    try {
+      await logOutUsecase.execute();
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
   function setErrorNull() {
     setError(null);
   }
@@ -208,6 +240,8 @@ export function UserProvider({ children }: PropsWithChildren) {
         forgotPassword,
         forgotPasswordSubmit,
         validateEmailInJson,
+        signIn,
+        logOut,
         error,
         setErrorNull,
       }}

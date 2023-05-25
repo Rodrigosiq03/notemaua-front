@@ -18,16 +18,21 @@ import {
   FormButton,
   FormContainer,
   FormInput,
+  FormInputEye,
   FormLabel,
 } from '../components/Form';
 import { LinkStyled, TextForLink } from '../components/Link';
 import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '../contexts/user_provider';
-import { useSearchParams } from 'next/navigation';
 import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
-import { SnackbarOrigin } from '@mui/material';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { IconButton, InputAdornment, SnackbarOrigin } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
+
+import { Auth } from 'aws-amplify';
 
 export interface IFormlogin {
   email: string;
@@ -50,10 +55,9 @@ export default function LoginPage() {
       password: '',
     },
   });
-  const { users, confirmUser, error } = useContext(UserContext);
+  const { signIn, confirmUser, error } = useContext(UserContext);
   const searchParams = useSearchParams();
-
-  // Snackbar Logic
+  const router = useRouter();
 
   // STATE SNACKBAR SUCCESS
   const [stateSnackbarSuccess, setStateSnackbarSuccess] =
@@ -131,11 +135,55 @@ export default function LoginPage() {
     }
   }, [confirmUser, error, searchParams]);
 
+  // eye input logic
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    setMessageSnackbarError('Funcionalidade não implementada!');
-    setTimeout(() => {
-      handleOpenSnackError({ vertical: 'bottom', horizontal: 'center' });
-    }, 3000);
+    const response = await signIn(data.email, data.password);
+    if (error) {
+      if (error?.message === 'Usuário não encontrado') {
+        setError('email', {
+          type: 'manual',
+          message: 'Usuário ou senha incorretos',
+        });
+      }
+      if (error?.message === 'Usuário ou senha incorretos') {
+        setError('password', {
+          type: 'manual',
+          message: 'Usuário ou senha incorretos',
+        });
+      }
+      if (error?.message === 'Usuário não confirmado') {
+        setError('email', {
+          type: 'manual',
+          message: 'Usuário não confirmado',
+        });
+      }
+    } else {
+      if (response) {
+        await Auth.currentAuthenticatedUser().then((user) => {
+          const customAttributes = user.attributes['custom:role'];
+          if (customAttributes === 'STUDENT') {
+            router.push('/retirada');
+          }
+          if (customAttributes === 'EMPLOYEE') {
+            setMessageSnackbarError(
+              'Funcionário não pode acessar o sistema ainda'
+            );
+            setTimeout(() => {
+              handleOpenSnackError({
+                vertical: 'bottom',
+                horizontal: 'center',
+              });
+            });
+          }
+        });
+      }
+    }
   };
 
   return (
@@ -150,6 +198,7 @@ export default function LoginPage() {
               <FormInput
                 type="email"
                 {...register('email', { required: true })}
+                disableUnderline={true}
               />
               {errors.email?.type === 'required' && (
                 <span style={{ color: 'red' }}>
@@ -157,16 +206,61 @@ export default function LoginPage() {
                 </span>
               )}
               <FormLabel htmlFor="password">Senha</FormLabel>
-              <FormInput
-                type="password"
-                {...register('password', { required: true })}
+              <FormInputEye
+                type={showPassword ? 'text' : 'password'}
+                {...register('password', {
+                  required: true,
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%'"*_?&ç(`{}[#%=+)-])[A-Za-z\d@$!%'"*_?&ç(`{}[#%=+)-]{8,}$/,
+                })}
+                disableUnderline={true}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePasswordVisibility}>
+                      {showPassword ? (
+                        <VisibilityOffIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          sx={{ color: '#545454', fontSize: '20px' }}
+                        />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
               {errors.password?.type === 'required' && (
                 <span style={{ color: 'red' }}>
                   Este campo é um campo obrigatório
                 </span>
               )}
-              <FormButton type="submit">Entrar</FormButton>
+              {errors.password?.type === 'pattern' && (
+                <span style={{ color: 'red', textAlign: 'center' }}>
+                  Senha inválida
+                </span>
+              )}
+              {errors.password?.type === 'manual' &&
+                errors.password?.message === 'Usuário ou senha incorretos' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                    Usuário ou senha incorretos
+                  </span>
+                )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Usuário ou senha incorretos' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                    Usuário ou senha incorretos
+                  </span>
+                )}
+              {errors.email?.type === 'manual' &&
+                errors.email?.message === 'Usuário não confirmado' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                    Usuário não confirmado
+                  </span>
+                )}
+              <FormButton id="loginButton" type="submit">
+                Entrar
+              </FormButton>
             </FormContainer>
             <ContainerRowLink>
               <TextForLink>Primeiro Acesso?</TextForLink>

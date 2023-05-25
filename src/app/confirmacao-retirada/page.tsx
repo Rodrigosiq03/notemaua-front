@@ -13,16 +13,27 @@ import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
 import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 import { ReturnLink } from '../../components/Link';
 import { CheckCircle, ExitIcon } from '../../components/Icon';
-import { User } from '@/@clean/shared/domain/entities/user';
+import { UserContext } from '@/contexts/user_provider';
+import { useRouter } from 'next/navigation';
 
 export default function ConfirmReturnPage() {
+  const { logOut } = useContext(UserContext);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
+  };
+
   return (
     <Container className={hind.className}>
       <CardGray>
         <CardWhite>
           <ContainerCardContent>
             <ImageComponentNoteMaua />
-            <Title style={{ marginBottom: "0px", paddingTop: "20px" }}>
+            <Title style={{ marginBottom: '0px', paddingTop: '20px' }}>
               Retirada Confirmada
             </Title>
             <CheckCircle />
@@ -30,18 +41,16 @@ export default function ConfirmReturnPage() {
               <UserText>
                 Horário de Retirada: <strong>7:40</strong>
               </UserText>
-              <UserText>
-                Luigi Guimarães Trevisan
-              </UserText>
-              <UserText>
-                22.01102-0@maua.br
-              </UserText>
+              <UserText>Luigi Guimarães Trevisan</UserText>
+              <UserText>22.01102-0@maua.br</UserText>
               <UserText>
                 RA: <strong>22.01102-0</strong>
               </UserText>
             </div>
             <ContainerRow>
-              <ReturnLink href="/">Sair</ReturnLink>
+              <ReturnLink onClick={handleLogout} href="#">
+                Sair
+              </ReturnLink>
               <ExitIcon style={{ paddingTop: '2px' }} />
             </ContainerRow>
           </ContainerCardContent>

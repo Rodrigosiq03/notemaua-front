@@ -1,4 +1,5 @@
-import { styled } from '@mui/system';
+import { styled as styledMUI } from '@mui/system';
+import styled from 'styled-components';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButtonMui from '@mui/material/IconButton';
 import IIcon from '@mui/icons-material/Info';
@@ -22,7 +23,7 @@ const ScanIcon = styled(QrCodeScannerIcon)({
   fontSize: '28px',
 });
 
-const ExitIcon = styled(ExitToAppIcon)({
+const ExitIcon = styledMUI(ExitToAppIcon)({
   color: '#545454',
   paddingTop: '2px',
   paddingLeft: '4px',
@@ -42,7 +43,7 @@ const InfoIcon = styled(IIcon)({
   paddingTop: '2px',
 });
 
-const InfoButton = styled(IconButtonMui)({
+const InfoButton = styledMUI(IconButtonMui)({
   width: '30px',
 });
 
