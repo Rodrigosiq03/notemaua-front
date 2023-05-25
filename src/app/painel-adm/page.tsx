@@ -29,17 +29,41 @@ import {
   ListNumSerie,
 } from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
+import { SubmitHandler, useForm } from 'react-hook-form';
+import React from 'react';
+import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
+import { DialogText } from '@/components/Dialog';
+
+export interface IFormDevolucao {
+  numSerie: string;
+}
 
 export default function PainelAdmPage() {
+  const {
+    handleSubmit,
+  } = useForm<IFormDevolucao>();
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const onSubmit: SubmitHandler<IFormDevolucao> = (data) => {
+  }
+
   return (
     <Container className={hind.className}>
       <ImageComponentNoteMaua />
       <CardGrayADM>
         <CardWhiteADM>
-          <FormContainer>
+          <FormContainer onSubmit={handleSubmit(onSubmit)}>
             <ContainerRowADM>
               <FormInput placeholder="Número de série"></FormInput>
-              <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
+              <FormButtonADM onClick={handleClickOpenDialog} type="submit">Confirmar devolução</FormButtonADM>
             </ContainerRowADM>
             <CardADM>
               <hr
@@ -430,6 +454,30 @@ export default function PainelAdmPage() {
         </CardWhiteADM>
       </CardGrayADM>
       <ImageComponentMaua style={{ paddingTop: '18px' }} />
+      <DialogComponentDevolution open={openDialog} handleClose={handleCloseDialog}>
+        <div>
+        <hr></hr>
+        <DialogText style={{fontWeight: "700", fontSize: "25px"}}>
+            Número de Série: 38029
+          </DialogText>
+          <DialogText>
+            Horário de Retirada: <strong>7:40</strong>
+          </DialogText>
+          <DialogText>
+            Horário de Devolução: <strong>11:20</strong>
+          </DialogText>
+          <hr style={{ marginTop: "25px"}}></hr>
+          <DialogText style={{fontWeight: "700", fontSize: "25px"}}>
+            Luigi Guimarães Trevisan
+          </DialogText>
+          <DialogText>
+            22.01102-0@maua.br
+          </DialogText>
+          <DialogText>
+            RA:<strong> 22.01102-0</strong>
+          </DialogText>
+        </div>
+      </DialogComponentDevolution>
     </Container>
   );
 }

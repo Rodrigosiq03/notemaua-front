@@ -22,4 +22,11 @@ const TitleADM = styled.a`
 
 `;
 
-export { Title, TitleADM };
+const UserText = styled.p`
+  text-align: center;
+  font-size: 15px;
+  margin: 0px;
+  padding-top: 4px;
+`;
+
+export { Title, TitleADM, UserText };
