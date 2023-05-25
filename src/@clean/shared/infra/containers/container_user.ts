@@ -16,6 +16,7 @@ import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
 import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
 import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
+import { CompleteNewPasswordUsecase } from '@/@clean/modules/user/usecases/complete_new_password';
 
 export const RegistryUser = {
   // Axios Adapter
@@ -37,6 +38,7 @@ export const RegistryUser = {
   ValidateEmailInJsonUsecase: Symbol.for('ValidateEmailInJsonUsecase'),
   SignInUsecase: Symbol.for('SignInUsecase'),
   LogOutUsecase: Symbol.for('LogOutUsecase'),
+  CompleteNewPasswordUsecase: Symbol.for('CompleteNewPasswordUsecase'),
 };
 
 export const containerUser = new Container();
@@ -232,3 +234,21 @@ containerUser.bind(RegistryUser.LogOutUsecase).toDynamicValue((context) => {
     );
   }
 });
+
+containerUser
+  .bind(RegistryUser.CompleteNewPasswordUsecase)
+  .toDynamicValue((context) => {
+    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+      return new CompleteNewPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+      return new CompleteNewPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryHttp)
+      );
+    } else {
+      return new CompleteNewPasswordUsecase(
+        context.container.get(RegistryUser.UserRepositoryMock)
+      );
+    }
+  });

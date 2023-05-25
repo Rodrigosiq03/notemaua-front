@@ -51,7 +51,7 @@ export default function NovaSenhaPage() {
   } = useForm<IFormNovaSenha>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { forgotPasswordSubmit } = useContext(UserContext);
+  const { forgotPasswordSubmit, completeNewPassword } = useContext(UserContext);
 
   const [openDialogPassword, setOpenDialogPassword] = React.useState(false);
 
@@ -83,6 +83,14 @@ export default function NovaSenhaPage() {
       const code = searchParams.get('code');
       if (email && code) {
         forgotPasswordSubmit(email, code, data.password);
+        router.push('/?passwordReset=true');
+      }
+    }
+    if (searchParams.has('email') && searchParams.has('challengeName')) {
+      const email = searchParams.get('email');
+      const challengeName = searchParams.get('challengeName');
+      if (email && challengeName) {
+        completeNewPassword(email, data.password);
         router.push('/?passwordReset=true');
       }
     }

@@ -133,6 +133,12 @@ export default function LoginPage() {
         handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
       }, 3000);
     }
+    if (searchParams.has('passwordEmployeeChanged')) {
+      setMessageSnackbarSuccess('Senha alterada com sucesso!');
+      setTimeout(() => {
+        handleOpenSnackSuccess({ vertical: 'bottom', horizontal: 'center' });
+      }, 3000);
+    }
   }, [confirmUser, error, searchParams]);
 
   // eye input logic
@@ -143,7 +149,7 @@ export default function LoginPage() {
   };
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    const response = await signIn(data.email, data.password);
+    const response = (await signIn(data.email, data.password)) as any;
     if (error) {
       if (error?.message === 'Usuário não encontrado') {
         setError('email', {
@@ -165,23 +171,28 @@ export default function LoginPage() {
       }
     } else {
       if (response) {
-        await Auth.currentAuthenticatedUser().then((user) => {
-          const customAttributes = user.attributes['custom:role'];
-          if (customAttributes === 'STUDENT') {
-            router.push('/retirada');
-          }
-          if (customAttributes === 'EMPLOYEE') {
-            setMessageSnackbarError(
-              'Funcionário não pode acessar o sistema ainda'
-            );
-            setTimeout(() => {
-              handleOpenSnackError({
-                vertical: 'bottom',
-                horizontal: 'center',
-              });
-            });
-          }
-        });
+        const challengeName = response.challengeName;
+        if (challengeName === 'NEW_PASSWORD_REQUIRED') {
+          router.push(`/nova-senha?challengeName=REQUIRED?email=${data.email}`);
+        }
+        // await Auth.currentAuthenticatedUser().then((user) => {
+        //   const customAttributes = user.attributes['custom:role'];
+        //   if (customAttributes === 'STUDENT') {
+        //     router.push('/retirada');
+        //   }
+        //   if (customAttributes === 'EMPLOYEE') {
+        //     setMessageSnackbarError(
+        //       'Funcionário não pode acessar o sistema ainda'
+        //     );
+        //     setTimeout(() => {
+        //       handleOpenSnackError({
+        //         vertical: 'bottom',
+        //         horizontal: 'center',
+        //       });
+        //     });
+        //   }
+        // });
+        console.log('logado', response);
       }
     }
   };

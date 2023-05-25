@@ -16,6 +16,7 @@ import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forg
 import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
 import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
 import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
+import { CompleteNewPasswordUsecase } from '@/@clean/modules/user/usecases/complete_new_password';
 
 export type UserContextType = {
   users: User[];
@@ -34,6 +35,10 @@ export type UserContextType = {
   validateEmailInJson: (email: string) => boolean;
   signIn: (email: string, password: string) => Promise<User | undefined>;
   logOut: () => Promise<void>;
+  completeNewPassword: (
+    email: string,
+    newPassword: string
+  ) => Promise<User | undefined>;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -55,6 +60,9 @@ const defaultContext: UserContextType = {
   validateEmailInJson: (email: string) => false,
   signIn: (email: string, password: string) => new Promise<User>(() => {}),
   logOut: () => new Promise<void>(() => {}),
+  completeNewPassword: (email: string, newPassword: string) =>
+    new Promise<User>(() => {}),
+
   error: null,
   setErrorNull: () => {},
 };
@@ -97,6 +105,11 @@ const signInUsecase = containerUser.get<SignInUsecase>(
 const logOutUsecase = containerUser.get<LogOutUsecase>(
   RegistryUser.LogOutUsecase
 );
+
+const completeNewPasswordUsecase =
+  containerUser.get<CompleteNewPasswordUsecase>(
+    RegistryUser.CompleteNewPasswordUsecase
+  );
 
 export function UserProvider({ children }: PropsWithChildren) {
   // State for error in API
@@ -223,6 +236,19 @@ export function UserProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function completeNewPassword(email: string, newPassword: string) {
+    try {
+      const response = await completeNewPasswordUsecase.execute(
+        email,
+        newPassword
+      );
+      return response;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
   function setErrorNull() {
     setError(null);
   }
@@ -242,6 +268,7 @@ export function UserProvider({ children }: PropsWithChildren) {
         validateEmailInJson,
         signIn,
         logOut,
+        completeNewPassword,
         error,
         setErrorNull,
       }}
