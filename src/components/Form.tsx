@@ -39,6 +39,7 @@ const FormButton = styled.button`
 
   &:hover {
     background-color: #0d4a7c;
+    cursor: pointer;
   }
 `;
 
@@ -58,6 +59,7 @@ const FormButtonADM = styled.button`
   &:hover {
     background-color: #00a12e;
     text-decoration: none;
+    cursor: pointer;
   }
 `;
 
@@ -86,6 +88,7 @@ const FormSelect = styled.select`
   border-radius: 5px;
   font-size: 15px;
   margin-left: 15px;
+  cursor: pointer;
 `;
 
 const FormButtonSearch = styled.button`
@@ -94,6 +97,7 @@ const FormButtonSearch = styled.button`
   margin-left: 8px;
   border: none;
   background-color: white;
+  cursor: pointer;
 `;
 
 export {
