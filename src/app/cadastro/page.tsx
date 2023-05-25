@@ -98,10 +98,10 @@ export default function CadastroPage() {
       }, 3000);
       console.log('User created: ', userCreated);
     } else {
-      if (error?.message === 'Usuário já cadastrado') {
+      if (error?.message === 'Falha no cadastro do usuário') {
         setError('email', {
           type: 'manual',
-          message: 'Usuário já cadastrado',
+          message: 'Falha no cadastro do usuário',
         });
       }
     }
@@ -135,8 +135,8 @@ export default function CadastroPage() {
                 </span>
               )}
               {errors.email?.type === 'manual' &&
-                errors.email?.message === 'Usuário já cadastrado' && (
-                  <span style={{ color: 'red' }}>Usuário já cadastrado</span>
+                errors.email?.message === 'Falha no cadastro do usuário' && (
+                  <span style={{ color: 'red' }}>Falha no cadastro do usuário</span>
                 )}
               {errors.email?.type === 'manual' &&
                 errors.email?.message === 'Email não válido para cadastro' && (
