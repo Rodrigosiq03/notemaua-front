@@ -62,6 +62,27 @@ const FormButton = styled.button`
 
   &:hover {
     background-color: #0d4a7c;
+    cursor: pointer;
+  }
+`;
+
+const FormButtonADM = styled.button`
+  width: 200px;
+  height: 36px;
+  border-radius: 5px;
+  position: relative;
+  left: 2%;
+  font-size: 15px;
+  background-color: #00ce3a;
+  color: black;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background-color: #00a12e;
+    text-decoration: none;
+    cursor: pointer;
   }
 `;
 
@@ -84,11 +105,35 @@ const FormButtonScan = styled.button`
   }
 `;
 
+const FormSelect = styled.select`
+  width: 150px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-left: 15px;
+  cursor: pointer;
+`;
+
+const FormButtonSearch = styled.button`
+  width: 40px;
+  height: 30px;
+  margin-left: 8px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+`;
+
+const FormContainerADM = styled.form``;
+
 export {
   FormContainer,
   FormInput,
   FormLabel,
   FormButton,
   FormButtonScan,
+  FormButtonADM,
+  FormSelect,
+  FormButtonSearch,
   FormInputEye,
+  FormContainerADM,
 };

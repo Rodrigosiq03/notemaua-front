@@ -5,12 +5,12 @@ import {
   Container,
   ContainerCardContent,
   ContainerRowLink,
-} from './components/Container';
-import { CardGray, CardWhite } from './components/Card';
+} from '../components/Container';
+import { CardGray, CardWhite } from '../components/Card';
 
-import { Title } from './components/Title';
+import { Title } from '../components/Title';
 
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, set } from 'react-hook-form';
 
 import { Hind } from 'next/font/google';
 
@@ -20,26 +20,33 @@ import {
   FormInput,
   FormInputEye,
   FormLabel,
-} from './components/Form';
-import { LinkStyled, TextForLink } from './components/Link';
-import ImageComponentMaua from './components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from './components/ImageComponent/LogoNoteMaua';
+} from '../components/Form';
+import { LinkStyled, TextForLink } from '../components/Link';
+import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+import SnackbarComponent from '../components/SnackbarMUI/Snackbar';
+import DialogComponentFirstAccess from '@/components/DialogMUI/DialogFirstAccessADM';
 import { UserContext } from '../contexts/user_provider';
 import { useSearchParams, useRouter } from 'next/navigation';
-import SnackbarComponent from './components/SnackbarMUI/Snackbar';
 import { IconButton, InputAdornment, SnackbarOrigin } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import { Auth } from 'aws-amplify';
+import { FormNewPasswordADM } from '@/components/FormADM/FormNewPassword';
 
-export interface IFormlogin {
+interface IFormlogin {
   email: string;
   password: string;
 }
 
-export interface StateSnackBar extends SnackbarOrigin {
+interface IFormNewPasswordADM {
+  password: string;
+  confirmPassword: string;
+}
+
+interface StateSnackBar extends SnackbarOrigin {
   open: boolean;
 }
 
@@ -47,6 +54,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     setError,
   } = useForm<IFormlogin>({
@@ -111,6 +119,44 @@ export default function LoginPage() {
     setStateSnackbarError({ ...stateSnackbarError, open: false });
   };
 
+  // DIALOG FIRST ACCESS ADM
+
+  const [openDialogFirstAccess, setOpenDialogFirstAccess] =
+    React.useState(false);
+  const [responseNewPasswordADM, setResponseNewPasswordADM] = React.useState();
+
+  const handleOpenDialogFirstAccess = () => {
+    setOpenDialogFirstAccess(true);
+  };
+
+  const handleCloseDialogFirstAccess = () => {
+    setOpenDialogFirstAccess(false);
+  };
+
+  const handleSubmitNewPasswordADM: SubmitHandler<IFormNewPasswordADM> = (
+    data
+  ) => {
+    const { password } = data;
+
+    if (responseNewPasswordADM) {
+      Auth.completeNewPassword(responseNewPasswordADM, password).then(
+        (response) => {
+          console.log(response);
+          setMessageSnackbarSuccess('Senha alterada com sucesso!');
+          setTimeout(() => {
+            handleOpenSnackSuccess({
+              vertical: 'bottom',
+              horizontal: 'center',
+            });
+          }, 1000);
+          setTimeout(() => {
+            router.push('/painel-adm');
+          }, 2000);
+        }
+      );
+    }
+  };
+
   // confirm user logic
 
   useEffect(() => {
@@ -143,7 +189,7 @@ export default function LoginPage() {
   };
 
   const onSubmit: SubmitHandler<IFormlogin> = async (data) => {
-    const response = await signIn(data.email, data.password);
+    const response = (await signIn(data.email, data.password)) as any;
     if (error) {
       if (error?.message === 'Usuário não encontrado') {
         setError('email', {
@@ -165,23 +211,21 @@ export default function LoginPage() {
       }
     } else {
       if (response) {
+        const challengeName = response.challengeName;
+        if (challengeName === 'NEW_PASSWORD_REQUIRED') {
+          handleOpenDialogFirstAccess();
+          setResponseNewPasswordADM(response);
+        }
         await Auth.currentAuthenticatedUser().then((user) => {
           const customAttributes = user.attributes['custom:role'];
           if (customAttributes === 'STUDENT') {
             router.push('/retirada');
           }
           if (customAttributes === 'EMPLOYEE') {
-            setMessageSnackbarError(
-              'Funcionário não pode acessar o sistema ainda'
-            );
-            setTimeout(() => {
-              handleOpenSnackError({
-                vertical: 'bottom',
-                horizontal: 'center',
-              });
-            });
+            router.push('/painel-adm');
           }
         });
+        console.log('logado', response);
       }
     }
   };
@@ -291,6 +335,12 @@ export default function LoginPage() {
       >
         {messageSnackbarError}
       </SnackbarComponent>
+      <DialogComponentFirstAccess
+        open={openDialogFirstAccess}
+        handleClose={handleCloseDialogFirstAccess}
+      >
+        <FormNewPasswordADM onSubmit={handleSubmitNewPasswordADM} />
+      </DialogComponentFirstAccess>
     </Container>
   );
 }

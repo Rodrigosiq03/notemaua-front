@@ -119,6 +119,10 @@ export class UserRepositoryMock implements IUserRepository {
   logout(): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  completeNewPassword(email: string, newPassword: string): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 decorate(injectable(), UserRepositoryMock);

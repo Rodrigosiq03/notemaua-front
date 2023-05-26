@@ -7,6 +7,15 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import Button from '@mui/material/Button';
+import SearchIconMUI from '@mui/icons-material/Search';
+import CircleIconMUI from '@mui/icons-material/Circle';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
+
+const SearchIcon = styled(SearchIconMUI)({
+  color: '#000000',
+  fontSize: '24px',
+});
 
 const ScanIcon = styled(QrCodeScannerIcon)({
   color: '#000000',
@@ -53,8 +62,27 @@ const TermsButton = styled(Button)({
 });
 
 const CheckCircle = styled(CheckCircleIcon)({
-  // color: '#00b300',
-  // fontSize: '300px',
+  fontSize: '140px',
+  color: '#00b300',
+  paddingTop: '10px',
+  paddingBottom: '20px',
+});
+
+const CircleIconGreen = styled(CircleIconMUI)({
+  color: '#08D210',
+  fontSize: '16px',
+  paddingTop: '4px',
+});
+
+const CircleIconRed = styled(CircleIconMUI)({
+  color: '#D20808',
+  fontSize: '16px',
+  paddingTop: '4px',
+});
+
+const PersonIconADM = styled(PersonIcon)({
+  color: '#545454',
+  fontSize: '36px',
 });
 
 export {
@@ -65,4 +93,8 @@ export {
   ScanIcon,
   TermsButton,
   CheckCircle,
+  SearchIcon,
+  CircleIconGreen,
+  CircleIconRed,
+  PersonIconADM,
 };

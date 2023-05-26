@@ -6,20 +6,20 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
-import { Title } from '../components/Title';
-import { ExitIcon } from '../components/Icon';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
+import { Title } from '../../components/Title';
+import { ExitIcon } from '../../components/Icon';
 import {
   FormButton,
   FormContainer,
   FormInput,
-  FormLabel,
   FormInputEye,
-} from '../components/Form';
-import { ReturnLink } from '../components/Link';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+  FormLabel,
+} from '../../components/Form';
+import { ReturnLink } from '../../components/Link';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -27,10 +27,9 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import { UserContext } from '../../contexts/user_provider';
-
-import DialogComponentSignUp from '../components/DialogMUI/DialogSignUp';
-import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
-import { InfoIcon, InfoButton } from '../components/Icon';
+import DialogComponentSignUp from '../../components/DialogMUI/DialogSignUp';
+import DialogComponentInfoPassword from '../../components/DialogMUI/DialogInfoPassword';
+import { InfoIcon, InfoButton } from '../../components/Icon';
 import { IconButton, InputAdornment } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -99,10 +98,10 @@ export default function CadastroPage() {
       }, 3000);
       console.log('User created: ', userCreated);
     } else {
-      if (error?.message === 'Usuário já cadastrado') {
+      if (error?.message === 'Falha no cadastro do usuário') {
         setError('email', {
           type: 'manual',
-          message: 'Usuário já cadastrado',
+          message: 'Falha no cadastro do usuário',
         });
       }
     }
@@ -136,8 +135,8 @@ export default function CadastroPage() {
                 </span>
               )}
               {errors.email?.type === 'manual' &&
-                errors.email?.message === 'Usuário já cadastrado' && (
-                  <span style={{ color: 'red' }}>Usuário já cadastrado</span>
+                errors.email?.message === 'Falha no cadastro do usuário' && (
+                  <span style={{ color: 'red' }}>Falha no cadastro do usuário</span>
                 )}
               {errors.email?.type === 'manual' &&
                 errors.email?.message === 'Email não válido para cadastro' && (

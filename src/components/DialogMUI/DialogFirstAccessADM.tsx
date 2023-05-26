@@ -1,13 +1,14 @@
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
-import { useRouter } from 'next/navigation';
+import { FormContainer } from '../Form';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -21,18 +22,13 @@ const Transition = React.forwardRef(function Transition(
 
 export default function DialogComponent({
   open,
-  children,
   handleClose,
+  children,
 }: {
   open: boolean;
-  children: React.ReactNode;
   handleClose: () => void;
+  children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const goToLogin = () => {
-    router.push('/');
-  };
-
   return (
     <Dialog
       className={hind.className}
@@ -49,19 +45,30 @@ export default function DialogComponent({
         },
       }}
     >
+      <DialogTitle
+        style={{
+          textAlign: 'center',
+          fontWeight: '700',
+          fontSize: '35px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          color: 'black',
+        }}
+      >
+        Troque sua senha
+      </DialogTitle>
       <DialogContent
         sx={{
           '& .MuiDialogContent-root': {
             paddingBottom: '0px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           },
         }}
       >
-        <DialogContentText id="alert-dialog-slide-description">
-          {children}
-        </DialogContentText>
-        <DialogActions>
-          <DialogButtonOK onClick={handleClose}>OK</DialogButtonOK>
-        </DialogActions>
+        {children}
       </DialogContent>
     </Dialog>
   );
