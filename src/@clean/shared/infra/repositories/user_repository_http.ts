@@ -212,6 +212,29 @@ export class UserRepositoryHttp implements IUserRepository {
       throw new Error(error.code);
     }
   }
+
+  async completeNewPassword(email: string, newPassword: string): Promise<User> {
+    try {
+      const user = await Auth.completeNewPassword(email, newPassword);
+      return new User({
+        email: user.attributes.email,
+        name: user.attributes.name,
+        ra: user.attributes.email.substring(0, 10),
+        password: 'cannot_pass_by_here',
+      });
+    } catch (error: any) {
+      switch (error.code) {
+        case 'UserNotFoundException':
+          throw new Error('Usuário não encontrado');
+        case 'InvalidPasswordException':
+          throw new Error('Senha inválida');
+        case 'InvalidParameterException':
+          throw new Error('Email inválido');
+        default:
+          throw new Error('Erro desconhecido');
+      }
+    }
+  }
 }
 
 decorate(injectable(), UserRepositoryHttp);

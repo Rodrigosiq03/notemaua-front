@@ -1,14 +1,13 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { DialogButtonOK, DialogButtonResend } from '../Dialog';
+import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
-import { useRouter } from 'next/navigation';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -29,11 +28,6 @@ export default function DialogComponent({
   children: React.ReactNode;
   handleClose: () => void;
 }) {
-  const router = useRouter();
-  const goToLogin = () => {
-    router.push('/');
-  };
-
   return (
     <Dialog
       className={hind.className}
@@ -50,6 +44,18 @@ export default function DialogComponent({
         },
       }}
     >
+      <DialogTitle
+        style={{
+          textAlign: 'center',
+          fontWeight: '700',
+          fontSize: '35px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          color: 'black',
+        }}
+      >
+        Confirmar Devolução
+      </DialogTitle>
       <DialogContent
         sx={{
           '& .MuiDialogContent-root': {
@@ -61,8 +67,18 @@ export default function DialogComponent({
           {children}
         </DialogContentText>
         <DialogActions>
-          <DialogButtonOK onClick={handleClose}>OK</DialogButtonOK>
-          <DialogButtonResend onClick={goToLogin}>Voltar</DialogButtonResend>
+          <DialogButtonOK
+            style={{
+              marginTop: '30px',
+              color: 'black',
+              fontWeight: '700',
+              width: '250px',
+              height: '100',
+            }}
+            onClick={handleClose}
+          >
+            Confirmar Devolução
+          </DialogButtonOK>
         </DialogActions>
       </DialogContent>
     </Dialog>

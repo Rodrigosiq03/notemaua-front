@@ -18,4 +18,5 @@ export interface IUserRepository {
   resendConfirmationCode(email: string): Promise<User>;
   signIn(email: string, password: string): Promise<User>;
   logout(): Promise<void>;
+  completeNewPassword(email: string, newPassword: string): Promise<User>;
 }

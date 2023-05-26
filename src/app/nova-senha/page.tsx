@@ -5,17 +5,17 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
 
-import { Title } from '../components/Title';
+import { Title } from '../../components/Title';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
-import DialogComponentInfoPassword from '../components/DialogMUI/DialogInfoPassword';
+import DialogComponentInfoPassword from '../../components/DialogMUI/DialogInfoPassword';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -25,12 +25,13 @@ import {
   FormContainer,
   FormInputEye,
   FormLabel,
-} from '../components/Form';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
+} from '../../components/Form';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
 import { UserContext } from '@/contexts/user_provider';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { InfoButton, InfoIcon } from '../components/Icon';
+import { InfoButton, InfoIcon } from '../../components/Icon';
+import { Auth } from 'aws-amplify';
 
 export interface IFormNovaSenha {
   password: string;

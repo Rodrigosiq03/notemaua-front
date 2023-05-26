@@ -4,16 +4,15 @@ import {
   Container,
   ContainerCardContent,
   ContainerRow,
-} from '../components/Container';
-import { CardGray, CardWhite } from '../components/Card';
-import { Title } from '../components/Title';
+} from '../../components/Container';
+import { CardGray, CardWhite } from '../../components/Card';
+import { Title, UserText } from '../../components/Title';
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { ReturnLink } from '../components/Link';
-import { ExitIcon } from '../components/Icon';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
+import { ReturnLink } from '../../components/Link';
+import { CheckCircle, ExitIcon } from '../../components/Icon';
 import { UserContext } from '@/contexts/user_provider';
 import { useRouter } from 'next/navigation';
 
@@ -34,39 +33,19 @@ export default function ConfirmReturnPage() {
         <CardWhite>
           <ContainerCardContent>
             <ImageComponentNoteMaua />
-            <Title style={{ paddingTop: '0px', marginBottom: '0px' }}>
+            <Title style={{ marginBottom: '0px', paddingTop: '20px' }}>
               Retirada Confirmada
             </Title>
-            <CheckCircleIcon
-              style={{
-                fontSize: '140px',
-                color: '#00b300',
-                paddingTop: '10px',
-                paddingBottom: '20px',
-              }}
-            />
+            <CheckCircle />
             <div>
-              <p
-                style={{ textAlign: 'center', fontSize: '13px', margin: '0px' }}
-              >
+              <UserText>
                 Horário de Retirada: <strong>7:40</strong>
-              </p>
-              {/* <p style={{ textAlign: 'center', fontSize: '13px', margin: '0px', paddingTop: '2px'  }}></p> */}
-              <p
-                style={{ textAlign: 'center', fontSize: '13px', margin: '0px' }}
-              >
-                Luigi Guimarães Trevisan
-              </p>
-              <p
-                style={{ textAlign: 'center', fontSize: '13px', margin: '0px' }}
-              >
-                22.01102-0@maua.br
-              </p>
-              <p
-                style={{ textAlign: 'center', fontSize: '13px', margin: '0px' }}
-              >
-                RA:<strong>22.01102-0</strong>
-              </p>
+              </UserText>
+              <UserText>Luigi Guimarães Trevisan</UserText>
+              <UserText>22.01102-0@maua.br</UserText>
+              <UserText>
+                RA: <strong>22.01102-0</strong>
+              </UserText>
             </div>
             <ContainerRow>
               <ReturnLink onClick={handleLogout} href="#">

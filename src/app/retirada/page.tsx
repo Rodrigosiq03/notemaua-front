@@ -1,30 +1,30 @@
 'use client';
-import { CardGray, CardWhite } from '../components/Card';
+import { CardGray, CardWhite } from '../../components/Card';
 import {
   Container,
   ContainerCardContent,
   ContainerRow,
   ContainerRowLink,
-} from '../components/Container';
+} from '../../components/Container';
 import {
   FormButton,
   FormButtonScan,
   FormContainer,
   FormInput,
   FormLabel,
-} from '../components/Form';
-import { ReturnIcon, ScanIcon, TermsButton } from '../components/Icon';
-import ImageComponentMaua from '../components/ImageComponent/LogoMaua';
-import ImageComponentNoteMaua from '../components/ImageComponent/LogoNoteMaua';
-import { ReturnLink, TextForLink } from '../components/Link';
-import { Title } from '../components/Title';
+} from '../../components/Form';
+import { ReturnIcon, ScanIcon, TermsButton } from '../../components/Icon';
+import ImageComponentMaua from '../../components/ImageComponent/LogoMaua';
+import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua';
+import { ReturnLink, TextForLink } from '../../components/Link';
+import { Title } from '../../components/Title';
 
 import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
-import DialogComponentTermsOfUse from '../components/DialogMUI/DialogTermsOfUse';
-import DialogScanner from '../components/DialogMUI/DialogScanner';
-import React, { useContext, useRef } from 'react';
+import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfUse';
+import React, { useContext, useEffect } from 'react';
+import DialogScanner from '../../components/DialogMUI/DialogScanner';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
@@ -49,7 +49,7 @@ export default function RetiradaPage() {
 
   // Scanner state
 
-  const setDataScanner = useRef(null);
+  const setDataScanner = React.useRef(null);
   const [openScanner, setOpenScanner] = React.useState(false);
 
   const handleClickOpenDialogScanner = () => {
@@ -76,6 +76,23 @@ export default function RetiradaPage() {
       router.push('/');
     }
   };
+
+  useEffect(() => {
+    const response = Auth.currentAuthenticatedUser();
+    response
+      .then((user) => {
+        const customAttributes = user.attributes['custom:role'];
+        if (customAttributes === 'STUDENT') {
+          return;
+        }
+        if (customAttributes === 'EMPLOYEE') {
+          router.push('/');
+        }
+      })
+      .catch((error) => {
+        router.push('/');
+      });
+  }, [router]);
 
   // form logic
   const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
