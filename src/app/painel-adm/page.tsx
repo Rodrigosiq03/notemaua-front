@@ -10,6 +10,7 @@ import {
   FormButtonADM,
   FormButtonSearch,
   FormContainer,
+  FormContainerADM,
   FormInput,
   FormSelect,
 } from '../../components/Form';
@@ -20,6 +21,7 @@ import { Hind } from 'next/font/google';
 import {
   CircleIconGreen,
   CircleIconRed,
+  PersonIconADM,
   SearchIcon,
 } from '../../components/Icon';
 import { TitleADM } from '../../components/Title';
@@ -30,40 +32,82 @@ import {
 } from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useEffect } from 'react';
 import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
+import DialogComponentChangeEmail from '../../components/DialogMUI/DialogChangeEmailADM';
 import { DialogText } from '@/components/Dialog';
+import { IconButton } from '@mui/material';
+import { Auth } from 'aws-amplify';
+import { useRouter } from 'next/navigation';
 
-export interface IFormDevolucao {
+export interface IFormDevolution {
   numSerie: string;
 }
 
 export default function PainelAdmPage() {
-  const {
-    handleSubmit,
-  } = useForm<IFormDevolucao>();
+  const { handleSubmit } = useForm<IFormDevolution>();
+  const router = useRouter();
 
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialogDevolution, setOpenDialogDevolution] = React.useState(false);
+  const [openDialogChangeEmail, setOpenDialogChangeEmail] =
+    React.useState(false);
 
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
+  const handleClickOpenDialogDevolution = () => {
+    setOpenDialogDevolution(true);
   };
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const handleCloseDialogDevolution = () => {
+    setOpenDialogDevolution(false);
   };
 
-  const onSubmit: SubmitHandler<IFormDevolucao> = (data) => {
-  }
+  const handleClickOpenDialogChangeEmail = () => {
+    setOpenDialogChangeEmail(true);
+  };
+
+  const handleCloseDialogChangeEmail = () => {
+    setOpenDialogChangeEmail(false);
+  };
+
+  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data) => {
+    handleClickOpenDialogDevolution();
+  };
+
+  useEffect(() => {
+    const response = Auth.currentAuthenticatedUser();
+    response
+      .then((user) => {
+        const customAttributes = user.attributes['custom:role'];
+        if (customAttributes === 'STUDENT') {
+          router.push('/');
+        }
+        if (customAttributes === 'EMPLOYEE') {
+          return;
+        }
+      })
+      .catch((error) => {
+        router.push('/');
+      });
+  }, [router]);
 
   return (
     <Container className={hind.className}>
       <ImageComponentNoteMaua />
       <CardGrayADM>
         <CardWhiteADM>
-          <FormContainer onSubmit={handleSubmit(onSubmit)}>
+          <FormContainer onSubmit={handleSubmit(onSubmitDevolution)}>
             <ContainerRowADM>
-              <FormInput placeholder="Número de série"></FormInput>
-              <FormButtonADM onClick={handleClickOpenDialog} type="submit">Confirmar devolução</FormButtonADM>
+              <FormContainerADM onSubmit={handleClickOpenDialogDevolution}>
+                <FormInput
+                  disableUnderline={true}
+                  placeholder="Número de série"
+                ></FormInput>
+                <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
+                <IconButton
+                  sx={{ marginLeft: '612px' }}
+                  onClick={handleClickOpenDialogChangeEmail}
+                >
+                  <PersonIconADM />
+                </IconButton>
+              </FormContainerADM>
             </ContainerRowADM>
             <CardADM>
               <hr
@@ -75,6 +119,7 @@ export default function PainelAdmPage() {
               />
               <ContainerRowADM2>
                 <FormInput
+                  disableUnderline={true}
                   placeholder="Pesquisar"
                   style={{
                     marginLeft: '20px',
@@ -454,10 +499,13 @@ export default function PainelAdmPage() {
         </CardWhiteADM>
       </CardGrayADM>
       <ImageComponentMaua style={{ paddingTop: '18px' }} />
-      <DialogComponentDevolution open={openDialog} handleClose={handleCloseDialog}>
+      <DialogComponentDevolution
+        open={openDialogDevolution}
+        handleClose={handleCloseDialogDevolution}
+      >
         <div>
-        <hr></hr>
-        <DialogText style={{fontWeight: "700", fontSize: "25px"}}>
+          <hr></hr>
+          <DialogText style={{ fontWeight: '700', fontSize: '25px' }}>
             Número de Série: 38029
           </DialogText>
           <DialogText>
@@ -466,18 +514,20 @@ export default function PainelAdmPage() {
           <DialogText>
             Horário de Devolução: <strong>11:20</strong>
           </DialogText>
-          <hr style={{ marginTop: "25px"}}></hr>
-          <DialogText style={{fontWeight: "700", fontSize: "25px"}}>
+          <hr style={{ marginTop: '25px' }}></hr>
+          <DialogText style={{ fontWeight: '700', fontSize: '25px' }}>
             Luigi Guimarães Trevisan
           </DialogText>
-          <DialogText>
-            22.01102-0@maua.br
-          </DialogText>
+          <DialogText>22.01102-0@maua.br</DialogText>
           <DialogText>
             RA:<strong> 22.01102-0</strong>
           </DialogText>
         </div>
       </DialogComponentDevolution>
+      <DialogComponentChangeEmail
+        open={openDialogChangeEmail}
+        handleClose={handleCloseDialogChangeEmail}
+      />
     </Container>
   );
 }

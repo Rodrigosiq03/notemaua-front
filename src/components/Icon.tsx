@@ -9,9 +9,8 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import Button from '@mui/material/Button';
 import SearchIconMUI from '@mui/icons-material/Search';
 import CircleIconMUI from '@mui/icons-material/Circle';
-import { alignProperty } from '@mui/material/styles/cssUtils';
-import { text } from 'stream/consumers';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
 
 const SearchIcon = styled(SearchIconMUI)({
   color: '#000000',
@@ -81,6 +80,11 @@ const CircleIconRed = styled(CircleIconMUI)({
   paddingTop: '4px',
 });
 
+const PersonIconADM = styled(PersonIcon)({
+  color: '#545454',
+  fontSize: '36px',
+});
+
 export {
   ExitIcon,
   InfoIcon,
@@ -89,7 +93,8 @@ export {
   ScanIcon,
   TermsButton,
   CheckCircle,
-  SearchIcon, 
+  SearchIcon,
   CircleIconGreen,
-  CircleIconRed
+  CircleIconRed,
+  PersonIconADM,
 };

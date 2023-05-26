@@ -8,6 +8,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
+import { FormContainer } from '../Form';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -21,11 +22,9 @@ const Transition = React.forwardRef(function Transition(
 
 export default function DialogComponent({
   open,
-  children,
   handleClose,
 }: {
   open: boolean;
-  children: React.ReactNode;
   handleClose: () => void;
 }) {
   return (
@@ -54,7 +53,7 @@ export default function DialogComponent({
           color: 'black',
         }}
       >
-        Confirmar Devolução
+        Troque seu e-mail
       </DialogTitle>
       <DialogContent
         sx={{
@@ -63,9 +62,7 @@ export default function DialogComponent({
           },
         }}
       >
-        <DialogContentText id="alert-dialog-slide-description">
-          {children}
-        </DialogContentText>
+        <FormContainer></FormContainer>
         <DialogActions>
           <DialogButtonOK
             style={{
@@ -74,10 +71,11 @@ export default function DialogComponent({
               fontWeight: '700',
               width: '250px',
               height: '100',
+              margin: '0 auto',
             }}
-            onClick={handleClose}
+            onClick={() => null}
           >
-            Confirmar Devolução
+            Confirmar
           </DialogButtonOK>
         </DialogActions>
       </DialogContent>

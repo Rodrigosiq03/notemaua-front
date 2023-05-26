@@ -31,6 +31,7 @@ import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua
 import { UserContext } from '@/contexts/user_provider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InfoButton, InfoIcon } from '../../components/Icon';
+import { Auth } from 'aws-amplify';
 
 export interface IFormNovaSenha {
   password: string;
@@ -51,7 +52,7 @@ export default function NovaSenhaPage() {
   } = useForm<IFormNovaSenha>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { forgotPasswordSubmit, completeNewPassword } = useContext(UserContext);
+  const { forgotPasswordSubmit } = useContext(UserContext);
 
   const [openDialogPassword, setOpenDialogPassword] = React.useState(false);
 
@@ -83,14 +84,6 @@ export default function NovaSenhaPage() {
       const code = searchParams.get('code');
       if (email && code) {
         forgotPasswordSubmit(email, code, data.password);
-        router.push('/?passwordReset=true');
-      }
-    }
-    if (searchParams.has('email') && searchParams.has('challengeName')) {
-      const email = searchParams.get('email');
-      const challengeName = searchParams.get('challengeName');
-      if (email && challengeName) {
-        completeNewPassword(email, data.password);
         router.push('/?passwordReset=true');
       }
     }

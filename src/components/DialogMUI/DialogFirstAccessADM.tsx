@@ -8,6 +8,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
+import { FormContainer } from '../Form';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -21,12 +22,12 @@ const Transition = React.forwardRef(function Transition(
 
 export default function DialogComponent({
   open,
-  children,
   handleClose,
+  children,
 }: {
   open: boolean;
-  children: React.ReactNode;
   handleClose: () => void;
+  children: React.ReactNode;
 }) {
   return (
     <Dialog
@@ -54,32 +55,20 @@ export default function DialogComponent({
           color: 'black',
         }}
       >
-        Confirmar Devolução
+        Troque sua senha
       </DialogTitle>
       <DialogContent
         sx={{
           '& .MuiDialogContent-root': {
             paddingBottom: '0px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           },
         }}
       >
-        <DialogContentText id="alert-dialog-slide-description">
-          {children}
-        </DialogContentText>
-        <DialogActions>
-          <DialogButtonOK
-            style={{
-              marginTop: '30px',
-              color: 'black',
-              fontWeight: '700',
-              width: '250px',
-              height: '100',
-            }}
-            onClick={handleClose}
-          >
-            Confirmar Devolução
-          </DialogButtonOK>
-        </DialogActions>
+        {children}
       </DialogContent>
     </Dialog>
   );

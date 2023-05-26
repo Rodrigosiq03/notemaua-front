@@ -23,7 +23,7 @@ import { Hind } from 'next/font/google';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfUse';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import DialogScanner from '../../components/DialogMUI/DialogScanner';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { NotebookContext } from '@/contexts/notebook_provider';
@@ -76,6 +76,23 @@ export default function RetiradaPage() {
       router.push('/');
     }
   };
+
+  useEffect(() => {
+    const response = Auth.currentAuthenticatedUser();
+    response
+      .then((user) => {
+        const customAttributes = user.attributes['custom:role'];
+        if (customAttributes === 'STUDENT') {
+          return;
+        }
+        if (customAttributes === 'EMPLOYEE') {
+          router.push('/');
+        }
+      })
+      .catch((error) => {
+        router.push('/');
+      });
+  }, [router]);
 
   // form logic
   const onSubmit: SubmitHandler<IFormRetirada> = (data) => {

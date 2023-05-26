@@ -123,6 +123,8 @@ const FormButtonSearch = styled.button`
   cursor: pointer;
 `;
 
+const FormContainerADM = styled.form``;
+
 export {
   FormContainer,
   FormInput,
@@ -133,4 +135,5 @@ export {
   FormSelect,
   FormButtonSearch,
   FormInputEye,
+  FormContainerADM,
 };
