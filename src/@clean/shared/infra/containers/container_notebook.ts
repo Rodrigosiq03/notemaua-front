@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_notebook_usecase';
+import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_all_notebooks_usecase';
 import { http } from '../http';
 import { NotebookRepositoryMock } from '../repositories/notebook_repository_mock';
 import { NotebookRepositoryHttp } from '../repositories/notebook_repository_http';

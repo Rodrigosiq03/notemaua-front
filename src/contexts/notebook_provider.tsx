@@ -5,19 +5,19 @@ import {
   RegistryNotebook,
   containerNotebook,
 } from '@/@clean/shared/infra/containers/container_notebook';
-import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_notebook_usecase';
+import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_all_notebooks_usecase';
 import { ValidateNumSerieInJsonUsecase } from '@/@clean/modules/notebook/usecases/validate_numSerie_in_json';
 
 export type NotebookContextType = {
   notebooks: Notebook[];
-  getNotebook: (numSerie: string) => void;
+  getAllNotebooks: () => Promise<void>;
   validateNumSerieInJson: (numSerie: string) => boolean;
   error: Error | null;
   setErrorNull: () => void;
 };
 const defaultContext: NotebookContextType = {
   notebooks: [],
-  getNotebook: (numSerie: string) => {},
+  getAllNotebooks: () => new Promise<void>(() => {}),
   validateNumSerieInJson(numSerie: string): boolean {
     return false;
   },
@@ -39,14 +39,14 @@ const validateNumSerieInJsonUsecase =
 export function NotebookProvider({ children }: PropsWithChildren) {
   const [notebooks, setNotebooks] = useState<Notebook[]>([]);
   const [error, setError] = useState<Error | null>(null);
-  async function getNotebook(numSerie: string) {
+  async function getAllNotebooks() {
     try {
-      const notebookFound = await getNotebookUsecase.execute(numSerie);
-      setNotebooks([...notebooks, notebookFound]);
+      await getNotebookUsecase.execute().then((notebooks) => {
+        setNotebooks(notebooks);
+      });
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      const setError = error;
-      setError(setError);
+      setError(error);
     }
   }
 
@@ -70,7 +70,7 @@ export function NotebookProvider({ children }: PropsWithChildren) {
     <NotebookContext.Provider
       value={{
         notebooks,
-        getNotebook,
+        getAllNotebooks,
         error,
         setErrorNull,
         validateNumSerieInJson,

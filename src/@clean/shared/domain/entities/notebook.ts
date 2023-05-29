@@ -1,4 +1,5 @@
 import { EntityError } from '../helpers/errors/domain_error';
+import { Withdraw } from './withdraw';
 
 export type NotebookProps = {
   numSerie: string;
@@ -6,14 +7,16 @@ export type NotebookProps = {
 };
 
 export type JsonProps = {
-  num_serie: string;
-  isActive?: boolean;
+  notebooks: [
+    {
+      notebook: {
+        numSerie: string;
+        isActive: boolean;
+      };
+      withdraws: Withdraw[];
+    }
+  ];
 };
-
-// if (!Notebook.validateNum_serie(props.numSerie)) {
-//     throw new EntityError('props.num_serie')
-// }
-// this.props.numSerie = props.numSerie;
 
 export class Notebook {
   constructor(public props: NotebookProps) {
@@ -69,12 +72,7 @@ export class Notebook {
     };
   }
 
-  fromJSON(json: JsonProps) {
-    return new Notebook({
-      numSerie: json.num_serie,
-      isActive: json.isActive,
-    });
-  }
+  static fromJSON(json: JsonProps): NotebookTreatment {}
 
   static validateNumSerie(numSerie: string): boolean {
     // validate length of num_serie

@@ -41,15 +41,8 @@ export class NotebookRepositoryMock implements INotebookRepository {
     }),
   ];
 
-  async getNotebook(numSerie: string): Promise<Notebook> {
-    const notebook = this.notebooks.find(
-      (notebook) => notebook.numSerie === numSerie
-    );
-    if (notebook) {
-      return notebook;
-    } else {
-      throw new NoItemsFoundError(`notebook numSerie: ${numSerie}`);
-    }
+  async getAllNotebooks(): Promise<Notebook[]> {
+    return this.notebooks;
   }
 
   validateNumSerieInJson(numSerie: string): boolean {

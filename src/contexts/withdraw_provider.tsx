@@ -11,7 +11,7 @@ import { GetAllWithdrawsUsecase } from '../@clean/modules/withdraw/usecases/get_
 
 export type WithdrawContextType = {
   withdraws: Withdraw[];
-  createWithdraw: (numSerie: string, email: string) => void;
+  createWithdraw: (numSerie: string) => void;
   finishWithdraw: (numSerie: string) => void;
   getAllWithdraws: () => void;
   error: Error | null;
@@ -20,7 +20,7 @@ export type WithdrawContextType = {
 
 const defaultContext: WithdrawContextType = {
   withdraws: [],
-  createWithdraw: (numSerie: string, email: string) => {},
+  createWithdraw: (numSerie: string) => {},
   finishWithdraw: (numSerie: string) => {},
   getAllWithdraws: () => {},
   error: null,
@@ -45,12 +45,9 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
   const [withdraws, setWithdraws] = useState<Withdraw[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
-  async function createWithdraw(numSerie: string, email: string) {
+  async function createWithdraw(numSerie: string) {
     try {
-      const withdrawCreated = await createWithdrawUsecase.execute(
-        numSerie,
-        email
-      );
+      const withdrawCreated = await createWithdrawUsecase.execute(numSerie);
       setWithdraws([...withdraws, withdrawCreated]);
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
