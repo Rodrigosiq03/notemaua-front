@@ -108,9 +108,6 @@ export default function RetiradaPage() {
     });
     
     const response = (await createWithdraw(data.numSerie, idToken)) as any;
-    if (response) {
-      console.log("funcionou!");
-    }
   };
 
   return (

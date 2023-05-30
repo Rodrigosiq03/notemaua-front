@@ -32,25 +32,28 @@ import {
 } from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
 import DialogComponentChangeEmail from '../../components/DialogMUI/DialogChangeEmailADM';
 import { DialogText } from '@/components/Dialog';
 import { IconButton } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import { useRouter } from 'next/navigation';
+import { NotebookContext } from '@/contexts/notebook_provider';
 
 export interface IFormDevolution {
   numSerie: string;
 }
 
 export default function PainelAdmPage() {
-  const { handleSubmit } = useForm<IFormDevolution>();
+  const { handleSubmit, setError, register, formState: { errors } } = useForm<IFormDevolution>();
   const router = useRouter();
+  const { validateNumSerieInJson } = useContext(NotebookContext);
 
-  const [openDialogDevolution, setOpenDialogDevolution] = React.useState(false);
+  const [openDialogDevolution,  setOpenDialogDevolution] = React.useState(false);
   const [openDialogChangeEmail, setOpenDialogChangeEmail] =
     React.useState(false);
+    
 
   const handleClickOpenDialogDevolution = () => {
     setOpenDialogDevolution(true);
@@ -67,9 +70,18 @@ export default function PainelAdmPage() {
     setOpenDialogChangeEmail(false);
   };
 
-  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data) => {
+  const onSubmitDevolution: SubmitHandler<IFormDevolution> = async (data) => {
+    if (!validateNumSerieInJson(data.numSerie))
+      setError('numSerie', {
+        type: 'manual',
+        message: 'Notebook não encontrado',
+      });
+    console.log(data);
+    setValueDialogDevolution(data.numSerie);
     handleClickOpenDialogDevolution();
   };
+
+  const [valueDialogDevolution, setValueDialogDevolution] = React.useState('');
 
   useEffect(() => {
     const response = Auth.currentAuthenticatedUser();
@@ -95,11 +107,16 @@ export default function PainelAdmPage() {
         <CardWhiteADM>
           <FormContainer onSubmit={handleSubmit(onSubmitDevolution)}>
             <ContainerRowADM>
-              <FormContainerADM onSubmit={handleClickOpenDialogDevolution}>
                 <FormInput
                   disableUnderline={true}
                   placeholder="Número de série"
+                  {...register('numSerie', {
+                    required: true,
+                    maxLength: 5,
+                    minLength: 5,
+                  })}
                 ></FormInput>
+                
                 <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
                 <IconButton
                   sx={{ marginLeft: '612px' }}
@@ -107,8 +124,23 @@ export default function PainelAdmPage() {
                 >
                   <PersonIconADM />
                 </IconButton>
-              </FormContainerADM>
             </ContainerRowADM>
+            {errors.numSerie?.type === 'required' && (
+                  <span style={{ color: 'red', textAlign: 'center' }}>
+                  Este campo é um campo obrigatório
+                </span>
+                
+              )}
+              {errors.numSerie?.type === 'minLength' && (
+                <span
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                  }}
+                >
+                  Número de série inválido
+                </span>
+              )}
             <CardADM>
               <hr
                 style={{
@@ -501,6 +533,7 @@ export default function PainelAdmPage() {
       <ImageComponentMaua style={{ paddingTop: '18px' }} />
       <DialogComponentDevolution
         open={openDialogDevolution}
+        value={valueDialogDevolution}
         handleClose={handleCloseDialogDevolution}
       >
         <div>
