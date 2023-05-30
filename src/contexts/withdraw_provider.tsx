@@ -45,11 +45,11 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
   const [withdraws, setWithdraws] = useState<Withdraw[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
-  async function createWithdraw(numSerie: string, email: string) {
+  async function createWithdraw(numSerie: string, idToken: string) {
     try {
       const withdrawCreated = await createWithdrawUsecase.execute(
         numSerie,
-        email
+        idToken
       );
       setWithdraws([...withdraws, withdrawCreated]);
     } catch (error: any) {

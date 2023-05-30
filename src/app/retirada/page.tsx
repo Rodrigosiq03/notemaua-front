@@ -31,6 +31,7 @@ import { UserContext } from '@/contexts/user_provider';
 import { useRouter } from 'next/navigation';
 
 import { Auth } from 'aws-amplify';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -45,6 +46,7 @@ export default function RetiradaPage() {
   } = useForm<IFormRetirada>();
   const { validateNumSerieInJson } = useContext(NotebookContext);
   const { logOut } = useContext(UserContext);
+  const { createWithdraw } = useContext(WithdrawContext);
   const router = useRouter();
 
   // Scanner state
@@ -95,13 +97,20 @@ export default function RetiradaPage() {
   }, [router]);
 
   // form logic
-  const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
+  const onSubmit: SubmitHandler<IFormRetirada> = async (data) => {
     if (!validateNumSerieInJson(data.numSerie))
       setError('numSerie', {
         type: 'manual',
         message: 'Notebook não encontrado',
       });
-    return;
+    const idToken = await Auth.currentSession().then((response) => {
+      return response.getIdToken().getJwtToken();
+    });
+    
+    const response = (await createWithdraw(data.numSerie, idToken)) as any;
+    if (response) {
+      console.log("funcionou!");
+    }
   };
 
   return (
