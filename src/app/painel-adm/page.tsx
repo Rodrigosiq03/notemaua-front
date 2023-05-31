@@ -48,7 +48,7 @@ export interface IFormDevolution {
   numSerie: string;
 }
 
-export default async function PainelAdmPage() {
+export default function PainelAdmPage() {
   const { handleSubmit, setError, register, formState: { errors } } = useForm<IFormDevolution>();
   const router = useRouter();
   const { validateNumSerieInJson } = useContext(NotebookContext);
@@ -77,7 +77,7 @@ export default async function PainelAdmPage() {
   const [notebooks, setNotebooks] = useState<[Notebook, Withdraw[]][]>([]);
 
 
-  const onSubmitDevolution: SubmitHandler<IFormDevolution> = async (data) => {
+  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data) => {
     if (!validateNumSerieInJson(data.numSerie))
       setError('numSerie', {
         type: 'manual',
@@ -105,14 +105,15 @@ export default async function PainelAdmPage() {
       .catch((error) => {
         router.push('/');
       });
-      getIdToken().then((idToken) => {
-        getAllNotebooks(idToken).then((response) => {
-          console.log('Resposta do getAllNotebooks: ', response);
-          setNotebooks(response);
-        }
-        );
-      });
-      }, []);
+      // getIdToken().then((idToken) => {
+      //   getAllNotebooks(idToken).then((response) => {
+      //     console.log('Resposta do getAllNotebooks: ', response);
+      //     setNotebooks(response);
+      //   }
+      //   );
+      // });
+      }, 
+      [router]);
 
     async function getIdToken() {
       var idToken = await Auth.currentSession().then((response) => {
