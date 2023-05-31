@@ -51,14 +51,16 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return withdraw;
   }
   async finishWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
-    const withdraw = this.withdraws.find(
-      (withdraw) => withdraw.numSerie === numSerie
-    ) as Withdraw;
+    const withdraw = this.withdraws.find((withdraw) => {
+      return withdraw.numSerie === numSerie;
+    });
+
     if (!withdraw) {
-      throw new NoItemsFoundError(`withdraw numSerie: ${numSerie}`);
+      throw new NoItemsFoundError('numSerie: ' + numSerie);
     }
-    withdraw.setFinishTime = Date.now();
-    this.withdraws.splice(this.withdraws.indexOf(withdraw), 1);
+
+    withdraw.setFinishTime = 1672585200001;
+
     return withdraw;
   }
 
@@ -69,11 +71,15 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
       var isActive = false;
       if (withdraw.finishTime !== null) {
         isActive = true;
-      const notebook = new Notebook({
-        numSerie,
-        isActive,
-      });
-      notebooks.push([notebook, [withdraw]]);
-    }}
+        const notebook = new Notebook({
+          numSerie,
+          isActive,
+        });
+        notebooks.push([notebook, [withdraw]]);
+      }
+    }
     return notebooks;
-}}
+  }
+}
+
+decorate(injectable(), WithdrawRepositoryMock);
