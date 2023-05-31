@@ -32,7 +32,7 @@ import {
 } from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
 import DialogComponentChangeEmail from '../../components/DialogMUI/DialogChangeEmailADM';
 import { DialogText } from '@/components/Dialog';
@@ -40,12 +40,15 @@ import { IconButton } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import { useRouter } from 'next/navigation';
 import { NotebookContext } from '@/contexts/notebook_provider';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
+import { Notebook } from '@/@clean/shared/domain/entities/notebook';
+import { Withdraw } from '@/@clean/shared/domain/entities/withdraw';
 
 export interface IFormDevolution {
   numSerie: string;
 }
 
-export default function PainelAdmPage() {
+export default async function PainelAdmPage() {
   const { handleSubmit, setError, register, formState: { errors } } = useForm<IFormDevolution>();
   const router = useRouter();
   const { validateNumSerieInJson } = useContext(NotebookContext);
@@ -70,6 +73,10 @@ export default function PainelAdmPage() {
     setOpenDialogChangeEmail(false);
   };
 
+  const { getAllNotebooks} = useContext(WithdrawContext);
+  const [notebooks, setNotebooks] = useState<[Notebook, Withdraw[]][]>([]);
+
+
   const onSubmitDevolution: SubmitHandler<IFormDevolution> = async (data) => {
     if (!validateNumSerieInJson(data.numSerie))
       setError('numSerie', {
@@ -82,8 +89,8 @@ export default function PainelAdmPage() {
   };
 
   const [valueDialogDevolution, setValueDialogDevolution] = React.useState('');
-
   useEffect(() => {
+    console.log('Entrou no useEffect');
     const response = Auth.currentAuthenticatedUser();
     response
       .then((user) => {
@@ -98,7 +105,24 @@ export default function PainelAdmPage() {
       .catch((error) => {
         router.push('/');
       });
-  }, [router]);
+      getIdToken().then((idToken) => {
+        getAllNotebooks(idToken).then((response) => {
+          console.log('Resposta do getAllNotebooks: ', response);
+          setNotebooks(response);
+        }
+        );
+      });
+      }, []);
+
+    async function getIdToken() {
+      var idToken = await Auth.currentSession().then((response) => {
+        return response.getIdToken().getJwtToken();
+      }).catch((error) => {
+        console.log(error);
+        return '';
+      });
+      return idToken;
+    }
 
   return (
     <Container className={hind.className}>
@@ -187,7 +211,7 @@ export default function PainelAdmPage() {
               />
               <ListNumSerie>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
+                  <ListItemLeft>34059</ListItemLeft>
                   <ListItemRight>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                       <CircleIconGreen />
@@ -539,7 +563,7 @@ export default function PainelAdmPage() {
         <div>
           <hr></hr>
           <DialogText style={{ fontWeight: '700', fontSize: '25px' }}>
-            Número de Série: 38029
+            Número de Série: {valueDialogDevolution}
           </DialogText>
           <DialogText>
             Horário de Retirada: <strong>7:40</strong>

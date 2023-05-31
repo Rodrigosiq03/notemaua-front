@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { http } from '../http';
 import { CreateWithdrawUsecase } from '@/@clean/modules/withdraw/usecases/create_withdraw_usecase';
-import { GetAllWithdrawsUsecase } from '@/@clean/modules/withdraw/usecases/get_all_withdraws_usecase';
+import { GetAllNotebooksUsecase } from '@/@clean/modules/withdraw/usecases/get_all_notebooks_usecase';
 import { FinishWithdrawUsecase } from '@/@clean/modules/withdraw/usecases/finish_withdraw_usecase';
 import { WithdrawRepositoryMock } from '../repositories/withdraw_repository_mock';
 import { WithdrawRepositoryHttp } from '../repositories/withdraw_repository_http';
@@ -17,7 +17,7 @@ export const RegistryWithdraw = {
 
   // Usecases
   CreateWithdrawUsecase: Symbol.for('CreateWithdrawUsecase'),
-  GetAllWithdrawsUsecase: Symbol.for('GetAllWithdrawsUsecase'),
+  GetAllNotebooksUsecase: Symbol.for('GetAllNotebooksUsecase'),
   FinishWithdrawUsecase: Symbol.for('FinishWithdrawUsecase'),
 };
 
@@ -52,18 +52,18 @@ containerWithdraw
   });
 
 containerWithdraw
-  .bind(RegistryWithdraw.GetAllWithdrawsUsecase)
+  .bind(RegistryWithdraw.GetAllNotebooksUsecase)
   .toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new GetAllWithdrawsUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryWithdraw.WithdrawRepositoryMock)
       );
     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new GetAllWithdrawsUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryWithdraw.WithdrawRepositoryHttp)
       );
     } else {
-      return new GetAllWithdrawsUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryWithdraw.WithdrawRepositoryMock)
       );
     }
