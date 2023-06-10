@@ -1,3 +1,4 @@
+import React from 'react';
 import { ImageLogoNoteMaua } from '../Image';
 import logoNoteMaua from 'public/images/logoNoteMaua.svg';
 

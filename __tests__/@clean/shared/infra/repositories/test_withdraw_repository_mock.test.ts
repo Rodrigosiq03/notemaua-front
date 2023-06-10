@@ -1,6 +1,5 @@
-import { NoItemsFoundError } from '@/@clean/shared/domain/helpers/errors/domain_error';
-import { NotebookRepositoryMock } from '@/@clean/shared/infra/repositories/notebook_repository_mock';
-import { WithdrawRepositoryMock } from '@/@clean/shared/infra/repositories/withdraw_repository_mock';
+import { NoItemsFoundError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error';
+import { WithdrawRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/withdraw_repository_mock';
 
 test('Test withdraw repository mock get all withdraws', () => {
   const repo = new WithdrawRepositoryMock();
@@ -23,7 +22,10 @@ test('Test withdraw repository mock create withdraw', async () => {
   const repoWithdraw = new WithdrawRepositoryMock();
   const withdraws = await repoWithdraw.getAllWithdraws();
 
-  const withdraw = await repoWithdraw.createWithdraw('34103');
+  const withdraw = await repoWithdraw.createWithdraw(
+    '34103',
+    '22.00680-0@maua.br'
+  );
 
   expect(withdraw.numSerie).toBe('34103');
   expect(withdraws.length).toBe(4);

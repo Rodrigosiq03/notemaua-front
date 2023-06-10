@@ -72,7 +72,7 @@ export class Notebook {
     };
   }
 
-  static fromJSON(json: JsonProps): NotebookTreatment {}
+  // static fromJSON(json: JsonProps): NotebookTreatment {}
 
   static validateNumSerie(numSerie: string): boolean {
     // validate length of num_serie

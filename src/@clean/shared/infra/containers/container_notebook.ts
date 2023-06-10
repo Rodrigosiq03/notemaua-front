@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_all_notebooks_usecase';
+
 import { http } from '../http';
 import { NotebookRepositoryMock } from '../repositories/notebook_repository_mock';
 import { NotebookRepositoryHttp } from '../repositories/notebook_repository_http';
-import { ValidateNumSerieInJsonUsecase } from '@/@clean/modules/notebook/usecases/validate_numSerie_in_json';
+import { GetNotebookUsecase } from '../../../modules/notebook/usecases/get_all_notebooks_usecase';
 
 export const RegistryNotebook = {
   // Axios Adapter
@@ -51,20 +51,20 @@ containerNotebook
     }
   });
 
-containerNotebook
-  .bind(RegistryNotebook.ValidateNumSerieInJsonUsecase)
-  .toDynamicValue((context) => {
-    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new ValidateNumSerieInJsonUsecase(
-        context.container.get(RegistryNotebook.NotebookRepositoryMock)
-      );
-    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new ValidateNumSerieInJsonUsecase(
-        context.container.get(RegistryNotebook.NotebookRepositoryHttp)
-      );
-    } else {
-      return new ValidateNumSerieInJsonUsecase(
-        context.container.get(RegistryNotebook.NotebookRepositoryMock)
-      );
-    }
-  });
+// containerNotebook
+//   .bind(RegistryNotebook.ValidateNumSerieInJsonUsecase)
+//   .toDynamicValue((context) => {
+//     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+//       return new ValidateNumSerieInJsonUsecase(
+//         context.container.get(RegistryNotebook.NotebookRepositoryMock)
+//       );
+//     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+//       return new ValidateNumSerieInJsonUsecase(
+//         context.container.get(RegistryNotebook.NotebookRepositoryHttp)
+//       );
+//     } else {
+//       return new ValidateNumSerieInJsonUsecase(
+//         context.container.get(RegistryNotebook.NotebookRepositoryMock)
+//       );
+//     }
+//   });

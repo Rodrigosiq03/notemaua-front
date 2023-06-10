@@ -1,10 +1,10 @@
-import { INotebookRepository } from '@/@clean/modules/notebook/domain/repositories/notebook_repository_interface';
 import { JsonProps, Notebook } from '../../domain/entities/notebook';
 import { decorate, injectable } from 'inversify';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import notebooksJson from '../jsons/notebooks.json';
 import { Withdraw } from '../../domain/entities/withdraw';
+import { INotebookRepository } from '../../../modules/notebook/domain/repositories/notebook_repository_interface';
 
 interface NotebookJson {
   numSerie: string;

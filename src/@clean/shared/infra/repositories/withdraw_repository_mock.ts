@@ -30,12 +30,11 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return this.withdraws;
   }
 
-  async createWithdraw(numSerie: string): Promise<Withdraw> {
-    const email = '22.00680-0@maua.br';
+  async createWithdraw(numSerie: string, email: string): Promise<Withdraw> {
     const withdraw = new Withdraw({
       numSerie,
-      withdrawTime: Date.now(),
       email,
+      withdrawTime: Date.now(),
       finishTime: null,
     });
 

@@ -1,4 +1,4 @@
-namespace NodeJS {
+export namespace NodeJS {
   interface ProcessEnv {
     NEXT_PUBLIC_STAGE: string;
     NEXT_PUBLIC_REGION: string;

@@ -7,7 +7,7 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
     throw new Error('Method not implemented.');
   }
 
-  createWithdraw(numSerie: string): Promise<Withdraw> {
+  createWithdraw(numSerie: string, email: string): Promise<Withdraw> {
     throw new Error('Method not implemented.');
   }
 

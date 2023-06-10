@@ -9,3 +9,9 @@ test('Test get a notebook usecase', async () => {
 
   expect(notebooks).toBeInstanceOf(Array);
 });
+
+test('Test get a notebook usecase with invalid numSerie', () => {
+  const repo = new NotebookRepositoryMock();
+  const usecase = new GetNotebookUsecase(repo);
+  expect(usecase.execute()).rejects.toThrow('Field numSerie is not valid');
+});
