@@ -7,25 +7,22 @@ import {
 } from '../@clean/shared/infra/containers/container_withdraw';
 import { CreateWithdrawUsecase } from '../@clean/modules/withdraw/usecases/create_withdraw_usecase';
 import { FinishWithdrawUsecase } from '../@clean/modules/withdraw/usecases/finish_withdraw_usecase';
-import { GetAllNotebooksUsecase } from '../@clean/modules/withdraw/usecases/get_all_notebooks_usecase';
-import { Notebook } from '@/@clean/shared/domain/entities/notebook';
+import { GetAllWithdrawsUsecase } from '../@clean/modules/withdraw/usecases/get_all_withdraws_usecase';
 
 export type WithdrawContextType = {
   withdraws: Withdraw[];
-  notebooks: [Notebook, Withdraw[]][]
-  createWithdraw: (numSerie: string, idToken: string) => void;
-  finishWithdraw: (numSerie: string, idToken: string) => void;
-  getAllNotebooks: (idToken: string) => Promise<[Notebook, Withdraw[]][]>;
+  createWithdraw: (numSerie: string) => void;
+  finishWithdraw: (numSerie: string) => void;
+  getAllWithdraws: () => void;
   error: Error | null;
   setErrorNull: () => void;
 };
 
 const defaultContext: WithdrawContextType = {
   withdraws: [],
-  notebooks: [],
-  createWithdraw: (numSerie: string, idToken: string) => {},
-  finishWithdraw: (numSerie: string, idToken: string) => {},
-  getAllNotebooks: (idToken: string) => Promise.resolve([]),
+  createWithdraw: (numSerie: string) => {},
+  finishWithdraw: (numSerie: string) => {},
+  getAllWithdraws: () => {},
   error: null,
   setErrorNull: () => {},
 };
@@ -40,21 +37,17 @@ const finishWithdrawUsecase = containerWithdraw.get<FinishWithdrawUsecase>(
   RegistryWithdraw.FinishWithdrawUsecase
 );
 
-const getAllNotebooksUsecase = containerWithdraw.get<GetAllNotebooksUsecase>(
-  RegistryWithdraw.GetAllNotebooksUsecase
+const getAllWithdrawsUsecase = containerWithdraw.get<GetAllWithdrawsUsecase>(
+  RegistryWithdraw.GetAllWithdrawsUsecase
 );
 
 export function WithdrawProvider({ children }: PropsWithChildren) {
   const [withdraws, setWithdraws] = useState<Withdraw[]>([]);
-  const [notebooks, setNotebooks] = useState<[Notebook, Withdraw[]][]>([]);
   const [error, setError] = useState<Error | null>(null);
 
-  async function createWithdraw(numSerie: string, idToken: string) {
+  async function createWithdraw(numSerie: string) {
     try {
-      const withdrawCreated = await createWithdrawUsecase.execute(
-        numSerie,
-        idToken
-      );
+      const withdrawCreated = await createWithdrawUsecase.execute(numSerie);
       setWithdraws([...withdraws, withdrawCreated]);
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
@@ -63,9 +56,9 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function finishWithdraw(numSerie: string, idToken: string) {
+  async function finishWithdraw(numSerie: string) {
     try {
-      const withdrawFinished = await finishWithdrawUsecase.execute(numSerie, idToken);
+      const withdrawFinished = await finishWithdrawUsecase.execute(numSerie);
       setWithdraws([...withdraws, withdrawFinished]);
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
@@ -74,17 +67,14 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getAllNotebooks(idToken: string){
+  async function getAllWithdraws() {
     try {
-      const notebooks = await getAllNotebooksUsecase.execute(idToken);
-      setNotebooks(notebooks);
-      return notebooks;
-    }
-    catch (error: any) {
+      const allWithdrawsFound = await getAllWithdrawsUsecase.execute();
+      setWithdraws(allWithdrawsFound);
+    } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       const setError = error;
       setError(setError);
-      return [];
     }
   }
 
@@ -95,10 +85,9 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
     <WithdrawContext.Provider
       value={{
         withdraws,
-        notebooks,
         createWithdraw,
         finishWithdraw,
-        getAllNotebooks,
+        getAllWithdraws,
         error,
         setErrorNull,
       }}

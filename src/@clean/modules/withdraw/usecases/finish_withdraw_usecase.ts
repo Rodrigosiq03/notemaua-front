@@ -5,11 +5,11 @@ import { EntityError } from '../../../shared/domain/helpers/errors/domain_error'
 export class FinishWithdrawUsecase {
   constructor(private withdrawRepo: IWithdrawRepository) {}
 
-  async execute(numSerie: string, idToken: string) {
+  async execute(numSerie: string) {
     if (!Withdraw.validateNumSerie(numSerie)) {
       throw new EntityError('numSerie');
     }
-    const withdraw = await this.withdrawRepo.finishWithdraw(numSerie, idToken);
+    const withdraw = await this.withdrawRepo.finishWithdraw(numSerie);
     return withdraw;
   }
 }

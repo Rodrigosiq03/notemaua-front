@@ -8,9 +8,6 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { DialogButtonOK } from '../Dialog';
 import { Hind } from 'next/font/google';
-import { Auth } from 'aws-amplify';
-import { useContext } from 'react';
-import { WithdrawContext } from '@/contexts/withdraw_provider';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 
 const Transition = React.forwardRef(function Transition(
@@ -24,29 +21,13 @@ const Transition = React.forwardRef(function Transition(
 
 export default function DialogComponent({
   open,
-  value,
   children,
   handleClose,
 }: {
   open: boolean;
   children: React.ReactNode;
-  value: string;
   handleClose: () => void;
-  
-})
-
-  
-{
-  const { finishWithdraw } = useContext(WithdrawContext);
-
-  const onSubmit = async () => {
-    const idToken = await Auth.currentSession().then((response) => {
-      return response.getIdToken().getJwtToken();
-    });
-    const response = (await finishWithdraw(value, idToken)) as any;
-    handleClose();
-  };
-
+}) {
   return (
     <Dialog
       className={hind.className}
@@ -94,7 +75,7 @@ export default function DialogComponent({
               width: '250px',
               height: '100',
             }}
-            onClick={onSubmit}
+            onClick={handleClose}
           >
             Confirmar Devolução
           </DialogButtonOK>
