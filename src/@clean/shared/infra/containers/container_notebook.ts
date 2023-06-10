@@ -4,7 +4,7 @@ import { Container } from 'inversify';
 import { http } from '../http';
 import { NotebookRepositoryMock } from '../repositories/notebook_repository_mock';
 import { NotebookRepositoryHttp } from '../repositories/notebook_repository_http';
-import { GetNotebookUsecase } from '../../../modules/notebook/usecases/get_all_notebooks_usecase';
+import { GetAllNotebooksUsecase } from '../../../modules/notebook/usecases/get_all_notebooks_usecase';
 
 export const RegistryNotebook = {
   // Axios Adapter
@@ -15,7 +15,7 @@ export const RegistryNotebook = {
   NotebookRepositoryHttp: Symbol.for('NotebookRepositoryHttp'),
 
   // Usecases
-  GetNotebookUsecase: Symbol.for('GetNotebookUsecase'),
+  GetAllNotebooksUsecase: Symbol.for('GetAllNotebooksUsecase'),
   ValidateNumSerieInJsonUsecase: Symbol.for('ValidateNumSerieInJsonUsecase'),
 };
 
@@ -34,18 +34,18 @@ containerNotebook
   .to(NotebookRepositoryHttp);
 
 containerNotebook
-  .bind(RegistryNotebook.GetNotebookUsecase)
+  .bind(RegistryNotebook.GetAllNotebooksUsecase)
   .toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryMock)
       );
     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryHttp)
       );
     } else {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryMock)
       );
     }

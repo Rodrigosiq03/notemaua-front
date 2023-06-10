@@ -1,7 +1,7 @@
 import { Notebook } from '../../../shared/domain/entities/notebook';
 import { INotebookRepository } from '../domain/repositories/notebook_repository_interface';
 
-export class GetNotebookUsecase {
+export class GetAllNotebooksUsecase {
   constructor(private notebookRepo: INotebookRepository) {}
 
   async execute(): Promise<Notebook[]> {

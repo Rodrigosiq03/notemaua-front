@@ -19,7 +19,6 @@ const TitleADM = styled.a`
   font-weight: 700;
   font-size: 13px;
   padding-left: 240px;
-
 `;
 
 const UserText = styled.p`

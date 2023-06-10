@@ -26,11 +26,11 @@ import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfU
 import React, { useContext, useEffect } from 'react';
 import DialogScanner from '../../components/DialogMUI/DialogScanner';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { NotebookContext } from '@/contexts/notebook_provider';
-import { UserContext } from '@/contexts/user_provider';
+
 import { useRouter } from 'next/navigation';
 
 import { Auth } from 'aws-amplify';
+import { NotebookContext } from '../../contexts/notebook_provider';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -43,8 +43,7 @@ export default function RetiradaPage() {
     formState: { errors },
     setError,
   } = useForm<IFormRetirada>();
-  const { validateNumSerieInJson } = useContext(NotebookContext);
-  const { logOut } = useContext(UserContext);
+  // const { validateNumSerieInJson } = useContext(NotebookContext);
   const router = useRouter();
 
   // Scanner state
@@ -70,12 +69,12 @@ export default function RetiradaPage() {
 
   // logout logic
 
-  const handleLogout = async () => {
-    const response = await logOut();
-    if (response !== undefined || response !== null) {
-      router.push('/');
-    }
-  };
+  // const handleLogout = async () => {
+  //   const response = await logOut();
+  //   if (response !== undefined || response !== null) {
+  //     router.push('/');
+  //   }
+  // };
 
   useEffect(() => {
     const response = Auth.currentAuthenticatedUser();
@@ -95,14 +94,14 @@ export default function RetiradaPage() {
   }, [router]);
 
   // form logic
-  const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
-    if (!validateNumSerieInJson(data.numSerie))
-      setError('numSerie', {
-        type: 'manual',
-        message: 'Notebook não encontrado',
-      });
-    return;
-  };
+  // const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
+  //   if (!validateNumSerieInJson(data.numSerie))
+  //     setError('numSerie', {
+  //       type: 'manual',
+  //       message: 'Notebook não encontrado',
+  //     });
+  //   return;
+  // };
 
   return (
     <Container className={hind.className}>
@@ -111,7 +110,7 @@ export default function RetiradaPage() {
           <ContainerCardContent>
             <ImageComponentNoteMaua />
             <Title>Retirada de Notebook</Title>
-            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+            <FormContainer onSubmit={handleSubmit(() => null)}>
               <FormLabel htmlFor="numSerie">
                 Digite/Escaneie o número de serie:
               </FormLabel>
@@ -179,7 +178,7 @@ export default function RetiradaPage() {
               </FormButton>
             </FormContainer>
             <ContainerRow style={{ paddingTop: '20px' }}>
-              <ReturnLink onClick={handleLogout} href="#">
+              <ReturnLink onClick={() => null} href="#">
                 Sair
               </ReturnLink>
               <ReturnIcon />

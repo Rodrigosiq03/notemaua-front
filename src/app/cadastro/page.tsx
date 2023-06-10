@@ -136,7 +136,9 @@ export default function CadastroPage() {
               )}
               {errors.email?.type === 'manual' &&
                 errors.email?.message === 'Falha no cadastro do usuário' && (
-                  <span style={{ color: 'red' }}>Falha no cadastro do usuário</span>
+                  <span style={{ color: 'red' }}>
+                    Falha no cadastro do usuário
+                  </span>
                 )}
               {errors.email?.type === 'manual' &&
                 errors.email?.message === 'Email não válido para cadastro' && (

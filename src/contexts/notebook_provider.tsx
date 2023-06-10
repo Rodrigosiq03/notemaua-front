@@ -6,7 +6,7 @@ import {
   containerNotebook,
   RegistryNotebook,
 } from '../@clean/shared/infra/containers/container_notebook';
-import { GetNotebookUsecase } from '../@clean/modules/notebook/usecases/get_all_notebooks_usecase';
+import { GetAllNotebooksUsecase } from '../@clean/modules/notebook/usecases/get_all_notebooks_usecase';
 
 export type NotebookContextType = {
   notebooks: Notebook[];
@@ -23,8 +23,8 @@ const defaultContext: NotebookContextType = {
 
 export const NotebookContext = createContext(defaultContext);
 
-const getNotebookUsecase = containerNotebook.get<GetNotebookUsecase>(
-  RegistryNotebook.GetNotebookUsecase
+const getAllNotebooksUsecase = containerNotebook.get<GetAllNotebooksUsecase>(
+  RegistryNotebook.GetAllNotebooksUsecase
 );
 // const validateNumSerieInJsonUsecase =
 //   containerNotebook.get<ValidateNumSerieInJsonUsecase>(
@@ -36,7 +36,7 @@ export function NotebookProvider({ children }: PropsWithChildren) {
   const [error, setError] = useState<Error | null>(null);
   async function getAllNotebooks() {
     try {
-      await getNotebookUsecase.execute().then((notebooks) => {
+      await getAllNotebooksUsecase.execute().then((notebooks) => {
         setNotebooks(notebooks);
       });
     } catch (error: any) {

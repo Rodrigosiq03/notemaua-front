@@ -1,17 +1,11 @@
 import { Notebook } from '../../../../../src/@clean/shared/domain/entities/notebook';
 import { NotebookRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/notebook_repository_mock';
-import { GetNotebookUsecase } from '../../../../../src/@clean/modules/notebook/usecases/get_all_notebooks_usecase';
+import { GetAllNotebooksUsecase } from '../../../../../src/@clean/modules/notebook/usecases/get_all_notebooks_usecase';
 
 test('Test get a notebook usecase', async () => {
   const repo = new NotebookRepositoryMock();
-  const usecase = new GetNotebookUsecase(repo);
+  const usecase = new GetAllNotebooksUsecase(repo);
   const notebooks = await usecase.execute();
 
   expect(notebooks).toBeInstanceOf(Array);
-});
-
-test('Test get a notebook usecase with invalid numSerie', () => {
-  const repo = new NotebookRepositoryMock();
-  const usecase = new GetNotebookUsecase(repo);
-  expect(usecase.execute()).rejects.toThrow('Field numSerie is not valid');
 });
