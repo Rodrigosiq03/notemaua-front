@@ -35,10 +35,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import React, { useEffect } from 'react';
 import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
 import DialogComponentChangeEmail from '../../components/DialogMUI/DialogChangeEmailADM';
-import { DialogText } from '@/components/Dialog';
+
 import { IconButton } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import { useRouter } from 'next/navigation';
+import { DialogText } from '../../components/Dialog';
 
 export interface IFormDevolution {
   numSerie: string;

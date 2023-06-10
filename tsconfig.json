@@ -39,7 +39,8 @@
     "**/utils/**/*.ts",
     "**/types/**/*.ts",
     "**/contexts/**/*.ts",
-    "env.d.ts"
+    "env.d.ts",
+    "custom.d.ts",
   ],
   "exclude": ["node_modules"]
 }

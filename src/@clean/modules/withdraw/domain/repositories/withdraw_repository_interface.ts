@@ -1,4 +1,4 @@
-import { Withdraw } from '@/@clean/shared/domain/entities/withdraw';
+import { Withdraw } from '../../../../shared/domain/entities/withdraw';
 
 export interface IWithdrawRepository {
   getAllWithdraws(): Promise<Withdraw[]>;
