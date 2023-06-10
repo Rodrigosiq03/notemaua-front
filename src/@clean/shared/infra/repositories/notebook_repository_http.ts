@@ -10,8 +10,6 @@ interface NotebookJson {
   numSerie: string;
 }
 
-const idToken = localStorage.getItem(process.env.NEXT_PUBLIC_ACCESS_TOKEN_PUSH);
-
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
