@@ -42,7 +42,6 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     this.withdraws.push(withdraw);
     return withdraw;
   }
-
   async finishWithdraw(numSerie: string): Promise<Withdraw> {
     const withdraw = this.withdraws.find(
       (withdraw) => withdraw.numSerie === numSerie
