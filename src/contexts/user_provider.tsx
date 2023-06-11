@@ -13,10 +13,11 @@ import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_
 import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_usecase';
 import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_password_usecase';
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
-import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
+
 import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
 import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
 import { CompleteNewPasswordUsecase } from '@/@clean/modules/user/usecases/complete_new_password';
+import { ValidateEmailInJsonUsecase } from '../@clean/modules/user/usecases/validate_email_in_json';
 
 export type UserContextType = {
   users: User[];

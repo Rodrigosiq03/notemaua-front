@@ -32,7 +32,7 @@ import {
 } from '../../components/List';
 const hind = Hind({ subsets: ['latin'], weight: ['700', '300'] });
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import DialogComponentDevolution from '../../components/DialogMUI/DialogDevolution';
 import DialogComponentChangeEmail from '../../components/DialogMUI/DialogChangeEmailADM';
 
@@ -40,14 +40,22 @@ import { IconButton } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import { useRouter } from 'next/navigation';
 import { DialogText } from '../../components/Dialog';
+import { NotebookContext } from '@/contexts/notebook_provider';
 
 export interface IFormDevolution {
   numSerie: string;
 }
 
 export default function PainelAdmPage() {
-  const { handleSubmit } = useForm<IFormDevolution>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IFormDevolution>();
   const router = useRouter();
+
+  const { validateNumSerieInJson } = useContext(NotebookContext);
 
   const [openDialogDevolution, setOpenDialogDevolution] = React.useState(false);
   const [openDialogChangeEmail, setOpenDialogChangeEmail] =
@@ -96,20 +104,71 @@ export default function PainelAdmPage() {
         <CardWhiteADM>
           <FormContainer onSubmit={handleSubmit(onSubmitDevolution)}>
             <ContainerRowADM>
-              <FormContainerADM onSubmit={handleClickOpenDialogDevolution}>
-                <FormInput
-                  disableUnderline={true}
-                  placeholder="Número de série"
-                ></FormInput>
-                <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
-                <IconButton
-                  sx={{ marginLeft: '612px' }}
-                  onClick={handleClickOpenDialogChangeEmail}
-                >
-                  <PersonIconADM />
-                </IconButton>
-              </FormContainerADM>
+              <FormInput
+                type="text"
+                disableUnderline={true}
+                placeholder="Número de série"
+                {...register('numSerie', {
+                  required: 'Campo obrigatório',
+                  validate: (value) => validateNumSerieInJson(value),
+                  minLength: {
+                    value: 5,
+                    message: 'Número de série invalido!',
+                  },
+                  maxLength: {
+                    value: 5,
+                    message: 'Número de série invalido!',
+                  },
+                })}
+              ></FormInput>
+              <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
+              <IconButton
+                sx={{ marginLeft: '612px' }}
+                onClick={handleClickOpenDialogChangeEmail}
+              >
+                <PersonIconADM />
+              </IconButton>
             </ContainerRowADM>
+            {errors.numSerie && errors.numSerie?.type === 'required' && (
+              <span
+                style={{
+                  color: 'red',
+                  textAlign: 'center',
+                }}
+              >
+                Campo obrigatório
+              </span>
+            )}
+            {errors.numSerie && errors.numSerie?.type === 'validate' && (
+              <span
+                style={{
+                  color: 'red',
+                  textAlign: 'center',
+                }}
+              >
+                Número de série invalido!
+              </span>
+            )}
+            {errors.numSerie && errors.numSerie?.type === 'minLength' && (
+              <span
+                style={{
+                  color: 'red',
+                  textAlign: 'center',
+                }}
+              >
+                {errors.numSerie.message}
+              </span>
+            )}
+            {errors.numSerie && errors.numSerie?.type === 'maxLength' && (
+              <span
+                style={{
+                  color: 'red',
+                  textAlign: 'center',
+                }}
+              >
+                {errors.numSerie.message}
+              </span>
+            )}
             <CardADM>
               <hr
                 style={{
