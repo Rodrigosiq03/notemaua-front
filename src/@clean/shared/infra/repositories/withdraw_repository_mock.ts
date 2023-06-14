@@ -14,7 +14,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     }),
     new Withdraw({
       numSerie: '34101',
-      email: '22.01102-0@maua.br', // HEY LOUNIS
+      email: '', // HEY LOUNIS
       withdrawTime: 1672585200001,
       finishTime: 1672585200002,
     }),
@@ -30,10 +30,10 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return this.withdraws;
   }
 
-  async createWithdraw(numSerie: string, email: string): Promise<Withdraw> {
+  async createWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
     const withdraw = new Withdraw({
       numSerie,
-      email,
+      email: '22.00680-0@maua.br',
       withdrawTime: Date.now(),
       finishTime: null,
     });
@@ -41,7 +41,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     this.withdraws.push(withdraw);
     return withdraw;
   }
-  async finishWithdraw(numSerie: string): Promise<Withdraw> {
+  async finishWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
     const withdraw = this.withdraws.find(
       (withdraw) => withdraw.numSerie === numSerie
     ) as Withdraw;

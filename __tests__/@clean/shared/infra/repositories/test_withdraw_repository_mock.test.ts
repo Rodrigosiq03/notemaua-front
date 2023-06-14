@@ -34,7 +34,7 @@ test('Test withdraw repository mock finish withdraw', async () => {
   const repoWithdraw = new WithdrawRepositoryMock();
   const withdraws = await repoWithdraw.getAllWithdraws();
 
-  const withdraw = await repoWithdraw.finishWithdraw('34100');
+  const withdraw = await repoWithdraw.finishWithdraw('34100', 'teste_id_token');
 
   expect(withdraws.length).toBe(2);
   expect(withdraw.numSerie).toBe('34100');
@@ -42,8 +42,10 @@ test('Test withdraw repository mock finish withdraw', async () => {
 test('Test notebook error to find', async () => {
   const repo = new WithdrawRepositoryMock();
 
-  await expect(repo.finishWithdraw('34104')).rejects.toThrow(NoItemsFoundError);
-  await expect(repo.finishWithdraw('34104')).rejects.toThrow(
+  await expect(repo.finishWithdraw('34104', 'teste_id_token')).rejects.toThrow(
+    NoItemsFoundError
+  );
+  await expect(repo.finishWithdraw('34104', 'teste_id_token')).rejects.toThrow(
     'No items found for this withdraw numSerie: 34104'
   );
 });

@@ -19,4 +19,5 @@ export interface IUserRepository {
   signIn(email: string, password: string): Promise<User>;
   logout(): Promise<void>;
   completeNewPassword(email: string, newPassword: string): Promise<User>;
+  getIdToken(): Promise<string>;
 }

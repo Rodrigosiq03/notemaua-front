@@ -49,6 +49,7 @@ const CardWhiteADM = styled.div`
   background-color: white;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
 
   @media (max-width: 1550px) {
     width: 1400px;

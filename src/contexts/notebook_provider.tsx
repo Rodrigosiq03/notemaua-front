@@ -8,17 +8,24 @@ import {
 } from '../@clean/shared/infra/containers/container_notebook';
 import { GetAllNotebooksUsecase } from '../@clean/modules/notebook/usecases/get_all_notebooks_usecase';
 import { ValidateNumSerieInJsonUsecase } from '@/@clean/modules/notebook/usecases/validate_numSerie_in_json';
+import { Withdraw } from '@/@clean/shared/domain/entities/withdraw';
 
 export type NotebookContextType = {
-  notebooks: Notebook[];
-  getAllNotebooks: () => Promise<void>;
+  notebooks: [Notebook, Withdraw[]][];
+  getAllNotebooks: (
+    idToken: string
+  ) => Promise<[Notebook, Withdraw[]][] | undefined>;
   error: Error | null;
   validateNumSerieInJson: (numSerie: string) => boolean;
   setErrorNull: () => void;
 };
 const defaultContext: NotebookContextType = {
   notebooks: [],
-  getAllNotebooks: () => new Promise<void>(() => {}),
+  getAllNotebooks: async (
+    idToken: string
+  ): Promise<[Notebook, Withdraw[]][] | undefined> => {
+    return Promise.resolve([] as [Notebook, Withdraw[]][]);
+  },
   validateNumSerieInJson: () => false,
   error: null,
   setErrorNull: () => {},
@@ -35,13 +42,13 @@ const validateNumSerieInJsonUsecase =
   );
 
 export function NotebookProvider({ children }: PropsWithChildren) {
-  const [notebooks, setNotebooks] = useState<Notebook[]>([]);
+  const [notebooks, setNotebooks] = useState<[Notebook, Withdraw[]][]>([]);
   const [error, setError] = useState<Error | null>(null);
-  async function getAllNotebooks() {
+  async function getAllNotebooks(idToken: string) {
     try {
-      await getAllNotebooksUsecase.execute().then((notebooks) => {
-        setNotebooks(notebooks);
-      });
+      const notebooks = await getAllNotebooksUsecase.execute(idToken);
+      setNotebooks(notebooks);
+      return notebooks;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       setError(error);
@@ -54,8 +61,7 @@ export function NotebookProvider({ children }: PropsWithChildren) {
       return isValid;
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      const setError = error;
-      setError(setError);
+      setError(error);
       return false;
     }
   }

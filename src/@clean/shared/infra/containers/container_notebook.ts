@@ -22,10 +22,6 @@ export const RegistryNotebook = {
 
 export const containerNotebook = new Container();
 
-// containerUser.bind(RegistryNotebook.UserHttpRepository).toDynamicValue((context) => {
-//     return new UserHttpRepository(context.containerUser.get(RegistryNotebook.AxiosAdapter));
-// });
-
 containerNotebook
   .bind(RegistryNotebook.NotebookRepositoryMock)
   .to(NotebookRepositoryMock);

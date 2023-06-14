@@ -1,41 +1,40 @@
-import { JsonProps, Notebook } from '../../domain/entities/notebook';
+import { Notebook } from '../../domain/entities/notebook';
 import { decorate, injectable } from 'inversify';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 import notebooksJson from '../jsons/notebooks.json';
-import { Withdraw } from '../../domain/entities/withdraw';
+import { Withdraw, WithdrawJson } from '../../domain/entities/withdraw';
 import { INotebookRepository } from '../../../modules/notebook/domain/repositories/notebook_repository_interface';
 
 interface NotebookJson {
   numSerie: string;
 }
 
-const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-});
-
 export class NotebookRepositoryHttp implements INotebookRepository {
-  async getAllNotebooks(): Promise<Notebook[]> {
-    // const response = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL}/get-all-notebooks`,
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Accept: 'application/json',
-    //       Authorization: `Bearer ${idToken}`,
-    //     },
-    //   }
-    // // );
-    // // const reponseJson = await response.json();
-    // // const notebooks = Notebook.fromJSON(responseJson);
-    // // const response = await axiosInstance.get<JsonProps>('/get-all-notebooks');
-    // return notebooks;
-    throw new Error('Method not implemented.');
+  async getAllNotebooks(idToken: string): Promise<[Notebook, Withdraw[]][]> {
+    try {
+      const url = process.env.NEXT_PUBLIC_API_URL + '/get-all-notebooks';
+      const response = (await axios.get<[NotebookJson, WithdrawJson[]][]>(url, {
+        headers: { Authorization: `Bearer ${idToken}'` },
+      })) as any;
+      if (response.status === 200) {
+        const jsondata = JSON.stringify(response.data, null, 2);
+        const data = JSON.parse(jsondata).notebooks;
+        var notebooks = data;
+        console.log('notebooks is', notebooks);
+        return notebooks;
+      } else {
+        console.log('response data is', response.data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log('error response is', error);
+      } else {
+        console.log('unknown error');
+        console.log(error);
+      }
+    }
+    return notebooks;
   }
 
   validateNumSerieInJson(numSerie: string): boolean {

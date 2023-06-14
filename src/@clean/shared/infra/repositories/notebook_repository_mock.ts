@@ -3,6 +3,7 @@ import { INotebookRepository } from '../../../modules/notebook/domain/repositori
 import { Notebook } from '../../domain/entities/notebook';
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error';
 import { decorate, injectable } from 'inversify';
+import { Withdraw } from '../../domain/entities/withdraw';
 
 export class NotebookRepositoryMock implements INotebookRepository {
   private notebooks: Notebook[] = [
@@ -41,8 +42,34 @@ export class NotebookRepositoryMock implements INotebookRepository {
     }),
   ];
 
-  async getAllNotebooks(): Promise<Notebook[]> {
-    return this.notebooks;
+  private withdraws: Withdraw[] = [
+    new Withdraw({
+      numSerie: '34100',
+      email: '22.00680-0@maua.br',
+      withdrawTime: 1672585200001,
+      finishTime: 1672585200002,
+    }),
+    new Withdraw({
+      numSerie: '34101',
+      email: '22.01102-0@maua.br', // HEY LOUNIS
+      withdrawTime: 1672585200001,
+      finishTime: 1672585200002,
+    }),
+    new Withdraw({
+      numSerie: '34102',
+      email: '22.01049-0@maua.br', // vitin
+      withdrawTime: 1672585200001,
+      finishTime: 1672585200002,
+    }),
+  ];
+
+  async getAllNotebooks(): Promise<[Notebook, Withdraw[]][]> {
+    return this.notebooks.map((notebook) => {
+      const withdraws = this.withdraws.filter(
+        (withdraw) => withdraw.numSerie === notebook.numSerie
+      );
+      return [notebook, withdraws];
+    });
   }
 
   validateNumSerieInJson(numSerie: string): boolean {

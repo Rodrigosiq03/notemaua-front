@@ -1,12 +1,24 @@
 import { EntityError } from '../helpers/errors/domain_error';
-import { Withdraw } from './withdraw';
+import { Withdraw, WithdrawJson, WithdrawProps } from './withdraw';
 
 export type NotebookProps = {
   numSerie: string;
   isActive?: boolean;
 };
 
-export type JsonProps = {
+export type NotebookJson = {
+  notebooks: [
+    {
+      notebook: {
+        num_serie: string;
+        isActive: boolean;
+      };
+      withdraws: WithdrawJson[];
+    }
+  ];
+};
+
+export type NotebooksConverted = {
   notebooks: [
     {
       notebook: {
@@ -72,10 +84,40 @@ export class Notebook {
     };
   }
 
-  // static fromJSON(json: JsonProps): NotebookTreatment {}
+  static fromJSON(json: NotebookJson): [Notebook, Withdraw[]][] {
+    const notebooksData = json.notebooks;
+
+    const notebooksAndWithdraws: [Notebook, Withdraw[]][] = [];
+
+    for (const notebookData of notebooksData) {
+      const notebookJson = notebookData.notebook;
+
+      const notebook = new Notebook({
+        numSerie: notebookJson.num_serie,
+        isActive: notebookJson.isActive,
+      });
+
+      const withdrawJsons = notebookData.withdraws;
+      const withdraws: Withdraw[] = [];
+
+      for (const withdrawJson of withdrawJsons) {
+        const withdraw = new Withdraw({
+          numSerie: withdrawJson.num_serie,
+          email: withdrawJson.email,
+          withdrawTime: withdrawJson.withdraw_time,
+          finishTime: withdrawJson.finish_time,
+        });
+
+        withdraws.push(withdraw);
+      }
+
+      notebooksAndWithdraws.push([notebook, withdraws]);
+    }
+
+    return notebooksAndWithdraws;
+  }
 
   static validateNumSerie(numSerie: string): boolean {
-    // validate length of num_serie
     if (numSerie == undefined) {
       return false;
     }

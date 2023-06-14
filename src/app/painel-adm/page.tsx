@@ -3,6 +3,7 @@
 import { CardADM, CardGrayADM, CardWhiteADM } from '../../components/Card';
 import {
   Container,
+  ContainerRow,
   ContainerRowADM,
   ContainerRowADM2,
 } from '../../components/Container';
@@ -22,6 +23,7 @@ import {
   CircleIconGreen,
   CircleIconRed,
   PersonIconADM,
+  ReturnIcon,
   SearchIcon,
 } from '../../components/Icon';
 import { TitleADM } from '../../components/Title';
@@ -41,21 +43,45 @@ import { Auth } from 'aws-amplify';
 import { useRouter } from 'next/navigation';
 import { DialogText } from '../../components/Dialog';
 import { NotebookContext } from '@/contexts/notebook_provider';
+import { UserContext } from '@/contexts/user_provider';
+import { WithdrawJson } from '@/@clean/shared/domain/entities/withdraw';
+import { ReturnLink } from '@/components/Link';
+import { type } from 'os';
 
 export interface IFormDevolution {
   numSerie: string;
 }
 
+export interface IFormFilteredNotebooks {
+  search: string;
+  filterBy: string;
+}
+
 export default function PainelAdmPage() {
   const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
+    register: registerDevolution,
+    handleSubmit: handleSubmitDevolution,
+    setError: setErrorDevolution,
+    formState: { errors: errorsDevolution },
   } = useForm<IFormDevolution>();
+
+  const {
+    register: registerFilteredNotebooks,
+    handleSubmit: handleSubmitFilteredNotebooks,
+    setError: setErrorFilteredNotebooks,
+    formState: { errors: errorsFilteredNotebooks },
+  } = useForm<IFormFilteredNotebooks>();
   const router = useRouter();
 
-  const { validateNumSerieInJson } = useContext(NotebookContext);
+  const { validateNumSerieInJson, getAllNotebooks } =
+    useContext(NotebookContext);
+  const { getIdToken, getNameFromJson, logOut } = useContext(UserContext);
+
+  const [filterBy, setFilterBy] = React.useState('');
+  const [search, setSearch] = React.useState('');
+
+  const [notebooks, setNotebooks] = React.useState<any>([]);
+  const [notebooksFiltered, setNotebooksFiltered] = React.useState<any>([]);
 
   const [openDialogDevolution, setOpenDialogDevolution] = React.useState(false);
   const [openDialogChangeEmail, setOpenDialogChangeEmail] =
@@ -76,9 +102,82 @@ export default function PainelAdmPage() {
     setOpenDialogChangeEmail(false);
   };
 
-  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data) => {
+  const onChangeHandlerFilterBy = (event: any) => {
+    setFilterBy(event.target.value);
+  };
+
+  const filterNotebooks = () => {
+    if (filterBy === 'RA') {
+      const notebooksFiltered = notebooks.filter((notebook: any) => {
+        return notebook.notebook.ra === search;
+      });
+      setNotebooksFiltered(notebooksFiltered);
+    } else if (filterBy === 'Número de série') {
+      const notebook = validateNumSerieInJson(search);
+      if (notebook) {
+        setNotebooksFiltered([notebook]);
+      }
+    } else {
+      setNotebooksFiltered([]);
+    }
+  };
+
+  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data, event) => {
+    event?.preventDefault();
     handleClickOpenDialogDevolution();
   };
+
+  const onSubmitFilteredNotebooks: SubmitHandler<IFormFilteredNotebooks> = (
+    data,
+    event
+  ) => {
+    event?.preventDefault();
+    filterNotebooks();
+  };
+
+  const handleLogout = async () => {
+    const response = await logOut();
+    if (response !== undefined || response !== null) {
+      router.push('/');
+    }
+  };
+
+  function convertTimestampToHoursMinutes(timestamp: string | number): string {
+    if (typeof timestamp === 'string') {
+      const date = new Date(parseInt(timestamp));
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      // Adiciona um zero à esquerda se os minutos forem menores que 10
+      const formattedMinutes =
+        minutes < 10 ? `0${minutes}` : minutes.toString();
+      return `${hours}:${formattedMinutes}`;
+    } else if (typeof timestamp === 'number' && timestamp > 0.0) {
+      const date = new Date(timestamp);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      // Adiciona um zero à esquerda se os minutos forem menores que 10
+      const formattedMinutes =
+        minutes < 10 ? `0${minutes}` : minutes.toString();
+      return `${hours}:${formattedMinutes}`;
+    }
+    return '';
+  }
+
+  let poolingTimeout: NodeJS.Timeout;
+  async function loadNotebooks() {
+    const idToken = await getIdToken();
+    if (!idToken) {
+      return;
+    }
+    const notebooks = await getAllNotebooks(idToken);
+    if (notebooks) {
+      setNotebooks(notebooks);
+    }
+
+    poolingTimeout = setTimeout(() => {
+      loadNotebooks();
+    }, 1000);
+  }
 
   useEffect(() => {
     const response = Auth.currentAuthenticatedUser();
@@ -95,6 +194,11 @@ export default function PainelAdmPage() {
       .catch((error) => {
         router.push('/');
       });
+    loadNotebooks();
+
+    return () => {
+      clearTimeout(poolingTimeout);
+    };
   }, [router]);
 
   return (
@@ -102,83 +206,108 @@ export default function PainelAdmPage() {
       <ImageComponentNoteMaua />
       <CardGrayADM>
         <CardWhiteADM>
-          <FormContainer onSubmit={handleSubmit(onSubmitDevolution)}>
+          <FormContainer onSubmit={handleSubmitDevolution(onSubmitDevolution)}>
             <ContainerRowADM>
-              <FormInput
-                type="text"
-                disableUnderline={true}
-                placeholder="Número de série"
-                {...register('numSerie', {
-                  required: 'Campo obrigatório',
-                  validate: (value) => validateNumSerieInJson(value),
-                  minLength: {
-                    value: 5,
-                    message: 'Número de série invalido!',
-                  },
-                  maxLength: {
-                    value: 5,
-                    message: 'Número de série invalido!',
-                  },
-                })}
-              ></FormInput>
-              <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
+              <ContainerRow
+                style={{ paddingLeft: '20px', marginBottom: '32px' }}
+              >
+                <ReturnLink onClick={handleLogout} href="#">
+                  Sair
+                </ReturnLink>
+                <ReturnIcon />
+              </ContainerRow>
+              <div
+                style={{
+                  paddingTop: '20px',
+                }}
+              >
+                <FormInput
+                  type="text"
+                  disableUnderline={true}
+                  placeholder="Número de série"
+                  {...registerDevolution('numSerie', {
+                    required: 'Campo obrigatório',
+                    validate: (value) => validateNumSerieInJson(value),
+                    minLength: {
+                      value: 5,
+                      message: 'Número de série invalido!',
+                    },
+                    maxLength: {
+                      value: 5,
+                      message: 'Número de série invalido!',
+                    },
+                  })}
+                ></FormInput>
+                <FormButtonADM type="submit">Confirmar devolução</FormButtonADM>
+              </div>
               <IconButton
-                sx={{ marginLeft: '612px' }}
+                sx={{ marginLeft: '12px', marginBottom: '12px' }}
                 onClick={handleClickOpenDialogChangeEmail}
               >
                 <PersonIconADM />
               </IconButton>
             </ContainerRowADM>
-            {errors.numSerie && errors.numSerie?.type === 'required' && (
-              <span
-                style={{
-                  color: 'red',
-                  textAlign: 'center',
-                }}
-              >
-                Campo obrigatório
-              </span>
-            )}
-            {errors.numSerie && errors.numSerie?.type === 'validate' && (
-              <span
-                style={{
-                  color: 'red',
-                  textAlign: 'center',
-                }}
-              >
-                Número de série invalido!
-              </span>
-            )}
-            {errors.numSerie && errors.numSerie?.type === 'minLength' && (
-              <span
-                style={{
-                  color: 'red',
-                  textAlign: 'center',
-                }}
-              >
-                {errors.numSerie.message}
-              </span>
-            )}
-            {errors.numSerie && errors.numSerie?.type === 'maxLength' && (
-              <span
-                style={{
-                  color: 'red',
-                  textAlign: 'center',
-                }}
-              >
-                {errors.numSerie.message}
-              </span>
-            )}
-            <CardADM>
-              <hr
-                style={{
-                  marginLeft: '20px',
-                  marginRight: '20px',
-                  borderColor: 'd6d6d6',
-                }}
-              />
+            {errorsDevolution.numSerie &&
+              errorsDevolution.numSerie?.type === 'required' && (
+                <span
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                  }}
+                >
+                  Campo obrigatório
+                </span>
+              )}
+            {errorsDevolution.numSerie &&
+              errorsDevolution.numSerie?.type === 'validate' && (
+                <span
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                  }}
+                >
+                  Número de série invalido!
+                </span>
+              )}
+            {errorsDevolution.numSerie &&
+              errorsDevolution.numSerie?.type === 'minLength' && (
+                <span
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                  }}
+                >
+                  {errorsDevolution.numSerie.message}
+                </span>
+              )}
+            {errorsDevolution.numSerie &&
+              errorsDevolution.numSerie?.type === 'maxLength' && (
+                <span
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                  }}
+                >
+                  {errorsDevolution.numSerie.message}
+                </span>
+              )}
+          </FormContainer>
+          <CardADM>
+            <hr
+              style={{
+                marginLeft: '20px',
+                marginRight: '20px',
+                borderColor: 'd6d6d6',
+              }}
+            />
+            <FormContainer
+              onSubmit={handleSubmitFilteredNotebooks(
+                onSubmitFilteredNotebooks
+              )}
+            >
               <ContainerRowADM2>
                 <FormInput
+                  type="text"
                   disableUnderline={true}
                   placeholder="Pesquisar"
                   style={{
@@ -187,375 +316,118 @@ export default function PainelAdmPage() {
                     height: '30px',
                     marginBottom: '15px',
                   }}
+                  {...registerFilteredNotebooks('search', {
+                    required: 'Campo obrigatório',
+                  })}
                 ></FormInput>
-                <FormSelect>
-                  <option>RA</option>
-                  <option>Número de série</option>
+                <FormSelect
+                  value={filterBy}
+                  {...registerFilteredNotebooks('filterBy')}
+                  onChange={onChangeHandlerFilterBy}
+                >
+                  <option value="">-- Filtrar por --</option>
+                  <option value="RA">RA</option>
+                  <option value="Número de série">Número de série</option>
                 </FormSelect>
                 <FormButtonSearch type="submit">
                   <SearchIcon />
                 </FormButtonSearch>
               </ContainerRowADM2>
-              <TitleADM style={{ paddingLeft: '50px' }}>
-                Número de Série
-              </TitleADM>
-              <TitleADM style={{ paddingLeft: '270px' }}>Estado</TitleADM>
-              <TitleADM>Horário de Retirada</TitleADM>
-              <TitleADM style={{ paddingLeft: '226px' }}>RA do Aluno</TitleADM>
-              <TitleADM style={{ paddingLeft: '305px' }}>
-                Nome do Aluno
-              </TitleADM>
-              <hr
-                style={{
-                  marginLeft: '20px',
-                  marginRight: '20px',
-                  borderColor: 'd6d6d6',
-                  marginTop: '0px',
-                }}
-              />
-              <ListNumSerie>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconGreen />
-                      <div style={{ paddingLeft: '4px' }}>Ativo</div>
-                    </div>
-                    <div>7:40</div>
-                    <div>22.01049-0</div>
-                    <div>Vitor Moretti Negresiolo</div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconGreen />
-                      <div style={{ paddingLeft: '4px' }}>Ativo</div>
-                    </div>
-                    <div>9:00</div>
-                    <div>22.01049-0</div>
-                    <div>Vitor Moretti Negresiolo</div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemLeft>38029</ListItemLeft>
-                  <ListItemRight>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <CircleIconRed />
-                      <div style={{ paddingLeft: '4px' }}>Inativo</div>
-                    </div>
-                  </ListItemRight>
-                </div>
-              </ListNumSerie>
-            </CardADM>
-          </FormContainer>
+            </FormContainer>
+            <TitleADM style={{ paddingLeft: '50px' }}>Número de Série</TitleADM>
+            <TitleADM style={{ paddingLeft: '270px' }}>Estado</TitleADM>
+            <TitleADM>Horário de Retirada</TitleADM>
+            <TitleADM style={{ paddingLeft: '226px' }}>RA do Aluno</TitleADM>
+            <TitleADM style={{ paddingLeft: '305px' }}>Nome do Aluno</TitleADM>
+            <hr
+              style={{
+                marginLeft: '20px',
+                marginRight: '20px',
+                borderColor: 'd6d6d6',
+                marginTop: '0px',
+              }}
+            />
+            <ListNumSerie>
+              {notebooks
+                .filter((notebook: any) => notebook.notebook.isActive)
+                .map((notebook: any, index: number) => (
+                  <div
+                    key={index}
+                    style={{ display: 'flex', flexDirection: 'row' }}
+                  >
+                    <ListItemLeft>{notebook.notebook.num_serie}</ListItemLeft>
+                    {notebook.notebook.isActive ? (
+                      <ListItemRight>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <CircleIconGreen />
+                          <div style={{ paddingLeft: '4px' }}>Ativo</div>
+                        </div>
+                        {notebook.withdraws.length > 0 ? (
+                          <>
+                            {notebook.withdraws.map(
+                              (
+                                withdraw: WithdrawJson,
+                                withdrawIndex: number
+                              ) => (
+                                <>
+                                  <div key={withdrawIndex}>
+                                    {convertTimestampToHoursMinutes(
+                                      withdraw.withdraw_time
+                                    )}
+                                  </div>
+                                  <div key={withdrawIndex}>
+                                    {withdraw.email.split('@')[0]}
+                                  </div>
+                                  <div key={withdrawIndex}>
+                                    {getNameFromJson(
+                                      withdraw.email.split('@')[0]
+                                    )}
+                                  </div>
+                                </>
+                              )
+                            )}
+                          </>
+                        ) : (
+                          <div>No withdraws available</div>
+                        )}
+                      </ListItemRight>
+                    ) : (
+                      <ListItemRight>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <CircleIconRed />
+                          <div style={{ paddingLeft: '4px' }}>Inativo</div>
+                        </div>
+                      </ListItemRight>
+                    )}
+                  </div>
+                ))}
+              {notebooks
+                .filter((notebook: any) => !notebook.notebook.isActive)
+                .map((notebook: any, index: number) => (
+                  <div
+                    key={index}
+                    style={{ display: 'flex', flexDirection: 'row' }}
+                  >
+                    <ListItemLeft>{notebook.notebook.num_serie}</ListItemLeft>
+                    <ListItemRight>
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <CircleIconRed />
+                        <div style={{ paddingLeft: '4px' }}>Inativo</div>
+                      </div>
+                    </ListItemRight>
+                  </div>
+                ))}
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <ListItemLeft>38029</ListItemLeft>
+                <ListItemRight>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <CircleIconRed />
+                    <div style={{ paddingLeft: '4px' }}>Inativo</div>
+                  </div>
+                </ListItemRight>
+              </div>
+            </ListNumSerie>
+          </CardADM>
         </CardWhiteADM>
       </CardGrayADM>
       <ImageComponentMaua style={{ paddingTop: '18px' }} />

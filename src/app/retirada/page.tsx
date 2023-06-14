@@ -32,6 +32,7 @@ import { useRouter } from 'next/navigation';
 import { Auth } from 'aws-amplify';
 import { NotebookContext } from '../../contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -45,8 +46,9 @@ export default function RetiradaPage() {
     setError,
   } = useForm<IFormRetirada>();
 
-  const { validateNumSerieInJson } = useContext(NotebookContext);
-  const { logOut } = useContext(UserContext);
+  const { validateNumSerieInJson, error } = useContext(NotebookContext);
+  const { logOut, getIdToken } = useContext(UserContext);
+  const { createWithdraw } = useContext(WithdrawContext);
   const router = useRouter();
 
   // Scanner state
@@ -97,13 +99,26 @@ export default function RetiradaPage() {
   }, [router]);
 
   // form logic
-  const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
+  const onSubmit: SubmitHandler<IFormRetirada> = async (data) => {
     if (!validateNumSerieInJson(data.numSerie))
       setError('numSerie', {
         type: 'manual',
         message: 'Notebook não encontrado',
       });
-    return;
+    else {
+      const idToken = await getIdToken();
+      if (idToken) {
+        const response = (await createWithdraw(data.numSerie, idToken)) as any;
+        if (error) {
+          setError('numSerie', {
+            type: 'manual',
+            message: 'Usuário ja possui um notebook em seu nome',
+          });
+        }
+        const withdrawTime = response?.withdraw_time;
+        router.push(`/confirmacao-retirada?withdrawTime=${withdrawTime}`);
+      }
+    }
   };
 
   return (
@@ -153,6 +168,19 @@ export default function RetiradaPage() {
                     }}
                   >
                     Notebook inexistente
+                  </span>
+                )}
+              {errors.numSerie?.type === 'manual' &&
+                errors.numSerie?.message ===
+                  'Usuário ja possui um notebook em seu nome' && (
+                  <span
+                    style={{
+                      color: 'red',
+                      textAlign: 'center',
+                      paddingTop: '4px',
+                    }}
+                  >
+                    Usuário ja possui um notebook em seu nome
                   </span>
                 )}
               <h4
