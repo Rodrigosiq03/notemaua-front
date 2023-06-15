@@ -100,7 +100,8 @@ export default function RetiradaPage() {
 
   // form logic
   const onSubmit: SubmitHandler<IFormRetirada> = async (data) => {
-    if (!validateNumSerieInJson(data.numSerie))
+    const { numSerie } = data;
+    if (!validateNumSerieInJson(numSerie))
       setError('numSerie', {
         type: 'manual',
         message: 'Notebook não encontrado',
@@ -108,17 +109,20 @@ export default function RetiradaPage() {
     else {
       const idToken = await getIdToken();
       if (idToken) {
-        const response = await createWithdraw(data.numSerie, idToken);
-        const withdrawTime = response?.withdrawTime;
-        const email = response?.email;
-        router.push(
-          `/confirmacao-retirada?withdrawTime=${withdrawTime}&email=${email}`
-        );
+        console.log('numSerie is ', numSerie);
+        const response = await createWithdraw(numSerie, idToken);
+        if (response !== undefined || response !== null) {
+          console.log('response on retirada page is ', response);
+          const withdrawTime = response?.withdrawTime;
+          console.log('withdrawTime is ', withdrawTime);
+          const email = response?.email;
+          console.log('email is ', email);
+          router.push(
+            `/confirmacao-retirada?withdrawTime=${withdrawTime}&email=${email}`
+          );
+        }
+        console.log('response on retirada page is ', response);
       }
-      setError('numSerie', {
-        type: 'manual',
-        message: 'Usuário ja possui um notebook em seu nome',
-      });
     }
   };
 

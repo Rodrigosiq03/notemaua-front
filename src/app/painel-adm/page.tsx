@@ -121,8 +121,8 @@ export default function PainelAdmPage() {
     if (!idToken) return;
     const withdrawFinished = await finishWithdraw(numSerie, idToken);
     if (withdrawFinished) {
-      console.log('withdrawFinished is ', withdrawFinished);
       setEmail(withdrawFinished.email);
+      const email = withdrawFinished.email;
       const ra = email.split('@')[0];
       setRa(ra);
       const name = getNameFromJson(ra);
@@ -132,11 +132,6 @@ export default function PainelAdmPage() {
       setFinishTime(withdrawFinished.finishTime);
       if (withdrawFinished.withdrawTime === null) return;
       setWithdrawTime(withdrawFinished.withdrawTime);
-      console.log(email);
-      console.log(ra);
-      console.log(name);
-      console.log(withdrawFinished.finishTime);
-      console.log(withdrawFinished.withdrawTime);
     }
 
     handleClickOpenDialogDevolution();

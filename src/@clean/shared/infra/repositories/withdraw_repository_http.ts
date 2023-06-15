@@ -10,12 +10,6 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
   }
 
   async createWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
-    var withdraw: Withdraw = new Withdraw({
-      numSerie: '',
-      email: '',
-      withdrawTime: 1600000,
-      finishTime: null,
-    });
     try {
       const url = process.env.NEXT_PUBLIC_API_URL + '/create-withdraw';
       const response = await axios.post<WithdrawJson>(
@@ -23,11 +17,10 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
         { num_serie: numSerie },
         { headers: { Authorization: `Bearer ${idToken}` } }
       );
-      console.log('response is', response);
-      if (response.status === 200) {
+      if (response.status === 201) {
         const jsondata = JSON.stringify(response.data, null, 2);
-        var withdrawResponse = JSON.parse(jsondata).withdraw as WithdrawJson;
-        withdraw = Withdraw.fromJSON(withdrawResponse);
+        var withdraw = JSON.parse(jsondata).withdraw;
+        withdraw = Withdraw.fromJSON(withdraw);
         return withdraw;
       }
     } catch (error) {
@@ -49,15 +42,10 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
         { num_serie: numSerie },
         { headers: { Authorization: `Bearer ${idToken}'` } }
       );
-      console.log('response status is', status);
       if (response.status === 200) {
-        console.log('response data is', response.data);
         const jsondata = JSON.stringify(response.data, null, 2);
         var withdraw = JSON.parse(jsondata).withdraw;
         withdraw = Withdraw.fromJSON(withdraw);
-        console.log('withdraw on response treat is', withdraw);
-      } else {
-        console.log('response data is', response.data);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -67,7 +55,6 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
         console.log(error);
       }
     }
-    console.log('withdraw on return is', withdraw);
     return withdraw;
   }
 }
