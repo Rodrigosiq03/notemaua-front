@@ -7,7 +7,7 @@ export type WithdrawProps = {
   finishTime: number | null;
 };
 
-export type JsonProps = {
+export type WithdrawJson = {
   num_serie: string;
   email: string;
   withdraw_time: number;
@@ -91,7 +91,7 @@ export class Withdraw {
     };
   }
 
-  static fromJSON(json: JsonProps) {
+  static fromJSON(json: WithdrawJson) {
     return new Withdraw({
       numSerie: json.num_serie,
       email: json.email,

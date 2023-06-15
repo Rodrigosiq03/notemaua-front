@@ -67,9 +67,9 @@ const ContainerRow = styled.div`
 const ContainerRowADM = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   padding-top: 15px;
   position: relative;
-  left: 630px;
 
   @media (max-width: 1550px) {
     left: 450px;
@@ -81,6 +81,13 @@ const ContainerRowADM2 = styled.div`
   padding-top: 5px;
 `;
 
+const ContainerRowADMLogos = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+`;
+
 export {
   Container,
   ContainerCardContent,
@@ -88,5 +95,6 @@ export {
   ContainerRow,
   ContainerCenterMiddle,
   ContainerRowADM,
-  ContainerRowADM2
+  ContainerRowADM2,
+  ContainerRowADMLogos,
 };

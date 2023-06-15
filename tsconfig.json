@@ -24,13 +24,13 @@
     }
   },
   "include": [
-    "next-env.d.ts", 
-    "**/*.ts", 
-    "**/*.tsx", 
-    ".next/types/**/*.ts", 
-    "**/__tests__/**/*.ts", 
-    "jest.config.js", 
-    "jest.setup.ts", 
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "**/__tests__/**/*.ts",
+    "jest.config.js",
+    "jest.setup.ts",
     "**/infra/**/*.ts",
     "**/containers/**/*.ts",
     "**/components/**/*.ts",
@@ -39,10 +39,12 @@
     "**/utils/**/*.ts",
     "**/types/**/*.ts",
     "**/contexts/**/*.ts",
-    "env.d.ts"  
+    "env.d.ts",
+    "custom.d.ts",
   ],
   "exclude": ["node_modules"]
 }
+
 
 
 

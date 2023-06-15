@@ -235,6 +235,15 @@ export class UserRepositoryHttp implements IUserRepository {
       }
     }
   }
+
+  async getIdToken(): Promise<string> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      return user.signInUserSession.idToken.jwtToken;
+    } catch (error: any) {
+      throw new Error(error.code);
+    }
+  }
 }
 
 decorate(injectable(), UserRepositoryHttp);

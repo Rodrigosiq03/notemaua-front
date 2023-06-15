@@ -7,7 +7,7 @@ const ListNumSerie = styled.ul`
   margin-top: 20px;
   overflow-y: scroll;
   width: 96%;
-  height: 70%;
+  height: 60%;
 
   &::-webkit-scrollbar {
     width: 10px;

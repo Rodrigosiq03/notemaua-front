@@ -13,10 +13,12 @@ import { GetNameFromJsonUsecase } from '@/@clean/modules/user/usecases/get_name_
 import { ConfirmUserUsecase } from '@/@clean/modules/user/usecases/confirm_user_usecase';
 import { ForgotPasswordUsecase } from '@/@clean/modules/user/usecases/forgot_password_usecase';
 import { ForgotPasswordSubmitUsecase } from '@/@clean/modules/user/usecases/forgot_password_submit_usecase';
-import { ValidateEmailInJsonUsecase } from '@/@clean/modules/user/usecases/validate_email_in_json';
+
 import { SignInUsecase } from '@/@clean/modules/user/usecases/sign_in_usecase';
 import { LogOutUsecase } from '@/@clean/modules/user/usecases/log_out_usecase';
 import { CompleteNewPasswordUsecase } from '@/@clean/modules/user/usecases/complete_new_password';
+import { ValidateEmailInJsonUsecase } from '../@clean/modules/user/usecases/validate_email_in_json';
+import { GetIdTokenUsecase } from '@/@clean/modules/user/usecases/get_id_token_usecase';
 
 export type UserContextType = {
   users: User[];
@@ -24,7 +26,7 @@ export type UserContextType = {
   getUser: (email: string) => void;
   updateUser: (email: string, newPassword: string, code: string) => void;
   deleteUser: (email: string) => void;
-  getNameFromJson: (ra: string) => void;
+  getNameFromJson: (ra: string) => string | undefined;
   confirmUser: (email: string, code: string) => void;
   forgotPassword: (email: string) => void;
   forgotPasswordSubmit: (
@@ -39,6 +41,7 @@ export type UserContextType = {
     email: string,
     newPassword: string
   ) => Promise<User | undefined>;
+  getIdToken: () => Promise<string | undefined>;
   error: Error | null;
   setErrorNull: () => void;
 };
@@ -49,7 +52,7 @@ const defaultContext: UserContextType = {
   getUser: (email: string) => {},
   updateUser: (email: string, newPassword: string, code: string) => {},
   deleteUser: (email: string) => {},
-  getNameFromJson: (ra: string) => {},
+  getNameFromJson: (ra: string) => '',
   confirmUser: (email: string, code: string) => {},
   forgotPassword: (email: string) => {},
   forgotPasswordSubmit: (
@@ -62,7 +65,7 @@ const defaultContext: UserContextType = {
   logOut: () => new Promise<void>(() => {}),
   completeNewPassword: (email: string, newPassword: string) =>
     new Promise<User>(() => {}),
-
+  getIdToken: () => new Promise<string>(() => ''),
   error: null,
   setErrorNull: () => {},
 };
@@ -110,6 +113,10 @@ const completeNewPasswordUsecase =
   containerUser.get<CompleteNewPasswordUsecase>(
     RegistryUser.CompleteNewPasswordUsecase
   );
+
+const getIdTokenUsecase = containerUser.get<GetIdTokenUsecase>(
+  RegistryUser.GetIdTokenUsecase
+);
 
 export function UserProvider({ children }: PropsWithChildren) {
   // State for error in API
@@ -249,6 +256,19 @@ export function UserProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getIdToken() {
+    try {
+      const idToken = await getIdTokenUsecase.execute();
+      if (idToken) {
+        return idToken;
+      }
+      return;
+    } catch (error: any) {
+      console.log(`ERROR PROVIDER: ${error}`);
+      setError(error);
+    }
+  }
+
   function setErrorNull() {
     setError(null);
   }
@@ -269,6 +289,7 @@ export function UserProvider({ children }: PropsWithChildren) {
         signIn,
         logOut,
         completeNewPassword,
+        getIdToken,
         error,
         setErrorNull,
       }}

@@ -1,19 +1,34 @@
 import { EntityError } from '../helpers/errors/domain_error';
+import { Withdraw, WithdrawJson, WithdrawProps } from './withdraw';
 
 export type NotebookProps = {
   numSerie: string;
   isActive?: boolean;
 };
 
-export type JsonProps = {
-  num_serie: string;
-  isActive?: boolean;
+export type NotebookJson = {
+  notebooks: [
+    {
+      notebook: {
+        num_serie: string;
+        isActive: boolean;
+      };
+      withdraws: WithdrawJson[];
+    }
+  ];
 };
 
-// if (!Notebook.validateNum_serie(props.numSerie)) {
-//     throw new EntityError('props.num_serie')
-// }
-// this.props.numSerie = props.numSerie;
+export type NotebooksConverted = {
+  notebooks: [
+    {
+      notebook: {
+        numSerie: string;
+        isActive: boolean;
+      };
+      withdraws: Withdraw[];
+    }
+  ];
+};
 
 export class Notebook {
   constructor(public props: NotebookProps) {
@@ -69,15 +84,40 @@ export class Notebook {
     };
   }
 
-  fromJSON(json: JsonProps) {
-    return new Notebook({
-      numSerie: json.num_serie,
-      isActive: json.isActive,
-    });
+  static fromJSON(json: NotebookJson): [Notebook, Withdraw[]][] {
+    const notebooksData = json.notebooks;
+
+    const notebooksAndWithdraws: [Notebook, Withdraw[]][] = [];
+
+    for (const notebookData of notebooksData) {
+      const notebookJson = notebookData.notebook;
+
+      const notebook = new Notebook({
+        numSerie: notebookJson.num_serie,
+        isActive: notebookJson.isActive,
+      });
+
+      const withdrawJsons = notebookData.withdraws;
+      const withdraws: Withdraw[] = [];
+
+      for (const withdrawJson of withdrawJsons) {
+        const withdraw = new Withdraw({
+          numSerie: withdrawJson.num_serie,
+          email: withdrawJson.email,
+          withdrawTime: withdrawJson.withdraw_time,
+          finishTime: withdrawJson.finish_time,
+        });
+
+        withdraws.push(withdraw);
+      }
+
+      notebooksAndWithdraws.push([notebook, withdraws]);
+    }
+
+    return notebooksAndWithdraws;
   }
 
   static validateNumSerie(numSerie: string): boolean {
-    // validate length of num_serie
     if (numSerie == undefined) {
       return false;
     }

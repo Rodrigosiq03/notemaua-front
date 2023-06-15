@@ -1,13 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'standalone',
-  experimental: {
-    appDir: true,
-  },
-  transpilePackages: ['@acme/ui', 'lodash-es'],
-  env: {
-    NEXT_PUBLIC_STAGE: process.env.NEXT_PUBLIC_STAGE,
-  },
-};
+const nextConfig = {};
 
 module.exports = nextConfig;

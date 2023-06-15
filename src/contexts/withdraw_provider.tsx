@@ -11,8 +11,14 @@ import { GetAllWithdrawsUsecase } from '../@clean/modules/withdraw/usecases/get_
 
 export type WithdrawContextType = {
   withdraws: Withdraw[];
-  createWithdraw: (numSerie: string, email: string) => void;
-  finishWithdraw: (numSerie: string) => void;
+  createWithdraw: (
+    numSerie: string,
+    idToken: string
+  ) => Promise<Withdraw | undefined>;
+  finishWithdraw: (
+    numSerie: string,
+    idToken: string
+  ) => Promise<Withdraw | undefined>;
   getAllWithdraws: () => void;
   error: Error | null;
   setErrorNull: () => void;
@@ -20,8 +26,18 @@ export type WithdrawContextType = {
 
 const defaultContext: WithdrawContextType = {
   withdraws: [],
-  createWithdraw: (numSerie: string, email: string) => {},
-  finishWithdraw: (numSerie: string) => {},
+  createWithdraw: async (
+    numSerie: string,
+    idToken: string
+  ): Promise<Withdraw> => {
+    return Promise.resolve({} as Withdraw);
+  },
+  finishWithdraw: async (
+    numSerie: string,
+    idToken: string
+  ): Promise<Withdraw> => {
+    return Promise.resolve({} as Withdraw);
+  },
   getAllWithdraws: () => {},
   error: null,
   setErrorNull: () => {},
@@ -45,24 +61,32 @@ export function WithdrawProvider({ children }: PropsWithChildren) {
   const [withdraws, setWithdraws] = useState<Withdraw[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
-  async function createWithdraw(numSerie: string, email: string) {
+  async function createWithdraw(numSerie: string, idToken: string) {
     try {
       const withdrawCreated = await createWithdrawUsecase.execute(
         numSerie,
-        email
+        idToken
       );
-      setWithdraws([...withdraws, withdrawCreated]);
+      if (withdrawCreated) {
+        setWithdraws([...withdraws, withdrawCreated]);
+        return withdrawCreated;
+      }
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
-      const setError = error;
-      setError(setError);
+      setError(error);
     }
   }
 
-  async function finishWithdraw(numSerie: string) {
+  async function finishWithdraw(numSerie: string, idToken: string) {
     try {
-      const withdrawFinished = await finishWithdrawUsecase.execute(numSerie);
-      setWithdraws([...withdraws, withdrawFinished]);
+      const withdrawFinished = await finishWithdrawUsecase.execute(
+        numSerie,
+        idToken
+      );
+      if (withdrawFinished) {
+        setWithdraws([...withdraws, withdrawFinished]);
+        return withdrawFinished;
+      }
     } catch (error: any) {
       console.log(`ERROR PROVIDER: ${error}`);
       const setError = error;

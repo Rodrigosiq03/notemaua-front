@@ -1,6 +1,6 @@
-import { User } from '@/@clean/shared/domain/entities/user';
+import { User } from '../../../shared/domain/entities/user';
 import { IUserRepository } from '../domain/repositories/user_repository_interface';
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error';
+import { EntityError } from '../../../shared/domain/helpers/errors/domain_error';
 
 export class ValidateEmailInJsonUsecase {
   constructor(private userRepository: IUserRepository) {}

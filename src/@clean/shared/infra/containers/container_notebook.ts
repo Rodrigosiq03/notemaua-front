@@ -1,9 +1,10 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { GetNotebookUsecase } from '@/@clean/modules/notebook/usecases/get_notebook_usecase';
+
 import { http } from '../http';
 import { NotebookRepositoryMock } from '../repositories/notebook_repository_mock';
 import { NotebookRepositoryHttp } from '../repositories/notebook_repository_http';
+import { GetAllNotebooksUsecase } from '../../../modules/notebook/usecases/get_all_notebooks_usecase';
 import { ValidateNumSerieInJsonUsecase } from '@/@clean/modules/notebook/usecases/validate_numSerie_in_json';
 
 export const RegistryNotebook = {
@@ -15,15 +16,11 @@ export const RegistryNotebook = {
   NotebookRepositoryHttp: Symbol.for('NotebookRepositoryHttp'),
 
   // Usecases
-  GetNotebookUsecase: Symbol.for('GetNotebookUsecase'),
+  GetAllNotebooksUsecase: Symbol.for('GetAllNotebooksUsecase'),
   ValidateNumSerieInJsonUsecase: Symbol.for('ValidateNumSerieInJsonUsecase'),
 };
 
 export const containerNotebook = new Container();
-
-// containerUser.bind(RegistryNotebook.UserHttpRepository).toDynamicValue((context) => {
-//     return new UserHttpRepository(context.containerUser.get(RegistryNotebook.AxiosAdapter));
-// });
 
 containerNotebook
   .bind(RegistryNotebook.NotebookRepositoryMock)
@@ -34,18 +31,18 @@ containerNotebook
   .to(NotebookRepositoryHttp);
 
 containerNotebook
-  .bind(RegistryNotebook.GetNotebookUsecase)
+  .bind(RegistryNotebook.GetAllNotebooksUsecase)
   .toDynamicValue((context) => {
     if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryMock)
       );
     } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryHttp)
       );
     } else {
-      return new GetNotebookUsecase(
+      return new GetAllNotebooksUsecase(
         context.container.get(RegistryNotebook.NotebookRepositoryMock)
       );
     }

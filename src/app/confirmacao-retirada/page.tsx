@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Container,
   ContainerCardContent,
@@ -14,11 +14,39 @@ import ImageComponentNoteMaua from '../../components/ImageComponent/LogoNoteMaua
 import { ReturnLink } from '../../components/Link';
 import { CheckCircle, ExitIcon } from '../../components/Icon';
 import { UserContext } from '@/contexts/user_provider';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Auth } from 'aws-amplify';
 
 export default function ConfirmReturnPage() {
-  const { logOut } = useContext(UserContext);
+  const { logOut, getNameFromJson } = useContext(UserContext);
   const router = useRouter();
+  const serachparams = useSearchParams();
+
+  function convertTimestampToHoursMinutes(timestamp: string | number): string {
+    if (typeof timestamp === 'string') {
+      const date = new Date(parseInt(timestamp));
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      // Adiciona um zero à esquerda se os minutos forem menores que 10
+      const formattedMinutes =
+        minutes < 10 ? `0${minutes}` : minutes.toString();
+      return `${hours}:${formattedMinutes}`;
+    } else if (typeof timestamp === 'number' && timestamp > 0.0) {
+      const date = new Date(timestamp);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      // Adiciona um zero à esquerda se os minutos forem menores que 10
+      const formattedMinutes =
+        minutes < 10 ? `0${minutes}` : minutes.toString();
+      return `${hours}:${formattedMinutes}`;
+    }
+    return '';
+  }
+
+  const [withdrawTime, setWithdrawTime] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [ra, setRa] = React.useState('');
+  const [email, setEmail] = React.useState('');
 
   const handleLogout = async () => {
     const response = await logOut();
@@ -26,6 +54,36 @@ export default function ConfirmReturnPage() {
       router.push('/');
     }
   };
+
+  async function getEmailFromAuth(): Promise<string> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      return user.attributes.email;
+    } catch (error) {
+      console.log('Error getting authenticated user:', error);
+      throw error; // or handle the error accordingly
+    }
+  }
+
+  useEffect(() => {
+    if (!serachparams.get('withdrawTime') || !serachparams.get('email')) {
+      router.push('/');
+    }
+    const withdrawTimeParam = serachparams.get('withdrawTime');
+    if (withdrawTimeParam !== null && withdrawTimeParam !== undefined) {
+      const emailAuth = getEmailFromAuth().then((email) => {
+        setEmail(email);
+      });
+      const name = getNameFromJson(email.split('@')[0]) as string;
+      if (name !== undefined || name !== null) {
+        setName(name);
+      }
+      const ra = email.split('@')[0];
+      setRa(ra);
+      const withdrawTime = convertTimestampToHoursMinutes(withdrawTimeParam);
+      setWithdrawTime(convertTimestampToHoursMinutes(withdrawTime));
+    }
+  }, [email, getNameFromJson, router, serachparams]);
 
   return (
     <Container className={hind.className}>
@@ -39,12 +97,12 @@ export default function ConfirmReturnPage() {
             <CheckCircle />
             <div>
               <UserText>
-                Horário de Retirada: <strong>7:40</strong>
+                Horário de Retirada: <strong>{withdrawTime}</strong>
               </UserText>
-              <UserText>Luigi Guimarães Trevisan</UserText>
-              <UserText>22.01102-0@maua.br</UserText>
+              <UserText>{name}</UserText>
+              <UserText>{email}</UserText>
               <UserText>
-                RA: <strong>22.01102-0</strong>
+                RA: <strong>{ra}</strong>
               </UserText>
             </div>
             <ContainerRow>

@@ -9,13 +9,6 @@ export type UserProps = {
   role?: ROLE | null;
 };
 
-// export type JsonProps = {
-//     user_id?: number;
-//     name: string;
-//     email: string;
-//     state?: string;
-// }
-
 export class User {
   constructor(
     public props: UserProps = {
@@ -109,38 +102,14 @@ export class User {
     this.props.role = role;
   }
 
-  // AUTHENTICATION IS GOING TO BE DONE BY THE FRONTEND WITH AMPLIFY!!!
-
-  // static fromJSON(json: JsonProps) {
-  //     return new User({
-  //         id: json.user_id,
-  //         name: json.name,
-  //         email: json.email,
-  //         state: toEnum(json.state as string)
-  //     })
-  // }
-
-  // toJSON() {
-  //     return {
-  //         ra: this.props.ra,
-  //         name: this.props.name,
-  //         email: this.props.email,
-  //         role: this.props.role
-  //     }
-  // }
-
-  // validações abaixo...
-
   static validateRa(ra: string | null): boolean {
     if (ra != null) {
       if (typeof ra !== 'string') {
         return false;
       }
       if (ra.length != 10) {
-        // CONTANDO O PONTO E O TRAÇO!!
         return false;
       }
-      // model of ra is 22.00680-0
       if (ra[2] != '.' && ra[8] != '-') {
         return false;
       }

@@ -26,11 +26,13 @@ import DialogComponentTermsOfUse from '../../components/DialogMUI/DialogTermsOfU
 import React, { useContext, useEffect } from 'react';
 import DialogScanner from '../../components/DialogMUI/DialogScanner';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { NotebookContext } from '@/contexts/notebook_provider';
-import { UserContext } from '@/contexts/user_provider';
+
 import { useRouter } from 'next/navigation';
 
 import { Auth } from 'aws-amplify';
+import { NotebookContext } from '../../contexts/notebook_provider';
+import { UserContext } from '@/contexts/user_provider';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
 
 export interface IFormRetirada {
   numSerie: string;
@@ -43,8 +45,10 @@ export default function RetiradaPage() {
     formState: { errors },
     setError,
   } = useForm<IFormRetirada>();
-  const { validateNumSerieInJson } = useContext(NotebookContext);
-  const { logOut } = useContext(UserContext);
+
+  const { validateNumSerieInJson, error } = useContext(NotebookContext);
+  const { logOut, getIdToken } = useContext(UserContext);
+  const { createWithdraw } = useContext(WithdrawContext);
   const router = useRouter();
 
   // Scanner state
@@ -95,13 +99,26 @@ export default function RetiradaPage() {
   }, [router]);
 
   // form logic
-  const onSubmit: SubmitHandler<IFormRetirada> = (data) => {
+  const onSubmit: SubmitHandler<IFormRetirada> = async (data) => {
     if (!validateNumSerieInJson(data.numSerie))
       setError('numSerie', {
         type: 'manual',
         message: 'Notebook não encontrado',
       });
-    return;
+    else {
+      const idToken = await getIdToken();
+      if (idToken) {
+        const response = (await createWithdraw(data.numSerie, idToken)) as any;
+        if (error) {
+          setError('numSerie', {
+            type: 'manual',
+            message: 'Usuário ja possui um notebook em seu nome',
+          });
+        }
+        const withdrawTime = response?.withdraw_time;
+        router.push(`/confirmacao-retirada?withdrawTime=${withdrawTime}`);
+      }
+    }
   };
 
   return (
@@ -153,6 +170,19 @@ export default function RetiradaPage() {
                     Notebook inexistente
                   </span>
                 )}
+              {errors.numSerie?.type === 'manual' &&
+                errors.numSerie?.message ===
+                  'Usuário ja possui um notebook em seu nome' && (
+                  <span
+                    style={{
+                      color: 'red',
+                      textAlign: 'center',
+                      paddingTop: '4px',
+                    }}
+                  >
+                    Usuário ja possui um notebook em seu nome
+                  </span>
+                )}
               <h4
                 style={{
                   fontWeight: '300',
@@ -195,8 +225,8 @@ export default function RetiradaPage() {
           práticas de computação quando ocorrerem em que não sejam laboratórios
           de informática equipados com desktops. Conforme horário de aulas e
           indicação de uso, poderei retirar com um funcionário do corpo técnico
-          do IMT um kit notebook, composto: de 1 (um) notebook, 1 (uma)
-          fonte e 1 (um) mouse.
+          do IMT um kit notebook, composto: de 1 (um) notebook, 1 (uma) fonte e
+          1 (um) mouse.
         </p>
         <p>
           <strong>
