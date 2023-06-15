@@ -133,7 +133,10 @@ export default function RetiradaPage() {
           <ContainerCardContent>
             <ImageComponentNoteMaua />
             <Title>Retirada de Notebook</Title>
-            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+            <FormContainer
+              style={{ justifyContent: 'center', alignItems: 'center' }}
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <FormLabel htmlFor="numSerie">
                 Digite/Escaneie o número de serie:
               </FormLabel>
@@ -197,7 +200,10 @@ export default function RetiradaPage() {
               >
                 ou
               </h4>
-              <FormButtonScan onClick={handleClickOpenDialogScanner}>
+              <FormButtonScan
+                style={{ left: '0' }}
+                onClick={handleClickOpenDialogScanner}
+              >
                 <ScanIcon />
               </FormButtonScan>
               <ContainerRowLink style={{ paddingTop: '34px' }}>
@@ -209,7 +215,10 @@ export default function RetiradaPage() {
                   termos de uso.
                 </TermsButton>
               </ContainerRowLink>
-              <FormButton type="submit" style={{ backgroundColor: '#00CE3A' }}>
+              <FormButton
+                type="submit"
+                style={{ backgroundColor: '#00CE3A', left: '0' }}
+              >
                 Confirmar
               </FormButton>
             </FormContainer>
