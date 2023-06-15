@@ -108,16 +108,17 @@ export default function RetiradaPage() {
     else {
       const idToken = await getIdToken();
       if (idToken) {
-        const response = (await createWithdraw(data.numSerie, idToken)) as any;
-        if (error) {
-          setError('numSerie', {
-            type: 'manual',
-            message: 'Usuário ja possui um notebook em seu nome',
-          });
-        }
-        const withdrawTime = response?.withdraw_time;
-        router.push(`/confirmacao-retirada?withdrawTime=${withdrawTime}`);
+        const response = await createWithdraw(data.numSerie, idToken);
+        const withdrawTime = response?.withdrawTime;
+        const email = response?.email;
+        router.push(
+          `/confirmacao-retirada?withdrawTime=${withdrawTime}&email=${email}`
+        );
       }
+      setError('numSerie', {
+        type: 'manual',
+        message: 'Usuário ja possui um notebook em seu nome',
+      });
     }
   };
 

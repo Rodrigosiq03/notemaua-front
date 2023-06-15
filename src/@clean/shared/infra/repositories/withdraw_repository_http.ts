@@ -1,6 +1,6 @@
 import { decorate, injectable } from 'inversify';
 import { IWithdrawRepository } from '../../../modules/withdraw/domain/repositories/withdraw_repository_interface';
-import { Withdraw } from '../../domain/entities/withdraw';
+import { Withdraw, WithdrawJson } from '../../domain/entities/withdraw';
 import axios from 'axios';
 import { Auth } from 'aws-amplify';
 
@@ -10,26 +10,26 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
   }
 
   async createWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
-    var withdraw = new Withdraw({
-      numSerie,
-      email: '22.00680-0@maua.br',
-      withdrawTime: Date.now(),
+    var withdraw: Withdraw = new Withdraw({
+      numSerie: '',
+      email: '',
+      withdrawTime: 1600000,
       finishTime: null,
     });
     try {
       const url = process.env.NEXT_PUBLIC_API_URL + '/create-withdraw';
-      const response = (await axios.post<Withdraw>(
+      const response = await axios.post<WithdrawJson>(
         url,
         { num_serie: numSerie },
         { headers: { Authorization: `Bearer ${idToken}` } }
-      )) as any;
+      );
       console.log('response is', response);
       if (response.status === 200) {
         const jsondata = JSON.stringify(response.data, null, 2);
-        withdraw = JSON.parse(jsondata).withdraw;
-        withdraw = new Withdraw(withdraw);
+        var withdrawResponse = JSON.parse(jsondata).withdraw as WithdrawJson;
+        withdraw = Withdraw.fromJSON(withdrawResponse);
+        return withdraw;
       }
-      return withdraw;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('Error response is', error);
@@ -42,15 +42,9 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
   }
 
   async finishWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
-    var withdraw = new Withdraw({
-      numSerie,
-      email: 'teste@maua.br',
-      withdrawTime: Date.now(),
-      finishTime: null,
-    });
     try {
       const url = process.env.NEXT_PUBLIC_API_URL + '/finish-withdraw';
-      const response = await axios.put<Withdraw>(
+      const response = await axios.put<WithdrawJson>(
         url,
         { num_serie: numSerie },
         { headers: { Authorization: `Bearer ${idToken}'` } }
@@ -59,8 +53,8 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
       if (response.status === 200) {
         console.log('response data is', response.data);
         const jsondata = JSON.stringify(response.data, null, 2);
-        withdraw = JSON.parse(jsondata).withdraw;
-        withdraw = new Withdraw(withdraw);
+        var withdraw = JSON.parse(jsondata).withdraw;
+        withdraw = Withdraw.fromJSON(withdraw);
         console.log('withdraw on response treat is', withdraw);
       } else {
         console.log('response data is', response.data);

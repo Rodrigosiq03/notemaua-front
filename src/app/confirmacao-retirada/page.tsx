@@ -74,13 +74,13 @@ export default function ConfirmReturnPage() {
       const emailAuth = getEmailFromAuth().then((email) => {
         setEmail(email);
       });
-      const name = getNameFromJson(email.split('@')[0]) as string;
-      if (name !== undefined || name !== null) {
+      const ra = email.split('@')[0];
+      const name = getNameFromJson(ra);
+      if (name) {
         setName(name);
       }
-      const ra = email.split('@')[0];
       setRa(ra);
-      const withdrawTime = convertTimestampToHoursMinutes(withdrawTimeParam);
+      const withdrawTime = parseInt(withdrawTimeParam);
       setWithdrawTime(convertTimestampToHoursMinutes(withdrawTime));
     }
   }, [email, getNameFromJson, router, serachparams]);
