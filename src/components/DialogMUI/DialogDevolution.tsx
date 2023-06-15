@@ -77,7 +77,7 @@ export default function DialogComponent({
             }}
             onClick={handleClose}
           >
-            Confirmar Devolução
+            Confirmar
           </DialogButtonOK>
         </DialogActions>
       </DialogContent>

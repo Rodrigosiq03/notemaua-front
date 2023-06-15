@@ -46,7 +46,7 @@ import { NotebookContext } from '@/contexts/notebook_provider';
 import { UserContext } from '@/contexts/user_provider';
 import { WithdrawJson } from '@/@clean/shared/domain/entities/withdraw';
 import { ReturnLink } from '@/components/Link';
-import { type } from 'os';
+import { WithdrawContext } from '@/contexts/withdraw_provider';
 
 export interface IFormDevolution {
   numSerie: string;
@@ -76,12 +76,20 @@ export default function PainelAdmPage() {
   const { validateNumSerieInJson, getAllNotebooks } =
     useContext(NotebookContext);
   const { getIdToken, getNameFromJson, logOut } = useContext(UserContext);
+  const { finishWithdraw } = useContext(WithdrawContext);
 
   const [filterBy, setFilterBy] = React.useState('');
   const [search, setSearch] = React.useState('');
 
   const [notebooks, setNotebooks] = React.useState<any>([]);
-  const [notebooksFiltered, setNotebooksFiltered] = React.useState<any>([]);
+
+  // properties of dialog to show th devolution
+  const [numSerie, setNumSerie] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [withdrawTime, setWithdrawTime] = React.useState(0);
+  const [finishTime, setFinishTime] = React.useState(0);
+  const [ra, setRa] = React.useState('');
 
   const [openDialogDevolution, setOpenDialogDevolution] = React.useState(false);
   const [openDialogChangeEmail, setOpenDialogChangeEmail] =
@@ -106,34 +114,31 @@ export default function PainelAdmPage() {
     setFilterBy(event.target.value);
   };
 
-  const filterNotebooks = () => {
-    if (filterBy === 'RA') {
-      const notebooksFiltered = notebooks.filter((notebook: any) => {
-        return notebook.notebook.ra === search;
-      });
-      setNotebooksFiltered(notebooksFiltered);
-    } else if (filterBy === 'Número de série') {
-      const notebook = validateNumSerieInJson(search);
-      if (notebook) {
-        setNotebooksFiltered([notebook]);
-      }
-    } else {
-      setNotebooksFiltered([]);
+  const onSubmitDevolution: SubmitHandler<IFormDevolution> = async (data) => {
+    const { numSerie } = data;
+    setNumSerie(numSerie);
+    const idToken = await getIdToken();
+    if (!idToken) return;
+    const withdrawFinished = await finishWithdraw(numSerie, idToken);
+    if (withdrawFinished) {
+      setEmail(withdrawFinished.email);
+      setRa(email.split('@')[0]);
+      const name = getNameFromJson(email.split('@')[0]);
+      if (!name) return;
+      setName(name);
+      if (withdrawFinished.finishTime === null) return;
+      setFinishTime(withdrawFinished.finishTime);
+      if (withdrawFinished.withdrawTime === null) return;
+      setWithdrawTime(withdrawFinished.withdrawTime);
     }
-  };
 
-  const onSubmitDevolution: SubmitHandler<IFormDevolution> = (data, event) => {
-    event?.preventDefault();
     handleClickOpenDialogDevolution();
   };
 
   const onSubmitFilteredNotebooks: SubmitHandler<IFormFilteredNotebooks> = (
     data,
     event
-  ) => {
-    event?.preventDefault();
-    filterNotebooks();
-  };
+  ) => {};
 
   const handleLogout = async () => {
     const response = await logOut();
@@ -438,21 +443,23 @@ export default function PainelAdmPage() {
         <div>
           <hr></hr>
           <DialogText style={{ fontWeight: '700', fontSize: '25px' }}>
-            Número de Série: 38029
+            Número de Série: {numSerie}
           </DialogText>
           <DialogText>
-            Horário de Retirada: <strong>7:40</strong>
+            Horário de Retirada:{' '}
+            <strong>{convertTimestampToHoursMinutes(withdrawTime)}</strong>
           </DialogText>
           <DialogText>
-            Horário de Devolução: <strong>11:20</strong>
+            Horário de Devolução:{' '}
+            <strong>{convertTimestampToHoursMinutes(finishTime)}</strong>
           </DialogText>
           <hr style={{ marginTop: '25px' }}></hr>
           <DialogText style={{ fontWeight: '700', fontSize: '25px' }}>
-            Luigi Guimarães Trevisan
+            {name}
           </DialogText>
-          <DialogText>22.01102-0@maua.br</DialogText>
+          <DialogText>{email}</DialogText>
           <DialogText>
-            RA:<strong> 22.01102-0</strong>
+            RA:<strong> {ra}</strong>
           </DialogText>
         </div>
       </DialogComponentDevolution>

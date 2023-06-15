@@ -44,29 +44,36 @@ export class WithdrawRepositoryHttp implements IWithdrawRepository {
   async finishWithdraw(numSerie: string, idToken: string): Promise<Withdraw> {
     var withdraw = new Withdraw({
       numSerie,
-      email: '',
+      email: 'teste@maua.br',
       withdrawTime: Date.now(),
       finishTime: null,
     });
     try {
       const url = process.env.NEXT_PUBLIC_API_URL + '/finish-withdraw';
-      const { data, status } = await axios.post<Withdraw>(
+      const response = await axios.put<Withdraw>(
         url,
         { num_serie: numSerie },
-        { headers: { Authorization: `Bearer ${idToken}` } }
+        { headers: { Authorization: `Bearer ${idToken}'` } }
       );
-      if (status === 200) {
-        const jsondata = JSON.stringify(data, null, 2);
-        withdraw = JSON.parse(jsondata).withdraw as Withdraw;
+      console.log('response status is', status);
+      if (response.status === 200) {
+        console.log('response data is', response.data);
+        const jsondata = JSON.stringify(response.data, null, 2);
+        withdraw = JSON.parse(jsondata).withdraw;
+        withdraw = new Withdraw(withdraw);
+        console.log('withdraw on response treat is', withdraw);
+      } else {
+        console.log('response data is', response.data);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log('Error response is', error);
+        console.log('error response is', error);
       } else {
-        console.log('Unknown Error');
+        console.log('unknown error');
         console.log(error);
       }
     }
+    console.log('withdraw on return is', withdraw);
     return withdraw;
   }
 }
