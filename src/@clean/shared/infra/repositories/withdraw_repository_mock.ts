@@ -14,7 +14,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     }),
     new Withdraw({
       numSerie: '34101',
-      email: '', // HEY LOUNIS
+      email: '22.01102-0@maua.br', // HEY LOUNIS
       withdrawTime: 1672585200001,
       finishTime: 1672585200002,
     }),
