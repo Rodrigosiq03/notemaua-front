@@ -122,8 +122,10 @@ export default function PainelAdmPage() {
     const withdrawFinished = await finishWithdraw(numSerie, idToken);
     if (withdrawFinished) {
       setEmail(withdrawFinished.email);
-      setRa(email.split('@')[0]);
-      const name = getNameFromJson(email.split('@')[0]);
+      const email = withdrawFinished.email;
+      const ra = email.split('@')[0];
+      setRa(ra);
+      const name = getNameFromJson(ra);
       if (!name) return;
       setName(name);
       if (withdrawFinished.finishTime === null) return;
